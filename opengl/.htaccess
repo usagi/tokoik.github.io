@@ -1,0 +1,2 @@
+AddType "text/html; charset=iso-2022-jp" .html .shtml
+AddType "application/octet-stream" .dmg 
