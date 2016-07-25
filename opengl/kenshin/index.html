@@ -2,7 +2,7 @@
 <html lang="ja">
 
 <head>
-<title>$B<F;3@h@8$N:.FY$H$7$?%5%s%W%k(B</title>
+<title>柴山先生の混沌としたサンプル</title>
 <META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="../opengl.css">
@@ -12,52 +12,52 @@
 
 <body>
 
-<h1>$B<F;3@h@8$N:.FY$H$7$?%5%s%W%k(B</h1>
+<h1>柴山先生の混沌としたサンプル</h1>
 
 <ul>
-<li>$B%+%*%9$N$*$b$A$c$N%7%_%e%l!<%7%g%s(B
+<li>カオスのおもちゃのシミュレーション
   <ul>
-    <li>$B%*%j%8%J%k(B: <a href="chaostoy.c">chaostoy.c</a></li>
+    <li>オリジナル: <a href="chaostoy.c">chaostoy.c</a></li>
   </ul>
 </li>
-<li>Lorenz$BJ}Dx<0$N2r6J@~$rIA2h$9$k%W%m%0%i%`(B No. 1
+<li>Lorenz方程式の解曲線を描画するプログラム No. 1
   <ul>
-    <li>$B%*%j%8%J%k(B: <a href="lorenz1.c">lorenz1.c</a></li>
-    <li>$BN)BN;kHG(B: <a href="lorenz1s.c">lorenz1s.c</a></li>
+    <li>オリジナル: <a href="lorenz1.c">lorenz1.c</a></li>
+    <li>立体視版: <a href="lorenz1s.c">lorenz1s.c</a></li>
   </ul>
 </li>
-<li>Lorenz$BJ}Dx<0$N2r6J@~$rIA2h$9$k%W%m%0%i%`(B No. 2
+<li>Lorenz方程式の解曲線を描画するプログラム No. 2
   <ul>
-    <li>$B%*%j%8%J%k(B: <a href="lorenz2.c">lorenz2.c</a></li>
+    <li>オリジナル: <a href="lorenz2.c">lorenz2.c</a></li>
   </ul>
 </li>
-<li>Lorenz$BJ}Dx<0$N2r6J@~$rIA2h$9$k%W%m%0%i%`(B No. 3
+<li>Lorenz方程式の解曲線を描画するプログラム No. 3
   <ul>
-    <li>$BN)BN;kHG(B: <a href="lorenz3s.c">lorenz3s.c</a></li>
+    <li>立体視版: <a href="lorenz3s.c">lorenz3s.c</a></li>
   </ul>
 </li>
-<li>Rossler$BJ}Dx<0$N2r6J@~$rIA2h$9$k%W%m%0%i%`(B
+<li>Rossler方程式の解曲線を描画するプログラム
   <ul>
-    <li>$B%*%j%8%J%k(B: <a href="rossler.c">rossler.c</a></li>
-    <li>$BN)BN;kHG(B No.1: <a href="rosslers.c">rosslers.c</a></li>
-    <li>$BN)BN;kHG(B No.2: <a href="rossler2s.c">rossler2s.c</a></li>
-    <li>$BN)BN;kHG(B No.3: <a href="rossler3s.c">rossler3s.c</a></li>
+    <li>オリジナル: <a href="rossler.c">rossler.c</a></li>
+    <li>立体視版 No.1: <a href="rosslers.c">rosslers.c</a></li>
+    <li>立体視版 No.2: <a href="rossler2s.c">rossler2s.c</a></li>
+    <li>立体視版 No.3: <a href="rossler3s.c">rossler3s.c</a></li>
   </ul>
 </li>
 <li><a href="Makefile">Makefile</a></li>
 </ul>
 
-<h2>$BJdB-(B</h2>
+<h2>補足</h2>
 
 <p>chaostoy.c, lorenz1.c, lorenz2.c, rossler.c
-$B$O<F;3@h@8$K$h$k%5%s%W%k%W%m%0%i%`$G$9!%(B
-$B$=$N$[$+$N%W%m%0%i%`$O>20f$,>!<j$KN)BN;k$J$I$N<j$r2C$($?$b$N$G$9!%(B
-$BN)BN;kHG$N$&$A!$(Bmake $B$7$F(B *-crm $B$H$$$&%U%!%$%kL>$K$J$C$?$b$N(B
-(-DCRM $B$rIU$1$F%3%s%Q%$%k$5$l$?$b$N(B) $B$O(B OpenGL $B$N(B Quad Buffer Stereo
-$B$r;HMQ$7$F$$$^$9!%$=$l0J30$N$b$N$O(B SGI $B$N%^%7%s!J(BIndy $B$d(B
-O2 $BEy!K$G$7$+N)BN;k$G$-$^$;$s!%(B</p>
+は柴山先生によるサンプルプログラムです．
+そのほかのプログラムは床井が勝手に立体視などの手を加えたものです．
+立体視版のうち，make して *-crm というファイル名になったもの
+(-DCRM を付けてコンパイルされたもの) は OpenGL の Quad Buffer Stereo
+を使用しています．それ以外のものは SGI のマシン（Indy や
+O2 等）でしか立体視できません．</p>
 
-<p align="right">$B<F;37r?-@h@8(B: 
+<p align="right">柴山健伸先生: 
 http://www.sys.wakayama-u.ac.jp/~kenshin/</br>
 </p>
 

@@ -2,24 +2,24 @@
 <html lang="ja">
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>Makefile $B$NJdB-(B</title>
+<title>Makefile の補足</title>
 </head>
 
 <body>
 
-<h1>Makefile $B$NJdB-(B</h1>
+<h1>Makefile の補足</h1>
 
-<h2>make $B$O<B9T%W%m%0%i%`$N:n$jJ}$rCN$C$F$$$k(B</h2>
+<h2>make は実行プログラムの作り方を知っている</h2>
 
-<p>make $B%3%^%s%I$O(B, $B<B$O(B
-C $B$d(B C++
-$B$N%=!<%9%W%m%0%i%`$+$i<B9T%W%m%0%i%`$r:n@=$9$kJ}K!$r:G=i$+$iCN$C$F$$$^$9(B. 
-$B$3$N$?$a(B, 
-$B0l$D$N%=!<%9%W%m%0%i%`$+$i0l$D$N<B9T%W%m%0%i%`$r:n@.$9$k$h$&$J>l9g$O(B, 
-Makefile $B$K$*$$$F<jB3$-!J%3%^%s%I!K$N5-=R$r>JN,$9$k$3$H$,$G$-$^$9(B. </p>
+<p>make コマンドは, 実は
+C や C++
+のソースプログラムから実行プログラムを作製する方法を最初から知っています. 
+このため, 
+一つのソースプログラムから一つの実行プログラムを作成するような場合は, 
+Makefile において手続き（コマンド）の記述を省略することができます. </p>
 
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LIBS = -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread
@@ -29,72 +29,72 @@ prog1: prog1.c
 prog2: prog2.c
 <kbd>--Tab--&gt;</kbd>$(CC) $(CFLAGS) prog2.c -o prog2 $(LIBS)</pre>
 
-<p>$B$9$J$o$A(B, $B>e$N$h$&$J(B Makefile $B$O2<$N$h$&$K=q$/$3$H$b$G$-$^$9(B. </p>
+<p>すなわち, 上のような Makefile は下のように書くこともできます. </p>
 
-<h3>IRIX $B%*%j%8%J%k$N(B make $B$r;H$&>l9g(B</h3>
+<h3>IRIX オリジナルの make を使う場合</h3>
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LDFLAGS = -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread
 all: prog1 prog2
 prog1: prog1.c
 prog2: prog2.c</pre>
 
-<h3>GNU make (gmake) $B$r;H$&>l9g(B</h3>
+<h3>GNU make (gmake) を使う場合</h3>
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LDLIBS = -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread
 all: prog1 prog2
 prog1: prog1.c
 prog2: prog2.c</pre>
 
-<h2>make $B$O4JC1$J0MB84X78$J$iCN$C$F$$$k(B</h2>
+<h2>make は簡単な依存関係なら知っている</h2>
 
-<p>$B$5$i$K(B, $B<B9T%W%m%0%i%`$N%U%!%$%kL>$,%=!<%9%W%m%0%i%`$N%U%!%$%kL>$+$i3HD%;R(B
-(.c) $B$r<h$j=|$$$?$b$N$G$"$l$P!J(Bprog1.c $B$+$i(B prog1 $B$r@8@.$9$k>l9g$J$I!K(B, 
-$B$=$l$i$N0MB84X78$b>JN,$9$k$3$H$,$G$-$^$9(B. </p>
+<p>さらに, 実行プログラムのファイル名がソースプログラムのファイル名から拡張子
+(.c) を取り除いたものであれば（prog1.c から prog1 を生成する場合など）, 
+それらの依存関係も省略することができます. </p>
 
-<h3>IRIX $B%*%j%8%J%k$N(B make $B$r;H$&>l9g(B</h3>
+<h3>IRIX オリジナルの make を使う場合</h3>
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LDFLAGS = -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread
 all: prog1 prog2</pre>
 
-<h3>GNU make (gmake) $B$r;H$&>l9g(B</h3>
+<h3>GNU make (gmake) を使う場合</h3>
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LDLIBS = -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread
 all: prog1 prog2</pre>
 
-<h2>$B%^%/%m$O4D6-JQ?t$G$b;XDj$G$-$k(B</h2>
+<h2>マクロは環境変数でも指定できる</h2>
 
-<p>$B$^$?(B, $B>e$N(B <tt>CFLAGS</tt> $B$d(B <tt>LDFLAGS</tt> $B$"$k$$$O(B <tt>LDLIBS</tt>
-$B$N$h$&$J!V%^%/%m!W$O(B, $B4D6-JQ?t$GM?$($k$3$H$b$G$-$^$9(B. </p>
+<p>また, 上の <tt>CFLAGS</tt> や <tt>LDFLAGS</tt> あるいは <tt>LDLIBS</tt>
+のような「マクロ」は, 環境変数で与えることもできます. </p>
 
-<h3>IRIX $B%*%j%8%J%k$N(B make $B$r;H$&>l9g(B</h3>
+<h3>IRIX オリジナルの make を使う場合</h3>
 <pre class="display">% setenv CFLAGS -I/usr/X11R6/include
 % setenv LDFLAGS '-lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthread'</pre>
 
-<p>$B$"$k$$$O(B, </p>
+<p>あるいは, </p>
 
-<h3>GNU make (gmake) $B$r;H$&>l9g(B</h3>
+<h3>GNU make (gmake) を使う場合</h3>
 <pre class="display">% setenv CFLAGS -I/usr/X11R6/include
 % setenv LDLIBS '-L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm -lpthrad'</pre>
 
-<p>$B$H$$$&%3%^%s%I$r%7%'%k!J$3$N>l9g$O(B csh/tcsh$B!K$G$"$i$+$8$a<B9T$7$F$*$1$P(B
-$B!J$b$A$m$s(B, $B$3$l$O(B .cshrc $B$KF~$l$F$*$/$3$H$,$G$-$^$9!K(B, 
-Makefile $B$O<!$N$h$&$J0MB84X78$@$1$K$J$j$^$9(B. </p>
+<p>というコマンドをシェル（この場合は csh/tcsh）であらかじめ実行しておけば
+（もちろん, これは .cshrc に入れておくことができます）, 
+Makefile は次のような依存関係だけになります. </p>
 
 <pre class="source">all: prog1 prog2</pre>
 
-<p>$B$b$7(B, $B@8@.$9$k<B9T%W%m%0%i%`$r(B make $B%3%^%s%I$N0z?t$K;XDj$9$k$J$i(B, 
-<em>$B>e$N(B Makefile $B$9$iITMW(B</em>$B$G$9(B. </p>
+<p>もし, 生成する実行プログラムを make コマンドの引数に指定するなら, 
+<em>上の Makefile すら不要</em>です. </p>
 
 <pre class="display">% make prog1 prog2</pre>
 
-<p>$B%+%l%s%H%G%#%l%/%H%j$K(B prog1.c $B$H(B prog2.c $B$H$$$&%=!<%9%W%m%0%i%`$,$"$l$P(B, 
-Makefile $B$r:n@.$7$J$/$F$b(B, $B>e$N%3%^%s%I0lH/$G(B
-prog1 $B$H(B prog2 $B$,:n@.$5$l$^$9(B. </p>
+<p>カレントディレクトリに prog1.c と prog2.c というソースプログラムがあれば, 
+Makefile を作成しなくても, 上のコマンド一発で
+prog1 と prog2 が作成されます. </p>
 
-<h2>Makefile $B$r;H$C$?1i=,(B</h2>
+<h2>Makefile を使った演習</h2>
 <ul>
 <li><a href="http://www.wakayama-u.ac.jp/~tokoi/lecture/spyro/">
-$B2]Bj#7(B $B%^%/%mDj?t(B+Makefile+$B$X%C%@%U%!%$%k(B</a></li>
+課題７ マクロ定数+Makefile+へッダファイル</a></li>
 </li>
 
 </body>

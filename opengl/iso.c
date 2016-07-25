@@ -9,13 +9,13 @@
 #define TIMEOUT   0
 #define THREAD
 
-static struct termios ttySaved;		/* $B:G=i$NC<Kv%b!<%I(B		*/
-static float data[4][6];		/* $BF~NO$5$l$?%G!<%?(B	       	*/
-static int errCode = 0;			/* $B%(%i!<%U%i%0(B			*/
+static struct termios ttySaved;		/* 最初の端末モード		*/
+static float data[4][6];		/* 入力されたデータ	       	*/
+static int errCode = 0;			/* エラーフラグ			*/
 
 #ifdef THREAD
 #include <pthread.h>
-static pthread_t thr;			/* $B%9%l%C%I5-=R;R(B		*/
+static pthread_t thr;			/* スレッド記述子		*/
 #endif
 
 static void readIsoTrak(int fd) {
@@ -35,8 +35,8 @@ static void readIsoTrak(int fd) {
     }
     while (count > 0);
 
-    if (buf[0] == '0') {		/* $B%G!<%?%V%m%C%/!J%(%i!<$J$7!K(B	*/
-      int receiver = buf[1] - '1';	/* $B%l%7!<%PHV9f(B			*/
+    if (buf[0] == '0') {		/* データブロック（エラーなし）	*/
+      int receiver = buf[1] - '1';	/* レシーバ番号			*/
       float *p = data[receiver];
       buf[READCOUNT] = '\0';
       sscanf(buf + 3, "%7f%7f%7f%7f%7f%7f",
@@ -128,8 +128,8 @@ int main()
     }
     while (count > 0);
 
-    if (buf[0] == '0') {		/* $B%G!<%?%V%m%C%/!J%(%i!<$J$7!K(B	*/
-      int receiver = buf[1] - '1';	/* $B%l%7!<%PHV9f(B			*/
+    if (buf[0] == '0') {		/* データブロック（エラーなし）	*/
+      int receiver = buf[1] - '1';	/* レシーバ番号			*/
       float *p = data[receiver];
       buf[READCOUNT] = '\0';
       sscanf(buf + 3, "%7f%7f%7f%7f%7f%7f",

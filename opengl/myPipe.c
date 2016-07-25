@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 /*
- * $B%(%i!<%O%s%I%i(B
+ * エラーハンドラ
  */
 
 static void errCallBack(GLenum errCode)
@@ -13,46 +13,46 @@ static void errCallBack(GLenum errCode)
 }
 
 /*
- * $B1_E{$rIA$/(B
- *   radius: $BH>7B(B
- *   hole: $B7j$NH>7B(B
- *   height: $B9b$5(B
- *   sides: $BB&LL$N?t!J?t$,B?$$$[$I3j$i$+$K$J$k!K(B
+ * 円筒を描く
+ *   radius: 半径
+ *   hole: 穴の半径
+ *   height: 高さ
+ *   sides: 側面の数（数が多いほど滑らかになる）
  *
  */
 
 void myPipe(double radius, double hole, double height, int sides)
 {
-  /* quadric object $B$r0l$D@8@.$9$k(B */
+  /* quadric object を一つ生成する */
   GLUquadricObj *quad = gluNewQuadric();
 
-  /* $B@8@.$7$?%*%V%8%'%/%H$KBP$9$k%(%i!<%O%s%I%i$rEPO?$9$k(B */
+  /* 生成したオブジェクトに対するエラーハンドラを登録する */
   gluQuadricCallback(quad, GLU_ERROR, errCallBack);
 
-  /* $BLL$NEI$jDY$7$r;XDj$9$k!J@~2h$G$O$J$/1"1F$r$D$1$?1_Cl$rIA$/!K(B*/
+  /* 面の塗り潰しを指定する（線画ではなく陰影をつけた円柱を描く）*/
   gluQuadricDrawStyle(quad, GLU_FILL);
 
-  /* $B%9%`!<%9%7%'!<%G%#%s%0$r9T$&$h$&@_Dj$9$k(B */
+  /* スムースシェーディングを行うよう設定する */
   gluQuadricNormals(quad, GLU_SMOOTH);
 
-  /* $B30B&$NB&LL$rIA$/!J(Bstacks = 1$B!K(B*/
+  /* 外側の側面を描く（stacks = 1）*/
   gluCylinder(quad, radius, radius, height, sides, 1);
 
-  /* height $B$N9b$5$K>eLL$rIA$/(B */
+  /* height の高さに上面を描く */
   glPushMatrix();
   glTranslated(0.0, 0.0, height);
   gluDisk(quad, hole, radius, sides, 1);
   glPopMatrix();
 
-  /* $B?^7A$rN"JV$7$FIA$/$h$&$K@_Dj$9$k(B */
+  /* 図形を裏返して描くように設定する */
   gluQuadricOrientation(quad, GLU_INSIDE);
 
-  /* $BFbB&$rIA$/(B */
+  /* 内側を描く */
   gluCylinder(quad, hole, hole, height, sides, 1);
 
-  /* $B2<LL$rIA$/(B */
+  /* 下面を描く */
   gluDisk(quad, hole, radius, sides, 1);
 
-  /* $B@8@.$7$?(B quadlic object $B$r:o=|$9$k(B */
+  /* 生成した quadlic object を削除する */
   gluDeleteQuadric(quad);
 }

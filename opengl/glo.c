@@ -9,13 +9,13 @@
 #define TIMEOUT   0
 #define THREAD
 
-static struct termios ttySaved;		/* $B:G=i$NC<Kv%b!<%I(B		*/
-static float data[10];			/* $BF~NO$5$l$?%G!<%?(B	       	*/
-static int errCode = 0;			/* $B%(%i!<%U%i%0(B			*/
+static struct termios ttySaved;		/* 最初の端末モード		*/
+static float data[10];			/* 入力されたデータ	       	*/
+static int errCode = 0;			/* エラーフラグ			*/
 
 #ifdef THREAD
 #include <pthread.h>
-static pthread_t thr;			/* $B%9%l%C%I5-=R;R(B		*/
+static pthread_t thr;			/* スレッド記述子		*/
 #endif
 
 static void readSuperGlobe(int fd) {
@@ -34,7 +34,7 @@ static void readSuperGlobe(int fd) {
     }
     while (count > 0);
 
-    if (buf[0] == 'C') {		/* $B%G!<%?%V%m%C%/!JO"B3%b!<%I!K(B	*/
+    if (buf[0] == 'C') {		/* データブロック（連続モード）	*/
       buf[READCOUNT] = '\0';
       sscanf(buf + 1, "%3f%3f%3f%3f%3f%3f%3f%3f%3f%3f",
 	     data, data + 1, data + 2, data + 3, data + 4, data + 5,
@@ -123,7 +123,7 @@ int main()
     }
     while (count > 0);
 
-    if (buf[0] == 'C') {		/* $B%G!<%?%V%m%C%/!JO"B3%b!<%I!K(B	*/
+    if (buf[0] == 'C') {		/* データブロック（連続モード）	*/
       buf[READCOUNT] = '\0';
       sscanf(buf + 1, "%3f%3f%3f%3f%3f%3f%3f%3f%3f%3f",
 	     data, data + 1, data + 2, data + 3, data + 4, data + 5,

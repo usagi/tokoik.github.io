@@ -1,6 +1,6 @@
 /*
  *
- *  OpenGL, glut ¤ò»È¤Ã¤¿ LorenzÊıÄø¼°¤Î²ò¶ÊÀş¤òÉÁ²è¤¹¤ë¥Ç¥â¡¦¥×¥í¥°¥é¥à   
+ *  OpenGL, glut ã‚’ä½¿ã£ãŸ Lorenzæ–¹ç¨‹å¼ã®è§£æ›²ç·šã‚’æç”»ã™ã‚‹ãƒ‡ãƒ¢ãƒ»ãƒ—ãƒ­ã‚°ãƒ©ãƒ    
  *                                                  ver.0.11 (1998/12/2)
  */
 
@@ -17,37 +17,37 @@ static double lanecolor[DATA_SIZE][3];
 static double cars[CARS][3],carsp[CARS][3];
 static int carlap[CARS];
 
-static int zoom=8;                 /* ¥º¡¼¥à¤Î¥Ñ¥é¥á¡¼¥¿¡¼ */
-static double vht=0.3;             /* »ëÅÀ¤Î¹â¤µ */
-static int car_num=0;              /* »ëÅÀ¤òÀßÄê¤¹¤ë¼Ö¤ÎÈÖ¹æ */
-static int vall=1;                 /* »ëÅÀ¤ÎÀÚ¤êÂØ¤¨¥¹¥¤¥Ã¥Á */
+static int zoom=8;                 /* ã‚ºãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ */
+static double vht=0.3;             /* è¦–ç‚¹ã®é«˜ã• */
+static int car_num=0;              /* è¦–ç‚¹ã‚’è¨­å®šã™ã‚‹è»Šã®ç•ªå· */
+static int vall=1;                 /* è¦–ç‚¹ã®åˆ‡ã‚Šæ›¿ãˆã‚¹ã‚¤ãƒƒãƒ */
 
 static int vp,vh,zm;               /* menu ID's */
 
-void solv_de(u,v) /* LorenzÊıÄø¼°¤Îº¹Ê¬²½ÊıÄø¼°¤Î·«¤êÊÖ¤··×»» */
+void solv_de(u,v) /* Lorenzæ–¹ç¨‹å¼ã®å·®åˆ†åŒ–æ–¹ç¨‹å¼ã®ç¹°ã‚Šè¿”ã—è¨ˆç®— */
 double u[3],v[3];
 {
-    static double dt = 0.005;                /* »ş´Ö´Ö³Ö */
+    static double dt = 0.005;                /* æ™‚é–“é–“éš” */
 
     v[0] = u[0] + dt * (10.0 * (u[1] - u[0]));
     v[1] = u[1] + dt * (28.0 * u[0] - u[1] - u[0] * u[2]);
     v[2] = u[2] + dt * (-2.666666667 * u[2] + u[0] * u[1]);
 }
 
-void make_lane(void) /* ²ò¶ÊÀş¤Î¥Ç¡¼¥¿ºîÀ® */
+void make_lane(void) /* è§£æ›²ç·šã®ãƒ‡ãƒ¼ã‚¿ä½œæˆ */
 {
     int  i,j;
     double v1[3],v2[3];
     GLdouble c1,c2,c3;
 
-    v1[0] = 2.0; v1[1] = 2.0; v1[2] = 2.0;               /* ½é´üÃÍ */
+    v1[0] = 2.0; v1[1] = 2.0; v1[2] = 2.0;               /* åˆæœŸå€¤ */
 
-    for(i=0; i<300; i++) {                       /* ½é´ü¤Î¶õ²ó¤· */
+    for(i=0; i<300; i++) {                       /* åˆæœŸã®ç©ºå›ã— */
         solv_de(v1,v2);
         for (j=0; j<3; j++) v1[j] = v2[j];
     }
     
-    for(i=0; i < DATA_SIZE; i++) {       /* ¥Ç¡¼¥¿¤ò·×»»¤·¤ÆÊİÂ¸ */
+    for(i=0; i < DATA_SIZE; i++) {       /* ãƒ‡ãƒ¼ã‚¿ã‚’è¨ˆç®—ã—ã¦ä¿å­˜ */
         solv_de(v1,v2);
 
         lane[i][0] = v2[0] + v2[1];
@@ -87,7 +87,7 @@ void move_cars(void)
     }
 }
 
-void init_cars(void)  /* ²ò¤Î½é´üÃÍÀßÄê */
+void init_cars(void)  /* è§£ã®åˆæœŸå€¤è¨­å®š */
 {
     int i;
     double r;
@@ -132,7 +132,7 @@ void set_sight(void)
     double u1[3], ur[3], ue[3];
     double rr;
 
-    if (vall == 1) {           /* »ëÅÀ¤ò¾åÊı±óÊı¤Ë¸ÇÄê */
+    if (vall == 1) {           /* è¦–ç‚¹ã‚’ä¸Šæ–¹é æ–¹ã«å›ºå®š */
         glLoadIdentity();
         gluLookAt(0.0,100.0,30.0, 0.0,0.0,30.0, 0.0,0.0,1.0);
     } else {
@@ -185,7 +185,7 @@ void display(void)
 
     set_light();
 
-    /* ²òµ°Æ»¤òÅÀÀş¤ÇÉ½¼¨ */
+    /* è§£è»Œé“ã‚’ç‚¹ç·šã§è¡¨ç¤º */
     glBegin(GL_LINE_STRIP);
     for(i=0; i < DATA_SIZE; i++) {
         glColor3dv(lanecolor[i]);
@@ -195,7 +195,7 @@ void display(void)
 
     glEnable(GL_LIGHTING);
 
-    /* ²òµ°Æ»¾å¤ÎÅÀ¤ò¥È¡¼¥é¥¹¤ÇÉ½¼¨ */
+    /* è§£è»Œé“ä¸Šã®ç‚¹ã‚’ãƒˆãƒ¼ãƒ©ã‚¹ã§è¡¨ç¤º */
     for(i=0; i<CARS; i++) {
         glPushMatrix();
         glTranslated(cars[i][0],cars[i][1],cars[i][2]);
@@ -206,7 +206,7 @@ void display(void)
         glPopMatrix();
     }
 
-    /* ÊıÄø¼°¤Î2¸Ä¤ÎÊ¿¹ÕÅÀ¤òµå¤ÇÉ½¼¨ */
+    /* æ–¹ç¨‹å¼ã®2å€‹ã®å¹³è¡¡ç‚¹ã‚’çƒã§è¡¨ç¤º */
     glPushMatrix();
     glTranslated(16.97, 0.0, 27.0);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse1);
@@ -253,71 +253,71 @@ void quit(void)
 void keyboard(unsigned char key, int x, int y)
 {
     switch(key) {
-         case 27:  /* [ESC] ¥×¥í¥°¥é¥à¤Î½ªÎ» */
+         case 27:  /* [ESC] ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®çµ‚äº† */
              quit();
              break;
-         case 's':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó°ì»şÄä»ß */
+         case 's':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€æ™‚åœæ­¢ */
              glutIdleFunc(NULL);
              break;
-         case 'g':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó³«»Ï */
+         case 'g':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹ */
              glutIdleFunc(idle);
              break;
-         case ' ':  /* (Ää»ß»ş¤Ë)1¥³¥Ş¿Ê¤á¤ë */
+         case ' ':  /* (åœæ­¢æ™‚ã«)1ã‚³ãƒé€²ã‚ã‚‹ */
              idle();
              break;
-         case '0':  /* »ëÅÀ¤ò¾åÊı±óÊı¤Ë¤¹¤ë */
+         case '0':  /* è¦–ç‚¹ã‚’ä¸Šæ–¹é æ–¹ã«ã™ã‚‹ */
              vall = 1;
              glutPostRedisplay();
              break;
-         case '1':  /* »ëÅÀ¤ò1ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '1':  /* è¦–ç‚¹ã‚’1ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 0;
              glutPostRedisplay();
              break;
-         case '2':  /* »ëÅÀ¤ò2ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '2':  /* è¦–ç‚¹ã‚’2ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 1;
              glutPostRedisplay();
              break;
-         case '3':  /* »ëÅÀ¤ò3ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '3':  /* è¦–ç‚¹ã‚’3ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 2;
              glutPostRedisplay();
              break;
-         case '4':  /* »ëÅÀ¤ò4ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '4':  /* è¦–ç‚¹ã‚’4ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 3;
              glutPostRedisplay();
              break;
-         case '5':  /* »ëÅÀ¤ò5ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '5':  /* è¦–ç‚¹ã‚’5ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 4;
              glutPostRedisplay();
              break;
-         case '6':  /* »ëÅÀ¤ò6ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+         case '6':  /* è¦–ç‚¹ã‚’6ç•ªã®è»Šã«ã™ã‚‹ */
              vall = 0;
              car_num = 5;
              glutPostRedisplay();
              break;
-         case 'u':  /* »ëÅÀ¤ò¾å¤Ë¤º¤é¤¹ */
+         case 'u':  /* è¦–ç‚¹ã‚’ä¸Šã«ãšã‚‰ã™ */
              if (vall == 0) {
                  vht += 0.2; if(vht > 1.1) vht = 1.1;
                  glutPostRedisplay();
              }
              break;
-         case 'd':  /* »ëÅÀ¤ò²¼¤Ë¤º¤é¤¹ */
+         case 'd':  /* è¦–ç‚¹ã‚’ä¸‹ã«ãšã‚‰ã™ */
              if (vall == 0) {
                  vht -= 0.2; if (vht < -1.1) vht = -1.1;
                  glutPostRedisplay();
              }
              break;
-         case '+':  /* ¥º¡¼¥à¥¤¥ó */
+         case '+':  /* ã‚ºãƒ¼ãƒ ã‚¤ãƒ³ */
              if (vall == 0) {
                  zoom = zoom / 2; if (zoom < 2) zoom = 2;
                  glutPostRedisplay();
              }
              break;
-         case '-':  /* ¥º¡¼¥à¥¢¥¦¥È */
+         case '-':  /* ã‚ºãƒ¼ãƒ ã‚¢ã‚¦ãƒˆ */
              if (vall == 0) {
                  zoom = zoom * 2; if (zoom > 128) zoom = 128;
                  glutPostRedisplay();

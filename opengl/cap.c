@@ -1,40 +1,40 @@
 #include <math.h>
 #include <GL/glut.h>
 
-/* $BJ*BN$N?'(B */
+/* 物体の色 */
 GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 GLfloat blue[] = { 0.2, 0.2, 0.8, 1.0 };
 GLfloat yellow[] = { 0.8, 0.8, 0.2, 1.0 };
 
-/* $B8w8;$N0LCV(B */
+/* 光源の位置 */
 GLfloat pos[] = { 3.0, 2.0, 5.0, 1.0 };
 
-/* $B;kE@$N0LCV(B */
+/* 視点の位置 */
 GLdouble ex = 3.0, ey = 4.0, ez = 5.0;
 
-/* $BL\I8E@$N0LCV(B */
+/* 目標点の位置 */
 GLdouble tx = 0.0, ty = 0.0, tz = 0.0;
 
-/* $B2sE><4(B */
+/* 回転軸 */
 GLdouble ax = 0.0, ay = 1.0;
 
-/* $B2sE>3Q(B */
+/* 回転角 */
 GLdouble angle = 0.0;
 
-/* $B%/%j%C%WLL(B */
+/* クリップ面 */
 GLdouble clip[] = { 0.0, 0.0, -1.0, 0.0 };
 
-/* $BI=<(?^7A$N%G%#%9%W%l%$%j%9%HHV9f(B */
+/* 表示図形のディスプレイリスト番号 */
 GLuint cube, dodeca, plane;
 
-/* $B%^%&%90\F0NL$N%9%1!<%k(B */
+/* マウス移動量のスケール */
 double sx, sy;
 #define SCALE 360.0
 
-/* $B%I%i%C%03+;O0LCV(B */
+/* ドラッグ開始位置 */
 int cx, cy;
 
-/* $B%I%i%C%03+;O;~$N2sE>3Q(B */
+/* ドラッグ開始時の回転角 */
 double ca;
 
 void display(void)
@@ -44,38 +44,38 @@ void display(void)
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-  /* $B%/%j%C%WLL$N@_Dj(B */
+  /* クリップ面の設定 */
   glLoadIdentity();
   glTranslated(0.0, 0.0, -d);
   glRotated(angle, ax, ay, 0.0);
   glClipPlane(GL_CLIP_PLANE0, clip);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   gluLookAt(ex, ey, ez, tx, ty, tz, 0.0, 1.0, 0.0);
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-  /* $B%9%F%s%7%k%P%C%U%!$N;HMQ3+;O(B */
+  /* ステンシルバッファの使用開始 */
   glEnable(GL_STENCIL_TEST);
 
-  /* $B%9%F%s%7%k%P%C%U%!$X=q$-$3$`$h$&$K@_Dj(B */
+  /* ステンシルバッファへ書きこむように設定 */
   glStencilFunc(GL_ALWAYS, 0x0, 0xffffffff);
 
-  /* $B30B&$N%/%j%C%W$5$l$k#1#2LLBN$rIA2h(B */
+  /* 外側のクリップされる１２面体を描画 */
   glEnable(GL_CLIP_PLANE0);
   glCallList(dodeca);
   glDisable(GL_CLIP_PLANE0);
 
-  /* $B%9%F%s%7%k$r;2>H$7$FIA2h$9$k$h$&$K@_Dj(B */
+  /* ステンシルを参照して描画するように設定 */
   glStencilFunc(GL_NOTEQUAL, 0x0, 0xffffffff);
 
-  /* $B%-%c%C%W$r%/%j%C%WLL$HF1MM$K2sE>$7$FIA2h(B $B!A(B $B%/%j%C%WLL(B
-   $B$N:BI8JQ49$N7k2L$r(B glGetFloatv(GL_MODELVIEW_MATRIX, ..) 
-   $B$7$F!"$=$l$r(B glLoadMatrixf(..) $B$7$F$b$$$$$H;W$&$1$I!D(B */
+  /* キャップをクリップ面と同様に回転して描画 ～ クリップ面
+   の座標変換の結果を glGetFloatv(GL_MODELVIEW_MATRIX, ..) 
+   して、それを glLoadMatrixf(..) してもいいと思うけど… */
   glPushMatrix();
   glLoadIdentity();
   glTranslated(0.0, 0.0, -d);
@@ -83,10 +83,10 @@ void display(void)
   glCallList(plane);
   glPopMatrix();
 
-  /* $B%9%F%s%7%k%P%C%U%!$N;HMQ=*N;(B */
+  /* ステンシルバッファの使用終了 */
   glDisable(GL_STENCIL_TEST);
 
-  /* $BFbB&$N%/%j%C%W$5$l$J$$N)J}BN$rIA2h(B */
+  /* 内側のクリップされない立方体を描画 */
   glCallList(cube);
 
   glutSwapBuffers();
@@ -94,21 +94,21 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $B%^%&%9%]%$%s%?0LCV$N%&%#%s%I%&Fb$NAjBPE*0LCV$X$N49;;MQ(B */
+  /* マウスポインタ位置のウィンドウ内の相対的位置への換算用 */
   sx = 1.0 / (double)w;
   sy = 1.0 / (double)h;
 
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -123,16 +123,16 @@ void mouse(int button, int state, int x, int y)
   case GLUT_LEFT_BUTTON:
     switch (state) {
     case GLUT_DOWN:
-      /* $B%"%K%a!<%7%g%s3+;O(B */
+      /* アニメーション開始 */
       glutIdleFunc(idle);
-      /* $B%I%i%C%03+;OE@$r5-O?(B */
+      /* ドラッグ開始点を記録 */
       cx = x;
       cy = y;
-      /* $B%I%i%C%03+;O;~$N2sE>3Q$r5-O?(B */
+      /* ドラッグ開始時の回転角を記録 */
       ca = angle;
       break;
     case GLUT_UP:
-      /* $B%"%K%a!<%7%g%s=*N;(B */
+      /* アニメーション終了 */
       glutIdleFunc(0);
       break;
     default:
@@ -148,18 +148,18 @@ void motion(int x, int y)
 {
   double dx, dy, a;
 
-  /* $B%^%&%9%]%$%s%?$N0LCV$N%I%i%C%03+;O0LCV$+$i$NJQ0L(B */
+  /* マウスポインタの位置のドラッグ開始位置からの変位 */
   dx = (x - cx) * sx;
   dy = (y - cy) * sy;
 
-  /* $B%^%&%9%]%$%s%?$N0LCV$N%I%i%C%03+;O0LCV$+$i$N5wN%(B */
+  /* マウスポインタの位置のドラッグ開始位置からの距離 */
   a = sqrt(dx * dx + dy * dy);
 
   if (a != 0.0) {
-    /* $B5wN%$r3QEY$K49;;$7$F%I%i%C%03+;O;~$N2sE>3Q$K2C;;(B */
+    /* 距離を角度に換算してドラッグ開始時の回転角に加算 */
     angle = fmod(ca + SCALE * a, 360.0);
 
-    /* $B%^%&%9$NJQ0L$+$i2sE><4%Y%/%H%k$r5a$a$k(B */
+    /* マウスの変位から回転軸ベクトルを求める */
     ax = dy / a;
     ay = dx / a;
   }
@@ -169,7 +169,7 @@ void keyboard(unsigned char key, int x, int y)
 {
   switch (key) {
   case '\033':
-    /* ESC $B$r%?%$%W$7$?$i=*N;(B */
+    /* ESC をタイプしたら終了 */
     exit(0);
   case 'x':
     ex += 0.5;
@@ -197,46 +197,46 @@ void keyboard(unsigned char key, int x, int y)
 
 void init(void)
 {
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
 
-  /* $B%9%F%s%7%k%P%C%U%!$K=q$-$3$`$?$S$K%9%F%s%7%k%P%C%U%!$N%S%C%H$rH?E>(B */
+  /* ステンシルバッファに書きこむたびにステンシルバッファのビットを反転 */
   glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
 
-  /* $B?^7A$,!VJD$8$?N)BN!W!J$+$D(B glCullFace() $B$r;H$o$J$$!K$J(B
-     $B$i!"2hAG$N%9%F%s%7%k%P%C%U%!$X$N=q$-9~$_2s?t$O6v?t2s$K(B
-     $B$J$k!#$H$3$m$,!"%/%j%C%W$5$l$FJ*BN$K7j$,3+$$$F$7$^$&$H!"(B
-     $B$=$NItJ,!J$=$3$+$i$ON"B&$NLL$,8+$($k!K$KBP$9$k=q$-9~$_(B
-     $B2s?t$O4q?t2s$K$J$k!#$7$?$,$C$F!"%9%F%s%7%k%P%C%U%!$N=q(B
-     $B$-9~$_$,9T$o$l$kEY$K%9%F%s%7%k%P%C%U%!$N%S%C%H$rH?E>$9(B
-     $B$l$P!"4q?t2s=q$-9~$_$,9T$o$l$?ItJ,!"$9$J$o$A7j$NItJ,$N(B
-     $B2hAG$N%9%F%s%7%k%P%C%U%!$@$1CM$,%;%C%H$5$l$k$3$H$K$J$k!#(B*/
+  /* 図形が「閉じた立体」（かつ glCullFace() を使わない）な
+     ら、画素のステンシルバッファへの書き込み回数は偶数回に
+     なる。ところが、クリップされて物体に穴が開いてしまうと、
+     その部分（そこからは裏側の面が見える）に対する書き込み
+     回数は奇数回になる。したがって、ステンシルバッファの書
+     き込みが行われる度にステンシルバッファのビットを反転す
+     れば、奇数回書き込みが行われた部分、すなわち穴の部分の
+     画素のステンシルバッファだけ値がセットされることになる。*/
 
 }
 
 void scene(void)
 {
-  /* $BI=<(?^7A$r%G%#%9%W%l%$%j%9%H$KEPO?(B */
+  /* 表示図形をディスプレイリストに登録 */
   int l = glGenLists(3);
 
-  /* $BFbB&$NN)J}BN(B */
+  /* 内側の立方体 */
   cube = l;
   glNewList(cube, GL_COMPILE);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
   glutSolidCube(2.0);
   glEndList();
 
-  /* $B30B&$N#1#2LLBN(B */
+  /* 外側の１２面体 */
   dodeca = l + 1;
   glNewList(dodeca, GL_COMPILE);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blue);
   glutSolidDodecahedron();
   glEndList();
 
-  /* $B%/%j%C%W$5$l$?ItJ,$N%-%c%C%W(B */
+  /* クリップされた部分のキャップ */
   plane = l + 2;
   glNewList(plane, GL_COMPILE);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, yellow);

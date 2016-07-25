@@ -2,26 +2,26 @@
 <html>
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>A. $B%&%)!<%/%9%k!<$N<B83(B</title>
+<title>A. ウォークスルーの実験</title>
 </head>
 
 <body>
 
-<h1>$B%&%)!<%/%9%k!<$N<B83(B</h1>
+<h1>ウォークスルーの実験</h1>
 
-<p>$B%&%)!<%/%9%k!<$O#3<!85#C#G%7!<%s$NCf$rJb$-2s$k8z2L$N$3$H$r8@$$$^$9!%(B $B$3$l$O;kE@$N0\F0$K$h$k%"%K%a!<%7%g%s$G$9!%%^%&%9$G;kE@$N0LCV$rF0$+$9%W%m%0%i%`$r:n$C$F$_$^$7$g$&!%(B $B$3$l$^$G$K:n$C$?%W%m%0%i%`$r%Y!<%9$r2~B$$9$k$N$,<j$C<h$jAa$$$H;W$$$^$9$,!$$&$^$/9T$+$J$1$l$P2<$N<j=g$r;29M$K$7$F$/$@$5$$!%(B $B%=!<%9%U%!%$%kL>$O(B prog3.c $B$H$7$F$/$@$5$$!%(B</p>
+<p>ウォークスルーは３次元ＣＧシーンの中を歩き回る効果のことを言います． これは視点の移動によるアニメーションです．マウスで視点の位置を動かすプログラムを作ってみましょう． これまでに作ったプログラムをベースを改造するのが手っ取り早いと思いますが，うまく行かなければ下の手順を参考にしてください． ソースファイル名は prog3.c としてください．</p>
 
-<p>$B2<$N%W%m%0%i%`$O%?%$%k>u$N>2$K;M$D$NN)J}BN$rCV$$$?%7!<%s$r@E;_2h$GI=<($7$^$9!%(B $BN)J}BN$NI=<($K$O(B glutSolidCube() $B$H$$$&4X?t$rMQ$$$F$$$^$9!%(B $B$?$@$7!$$3$N%W%m%0%i%`$G$O!$$3$l$r(B display() $B$G$O$J$/!$JL$N4X?t(B scene() $B$NCf$G<B9T$7$F$$$^$9!%(B</p>
+<p>下のプログラムはタイル状の床に四つの立方体を置いたシーンを静止画で表示します． 立方体の表示には glutSolidCube() という関数を用いています． ただし，このプログラムでは，これを display() ではなく，別の関数 scene() の中で実行しています．</p>
 
 <pre class="source">#include &lt;stdlib.h&gt;
 #include &lt;GL/glut.h&gt;
 
 void scene(void)
 {
-  /* $BJ*BN$N?'(B */
+  /* 物体の色 */
   static GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
   static GLfloat green[] = { 0.2, 0.8, 0.2, 1.0 };
   static GLfloat blue[] = { 0.2, 0.2, 0.8, 1.0 };
@@ -33,35 +33,35 @@ void scene(void)
 
   int i, j;
 
-  /* $B@V$$H"(B */
+  /* 赤い箱 */
   glPushMatrix();
   glTranslated(0.0, 0.0, -3.0);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
   glutSolidCube(1.0);
   glPopMatrix();
 
-  /* $BNP$NH"(B */
+  /* 緑の箱 */
   glPushMatrix();
   glTranslated(0.0, 0.0, 3.0);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, green);
   glutSolidCube(1.0);
   glPopMatrix();
 
-  /* $B@D$$H"(B */
+  /* 青い箱 */
   glPushMatrix();
   glTranslated(-3.0, 0.0, 0.0);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, blue);
   glutSolidCube(1.0);
   glPopMatrix();
 
-  /* $B2+?'$$H"(B */
+  /* 黄色い箱 */
   glPushMatrix();
   glTranslated(3.0, 0.0, 0.0);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, yellow);
   glutSolidCube(1.0);
   glPopMatrix();
 
-  /* $BCOLL(B */
+  /* 地面 */
   glBegin(GL_QUADS);
   glNormal3d(0.0, 1.0, 0.0);
   for (j = -5; j &lt; 5; ++j) {
@@ -78,25 +78,25 @@ void scene(void)
 
 void display(void)
 {
-  static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* $B8w8;$N0LCV(B */
+  static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* 光源の位置 */
 
-  static double ex = 0.0, ez = 0.0; /* $B;kE@$N0LCV(B */
-  static double r = 0.0;            /* $B;kE@$N8~$-(B */
+  static double ex = 0.0, ez = 0.0; /* 視点の位置 */
+  static double r = 0.0;            /* 視点の向き */
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   glRotated(r, 0.0, 1.0, 0.0);
   glTranslated(ex, 0.0, ez);
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   scene();
 
   glFlush();
@@ -104,23 +104,23 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
 void keyboard(unsigned char key, int x, int y)
 {
-  /* ESC $B$+(B q $B$r%?%$%W$7$?$i=*N;(B */
+  /* ESC か q をタイプしたら終了 */
   if (key == '\033' || key == 'q') {
     exit(0);
   }
@@ -128,7 +128,7 @@ void keyboard(unsigned char key, int x, int y)
 
 void init(void)
 {
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -149,63 +149,63 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p>$B$3$N;kE@$r!$Nc$($P<V$r1?E>$9$k$h$&$K!$(B $B%^%&%9$N%I%i%C%0$K=>$C$F<+M3$K0\F0$G$-$k$h$&$K$7$F$/$@$5$$!%(B <EM>$B$I$&$$$&0\F0$N;EJ}$r$9$k$+$O<+J,$G9M$($F2<$5$$!%(B</EM> $B$&$^$$J}K!$,;W$$IU$+$J$1$l$P!$0J2<$NJ}<0$r;29M$K$7$F2<$5$$!%(B</p>
+<p>この視点を，例えば車を運転するように， マウスのドラッグに従って自由に移動できるようにしてください． <EM>どういう移動の仕方をするかは自分で考えて下さい．</EM> うまい方法が思い付かなければ，以下の方式を参考にして下さい．</p>
 
-<p>$BNc$($P!$%^%&%9%+!<%=%k$,%&%#%s%I%&$NCf?4$K$"$k;~$K@E;_$9$k$H$7$F!$(B $B$=$3$+$i%^%&%9$rA0!J%^%&%9%+!<%=%k$O>e!K$KF0$+$;$PA0?J!$8e$m!J%^%&%9%+!<%=%k$O2<!K$KF0$+$;$P8eB`!$(B $B1&$KF0$+$;$P1&@{2s!$:8$KF0$+$;$P:8@{2s$9$k$h$&$K$7$^$9!%Cf?4$+$iN%$l$k$K$D$l$FB.$/F0$/$h$&$K$J$k$h$&$K$7$^$7$g$&!%(B</p>
+<p>例えば，マウスカーソルがウィンドウの中心にある時に静止するとして， そこからマウスを前（マウスカーソルは上）に動かせば前進，後ろ（マウスカーソルは下）に動かせば後退， 右に動かせば右旋回，左に動かせば左旋回するようにします．中心から離れるにつれて速く動くようになるようにしましょう．</p>
 
 <div class="figure">
-<img src="walk1.gif" width="595" height="253" alt="$B%^%&%9$K$h$k@)8f(B">
-<img src="walkmov.gif" width="120" height="120" alt="$B%&%)!<%/%9%k!<(B">
+<img src="walk1.gif" width="595" height="253" alt="マウスによる制御">
+<img src="walkmov.gif" width="120" height="120" alt="ウォークスルー">
 </div>
 
 <ol>
 
-<li>$B;kE@$N8=:_0LCV$O(B display() $B$NCf$N(B ex $B$*$h$S(B ez $B$NFs$D$NJQ?t$G@_Dj$7$F$$$^$9!%$3$NCM$rJQ99$9$k$3$H$G!$;kE@$N0LCV$rJQ$($k$3$H$,$G$-$^$9!%(B $B$^$?!$$=$N0LCV$G$N?J9TJ}8~$O(B r $B$G@_Dj$7$F$$$^$9!%(B</li>
+<li>視点の現在位置は display() の中の ex および ez の二つの変数で設定しています．この値を変更することで，視点の位置を変えることができます． また，その位置での進行方向は r で設定しています．</li>
 
-<li>$B8=:_0LCV$r(B <b>P</b> = (ex, ez) $B$H$7!$B.EY%Y%/%H%k$r(B <b>V</b> $B$H$9$l$P!$(B t $BIC8e$N0LCV(B <b>P</b>' = (ex', ez') $B$O<!<0$G5a$a$i$l$^$9!%(B
+<li>現在位置を <b>P</b> = (ex, ez) とし，速度ベクトルを <b>V</b> とすれば， t 秒後の位置 <b>P</b>' = (ex', ez') は次式で求められます．
 <div class="expression">
 <b>P</b>' = <b>V</b> t + <b>P</b>
 </div></li>
 
-<li>$B$^$?$=$N0LCV$K$*$1$k?J9TJ}8~(B r' $B$O!$(B $B8=:_$N?J9TJ}8~$r(B r$B!$?J9TJ}8~$rJQ$($kB.EY!J%O%s%I%k$r@Z$kB.$5!K$r(B a $B$H$9$l$P!$<!<0$G5a$a$i$l$^$9!%(B
+<li>またその位置における進行方向 r' は， 現在の進行方向を r，進行方向を変える速度（ハンドルを切る速さ）を a とすれば，次式で求められます．
 <div class="expression">
 r' = a t + r
 </div></li>
 
-<li>$B$7$?$,$C$F!$%&%#%s%I%&$NCf?40LCV$H%^%&%9%+!<%=%k$N4X78$+$i!$(B $BB.EY%Y%/%H%k$N@dBPCM!J?J9TJ}8~$KBP$9$kB.EY!K(B |<b>V</b>| $B$H3QB.EY(B a $B$r5a$a$^$9!%(B $B8=:_0LCV$K$*$1$kB.EY%Y%/%H%k(B <b>V</b>$B$O<!<0$G5a$a$i$l$^$9!%(B
+<li>したがって，ウィンドウの中心位置とマウスカーソルの関係から， 速度ベクトルの絶対値（進行方向に対する速度） |<b>V</b>| と角速度 a を求めます． 現在位置における速度ベクトル <b>V</b>は次式で求められます．
 <div class="expression">
 <b>V</b> = (|<b>V</b>|sin r, |<b>V</b>|cos r)
 </div>
-$B$?$@$7!$(B<a href="libglut.html#glRotated">glRotated()</a>$B$NBh#10z?t(B r $B$O:82sE>$,@5$J$N$KBP$7$F%^%&%9$N:BI87O$O1&J}8~$,@5$G$"$k$3$H!$$*$h$S(B r $B$NC10L$O(B<EM>$BEY(B</EM>$B$J$N$KBP$7$F?t3X4X?t(B sin(), cos() $B$N0z?t$O(B<EM>$B%i%8%"%s(B</EM>$B$GM?$($kI,MW$,$"$k$3$H$KCm0U$7$F$/$@$5$$!%(B</li>
+ただし，<a href="libglut.html#glRotated">glRotated()</a>の第１引数 r は左回転が正なのに対してマウスの座標系は右方向が正であること，および r の単位は<EM>度</EM>なのに対して数学関数 sin(), cos() の引数は<EM>ラジアン</EM>で与える必要があることに注意してください．</li>
 
-<li>$B%&%#%s%I%&$N%5%$%:$O(B resize() $B$N0z?t$GF@$i$l$^$9$+$i!$(B $B$=$l$i$+$i%&%#%s%I%&$NCf?40LCV$r5a$a$^$9!%(B $BF@$i$l$?0LCV$O!$B>$N4X?t$GMxMQ$G$-$k$h$&$K!$(B $BE,Ev$J(B<EM>$B30ItJQ?t(B</EM>$B$KBeF~$7$F$*$-$^$9!%(B</li>
+<li>ウィンドウのサイズは resize() の引数で得られますから， それらからウィンドウの中心位置を求めます． 得られた位置は，他の関数で利用できるように， 適当な<EM>外部変数</EM>に代入しておきます．</li>
 
-<li><a href="libglut.html#7.2">$B%I%i%C%0(B</a>$BCf$N%^%&%9$N0LCV$rF@$k$?$a$K!$(B $B$3$N%W%m%0%i%`$K%^%&%9$N%I%i%C%0Cf$K8F$S=P$94X?t$rDI2C$7!$$=$l$r(B <a href="libglut.html#glutmotionfunc">glutMotionFunc()</a> $B$N0z?t$K;XDj$7$^$9!%%^%&%9$N0LCV$ODI2C$7$?4X?t$N0z?t$GF@$k$3$H$,$G$-$^$9$+$i!$$=$N0LCV$N%&%#%s%I%&$NCf?4$+$i$NJQ0L$r85$K!$(B $B?J9TJ}8~$H$=$NJ}8~$KBP$9$kB.EY$r7hDj$7$^$9!%$3$l$i$bE,Ev$J30ItJQ?t$KBeF~$7$^$9!%(B</li>
+<li><a href="libglut.html#7.2">ドラッグ</a>中のマウスの位置を得るために， このプログラムにマウスのドラッグ中に呼び出す関数を追加し，それを <a href="libglut.html#glutmotionfunc">glutMotionFunc()</a> の引数に指定します．マウスの位置は追加した関数の引数で得ることができますから，その位置のウィンドウの中心からの変位を元に， 進行方向とその方向に対する速度を決定します．これらも適当な外部変数に代入します．</li>
 
-<li>$B$3$N?J9TJ}8~$H$=$NJ}8~$KBP$9$kB.EY$r$b$H$K!$(B $B;kE@$N8=:_0LCV$rJQ99$7$^$9!%$J$*!$;~9o(B t $B$O7P2a;~4V$r7WB,$7$F7hDj$9$kI,MW$,$"$j$^$9$,!$(B $BLLE]$J$iDj?t$G$b9=$$$^$;$s!%(Bt = 1 $B$/$i$$$+$i;O$a$FE,Ev$J%9%T!<%I$K$J$k$h$&D4@0$7$F$_$F2<$5$$!%(B</li>
+<li>この進行方向とその方向に対する速度をもとに， 視点の現在位置を変更します．なお，時刻 t は経過時間を計測して決定する必要がありますが， 面倒なら定数でも構いません．t = 1 くらいから始めて適当なスピードになるよう調整してみて下さい．</li>
 
-<li>$B$b$A$m$s!$;kE@$N0\F0$O(B<EM>$B3j$i$+$K(B</EM>$B9T$o$l$k$h$&$K$7$F$/$@$5$$!%(B $B$^$?2hLL$N(B<EM>$B$A$i$D$-$bM^@)(B</EM>$B$9$k$h$&$K$7$F$/$@$5$$!%(B</li>
+<li>もちろん，視点の移動は<EM>滑らかに</EM>行われるようにしてください． また画面の<EM>ちらつきも抑制</EM>するようにしてください．</li>
 
 </ol>
 
 <div class="figure">
-<img src="walk2.gif" alt="$B0\F0$N;EJ}(B">
+<img src="walk2.gif" alt="移動の仕方">
 </div>
 
-<p>$B>e$N%W%m%0%i%`$G$O!$;kE@$r0\F0$9$k$+$o$j$K(B <strong>$BJ*BN$NJ}$r5UJ}8~$KF0$+$9(B</strong>$B$3$H$rA0Ds$K$7$F$$$^$9!%$3$N$?$a(B ex, ez $B$*$h$S(B r $B$NCM$O!$(B $B?J9TJ}8~$H$O5U$K@_Dj$9$kI,MW$,$"$j$^$9$N$G!$Cm0U$7$F$/$@$5$$!%(B</p>
+<p>上のプログラムでは，視点を移動するかわりに <strong>物体の方を逆方向に動かす</strong>ことを前提にしています．このため ex, ez および r の値は， 進行方向とは逆に設定する必要がありますので，注意してください．</p>
 
-<p>scene() $B$N?^7A$O<+J,$J$j$K?'!9JQ$($F$_$F$/$@$5$$!%(B $B$?$@$7!$$"$^$jJ#;($J$b$N$rIA$/$HI=<($,CY$/$J$j$^$9!%ItIJ$K$O(B glutSolidCube() $B$N$[$+!$(BglutSolidSphere(), glutSolidCone(), glutSolidDodecahedron(), glutSolidOctahedron(), glutSolidIcosahedron(), glutSolidTetrahedron(), glutSolidTorus(), $B$=$l$K(B glutSolidTeapot() $B$J$I$,MQ0U$5$l$F$$$^$9!%>\$7$/$O%*%s%i%$%s%^%K%e%"%kEy$r;2>H$7$F$/$@$5$$!%(B</p>
+<p>scene() の図形は自分なりに色々変えてみてください． ただし，あまり複雑なものを描くと表示が遅くなります．部品には glutSolidCube() のほか，glutSolidSphere(), glutSolidCone(), glutSolidDodecahedron(), glutSolidOctahedron(), glutSolidIcosahedron(), glutSolidTetrahedron(), glutSolidTorus(), それに glutSolidTeapot() などが用意されています．詳しくはオンラインマニュアル等を参照してください．</p>
 
-<p>glutSolidTetrahedron() $B$J$I$O%5%$%:$r;XDj$9$k$3$H$,$G$-$^$;$s$+$i!$(B $B$3$l$i$NBg$-$5$rJQ$($?$$$H$-$O(B glScaled() $B$r;H$C$F$/$@$5$$!J%5%$%:$,;XDj$G$-$k(B glSolidCube() $B$J$I$r$3$l$G3HBg=L>.$9$k$H!$K!@~%Y%/%H%k$,$:$l$F1"1FIU$1$,$*$+$7$/$J$j$^$9!K(B</p>
+<p>glutSolidTetrahedron() などはサイズを指定することができませんから， これらの大きさを変えたいときは glScaled() を使ってください（サイズが指定できる glSolidCube() などをこれで拡大縮小すると，法線ベクトルがずれて陰影付けがおかしくなります）</p>
 
 <dl>
 
 <dt><tt><b><a class="label" name="glScaled">glScaled(GLdouble x, GLdouble y, GLdouble z)</a></b></tt></dt>
 
-<dd>$BJQ499TNs$K3HBg=L>.$N9TNs$r>h$8$^$9!%(B $B0z?t$O$$$:$l$b(B GLdouble $B7?(B (double $B$HEy2A!K$G!$(B $B#3$D$N0z?t(B x, y, z $B$K$O3HBg78?t$r;XDj$7$^$9!%(B $B0z?t$,(B float $B7?$J$i(B glScalef() $B$r;H$$$^$9!%$?$@$7!$(BglutSolidCube() $B$N$h$&$J%W%j%_%F%#%V$r$3$l$G3HBg=L>.$9$k$HK!@~%Y%/%H%k$,$:$l$F1"1FIU$1$,$*$+$7$/$J$C$F$7$^$$$^$9!%(B</dd>
+<dd>変換行列に拡大縮小の行列を乗じます． 引数はいずれも GLdouble 型 (double と等価）で， ３つの引数 x, y, z には拡大係数を指定します． 引数が float 型なら glScalef() を使います．ただし，glutSolidCube() のようなプリミティブをこれで拡大縮小すると法線ベクトルがずれて陰影付けがおかしくなってしまいます．</dd>
 
 </dl>
 
-<p>$B$J$*!$$3$l$O$"$/$^$G!V0lNc!W$K2a$.$^$;$s!%(B $B<+J,$N;W$&J}K!$GJb$-2s$jJ}$r9M$($F$/$l$l$P7k9=$G$9!%$?$@$7!$(B $B$A$c$s$HJ*BN$NGX8e$K!V2s$j9~$`!W$3$H$,$G$-$k$h$&$K$7$F2<$5$$!%(B</p>
+<p>なお，これはあくまで「一例」に過ぎません． 自分の思う方法で歩き回り方を考えてくれれば結構です．ただし， ちゃんと物体の背後に「回り込む」ことができるようにして下さい．</p>
 </body>
 </html>

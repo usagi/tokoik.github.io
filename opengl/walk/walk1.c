@@ -1,5 +1,5 @@
 /*
- * gluLookAt() �ǻ뺹��Ϳ����Ω�λ�Υ���ץ�
+ * gluLookAt() で視差を与えた立体視のサンプル
  */
 
 #include <stdio.h>

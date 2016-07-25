@@ -2,55 +2,55 @@
 <html>
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>H. $B%S!<6L$N<B83(B</title>
+<title>H. ビー玉の実験</title>
 </head>
 
 <body>
 
-<h1>$B%S!<6L$N<B83(B</h1>
+<h1>ビー玉の実験</h1>
 
-<p>$B%S!<6LM7$S$C$]$$%2!<%`$d!$%S%j%d!<%I$_$?$$$J%2!<%`$N%W%m%0%i%`$r:n$C$F$_$^$7$g$&!%(B
-$B0l1~!$0J2<$K;29M$N%W%m%0%i%`$r<($7$^$9!%$3$N%W%m%0%i%`$r<B9T$9$k$H!$%9%F!<%8>e$K%^%<%s%?$N5e$,8=$l$^$9!%$3$l$r%S!<6L$@$H;W$C$F!$%^%&%9%\%?%s$r2!$7$?$H$-$K8=$l$kL\I8$K$V$D$1$k$h$&$J%W%m%0%i%`$r=q$$$F$_$F$/$@$5$$!%(B $B$3$N%W%m%0%i%`$O7k9=D9$$$N$G!$(B
-$B;~4V$,L5$1$l$P(B Web $B%Z!<%8$+$i%3%T!<%"%s%I%Z!<%9%H$7$F9=$$$^$;$s!%$b$A$m$s!$%9%/%i%C%A$+$i=q$-;O$a$F$b9=$$$^$;$s!%$$$:$l$b%=!<%9%U%!%$%kL>$O(B
-prog10.c $B$H$7$F$/$@$5$$!%(B</p>
+<p>ビー玉遊びっぽいゲームや，ビリヤードみたいなゲームのプログラムを作ってみましょう．
+一応，以下に参考のプログラムを示します．このプログラムを実行すると，ステージ上にマゼンタの球が現れます．これをビー玉だと思って，マウスボタンを押したときに現れる目標にぶつけるようなプログラムを書いてみてください． このプログラムは結構長いので，
+時間が無ければ Web ページからコピーアンドペーストして構いません．もちろん，スクラッチから書き始めても構いません．いずれもソースファイル名は
+prog10.c としてください．</p>
 
 <pre class="source">#include &lt;stdlib.h&gt;
 #include &lt;math.h&gt;
 #include &lt;time.h&gt;
 #include &lt;GL/glut.h&gt;
 
-#define W 10                       /* $BBf$NI}$N#2J,$N#1!!(B */
-#define D 20                       /* $BBf$ND9$5!!!!!!!!!!(B */
-#define R 0.5                      /* $B5e$NH>7B!!!!!!!!!!(B */
-#define V 10.0                     /* $B%S!<6L$N=iB.EY!!!!(B */
-#define ZNEAR 1.0                  /* $BA0J}LL!!!!!!!!!!!!(B */
-#define ZFAR 100.0                 /* $B8eJ}LL!!!!!!!!!!!!(B */
+#define W 10                       /* 台の幅の２分の１　 */
+#define D 20                       /* 台の長さ　　　　　 */
+#define R 0.5                      /* 球の半径　　　　　 */
+#define V 10.0                     /* ビー玉の初速度　　 */
+#define ZNEAR 1.0                  /* 前方面　　　　　　 */
+#define ZFAR 100.0                 /* 後方面　　　　　　 */
 
-#define PI 3.1415926535897932      /* $B1_<~N(!!!!!!!!!!!!(B */
-#define TSCALE 0.001               /* $B;~4V$N%9%1!<%k(B(ms) */
+#define PI 3.1415926535897932      /* 円周率　　　　　　 */
+#define TSCALE 0.001               /* 時間のスケール(ms) */
 
-static int cx, cy;                 /* $B%&%#%s%I%&$NCf?4!!(B */
-static int sx, sy;                 /* $B:8%/%j%C%/0LCV!!!!(B */
-static int tstart;                 /* $B%\%?%s$rN%$7$?;~9o(B */
-static double r = 0.0;             /* $B;k@~$N8~$-!!!!!!!!(B */
-static double pbx = 0.0;           /* $B%S!<6L$N8=:_0LCV!!(B */
-static double pbz = 0.0;           /* $B%S!<6L$N8=:_0LCV!!(B */
-static double vbx = 0.0;           /* $B%S!<6L$NB.EY!!!!!!(B */
-static double vbz = 0.0;           /* $B%S!<6L$NB.EY!!!!!!(B */
-static double ptx = 0.0;           /* $BL\I8$N0LCV!!!!!!!!(B */
-static double ptz = 5.0;           /* $BL\I8$N0LCV!!!!!!!!(B */
-static double vtx = 0.0;           /* $BL\I8$NB.EY!!!!!!!!(B */
-static double vtz = 0.0;           /* $BL\I8$NB.EY!!!!!!!!(B */
+static int cx, cy;                 /* ウィンドウの中心　 */
+static int sx, sy;                 /* 左クリック位置　　 */
+static int tstart;                 /* ボタンを離した時刻 */
+static double r = 0.0;             /* 視線の向き　　　　 */
+static double pbx = 0.0;           /* ビー玉の現在位置　 */
+static double pbz = 0.0;           /* ビー玉の現在位置　 */
+static double vbx = 0.0;           /* ビー玉の速度　　　 */
+static double vbz = 0.0;           /* ビー玉の速度　　　 */
+static double ptx = 0.0;           /* 目標の位置　　　　 */
+static double ptz = 5.0;           /* 目標の位置　　　　 */
+static double vtx = 0.0;           /* 目標の速度　　　　 */
+static double vtz = 0.0;           /* 目標の速度　　　　 */
 
 /*
- *   $B>2$rIA$/(B
+ *   床を描く
  */
 static void myGround(double height)
 {
-  const static GLfloat ground[][4] = {   /* $BBf$N?'!!!!!!(B */
+  const static GLfloat ground[][4] = {   /* 台の色　　　 */
     { 0.6, 0.6, 0.6, 1.0 },
     { 0.3, 0.3, 0.3, 1.0 }
   };
@@ -73,40 +73,40 @@ static void myGround(double height)
 }
 
 /*
- * $B2hLLI=<((B
+ * 画面表示
  */
 static void display(void)
 {
-  const static GLfloat lightpos[] = { -3.0, 4.0, 5.0, 1.0 }; /* $B8w8;$N0LCV!!!!!!(B */
-  const static GLfloat bcolor[] = { 0.8, 0.0, 0.4, 1.0 };    /* $B%S!<6L$N?'!!!!!!(B */
-  const static GLfloat tcolor[] = { 0.1, 0.8, 0.3, 1.0 };    /* $BL\I8$N?'!!!!!!!!(B */
-  int tnow;                                                  /* $B8=:_;~9o!!!!!!!!(B */
-  double tstep;                                              /* $B%U%l!<%`4V3V!!!!(B */
+  const static GLfloat lightpos[] = { -3.0, 4.0, 5.0, 1.0 }; /* 光源の位置　　　 */
+  const static GLfloat bcolor[] = { 0.8, 0.0, 0.4, 1.0 };    /* ビー玉の色　　　 */
+  const static GLfloat tcolor[] = { 0.1, 0.8, 0.3, 1.0 };    /* 目標の色　　　　 */
+  int tnow;                                                  /* 現在時刻　　　　 */
+  double tstep;                                              /* フレーム間隔　　 */
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-  /* $B;kE@$N0\F0!JJ*BN$NJ}$r1|$K0\$9!K(B*/
+  /* 視点の移動（物体の方を奥に移す）*/
   glTranslated(0.0, -ZNEAR, -3.0);
   glRotated(r, 0.0, 1.0, 0.0);
 
-  /* $BCOLL$NIA2h(B */
+  /* 地面の描画 */
   myGround(-R);
 
-  /* $BL\I8$NIA2h(B */
+  /* 目標の描画 */
   glPushMatrix();
   glTranslated(ptx, 0.0, ptz);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, tcolor);
   glutSolidSphere(R, 32, 16);
   glPopMatrix();
   
-  /* $B%S!<6L(B */
+  /* ビー玉 */
   glPushMatrix();
   glTranslated(pbx, 0.0, pbz);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, bcolor);
@@ -115,33 +115,33 @@ static void display(void)
   
   glutSwapBuffers();
 
-  /* $B%U%l!<%`4V3V(B (Tstep) $B$N;;=P(B */
+  /* フレーム間隔 (Tstep) の算出 */
   tnow = glutGet(GLUT_ELAPSED_TIME);
   tstep = (tnow - tstart) * TSCALE;
   tstart = tnow;
 
   /*
-   * $B$3$N$"$?$j$K%S!<6L$dL\I8$N0LCV$N99?7=hM}$r=q$/(B
+   * このあたりにビー玉や目標の位置の更新処理を書く
    */
 }
 
 static void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&$NCf?4(B */
+  /* ウィンドウの中心 */
   cx = w / 2;
   cy = h / 2;
 
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(60.0, (double)w / (double)h, ZNEAR, ZFAR);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -155,24 +155,24 @@ static void mouse(int button, int state, int x, int y)
   switch (button) {
   case GLUT_LEFT_BUTTON:
     if (state == GLUT_DOWN) {
-      /* $B%^%&%9$N%/%j%C%/0LCV$NJ]B8(B */
+      /* マウスのクリック位置の保存 */
       sx = x;
       sy = y;
 
-      /* $B%S!<6L$dL\I8$N0LCV$dB.EY$N=i4|2=(B */
+      /* ビー玉や目標の位置や速度の初期化 */
       pbx = pbz = vbx = vbz = vtx = vtz = 0.0;
       ptx = 2.0 * (double)W * (double)rand() / (double)RAND_MAX - (double)W;
       ptz = (double)(-D) * (double)rand() / (double)RAND_MAX;
 
-      /* $B%"%K%a!<%7%g%s3+;O(B */
+      /* アニメーション開始 */
       glutIdleFunc(idle);
     }
     else {
-      /* $B%^%&%9%\%?%s$rN%$7$?;~9o$NJ]B8(B */
+      /* マウスボタンを離した時刻の保存 */
       tstart = glutGet(GLUT_ELAPSED_TIME);
 
       /*
-       * $B$3$N$"$?$j$G%S!<6L$N=iB.EY%Y%/%H%k$r@_Dj$9$k(B
+       * このあたりでビー玉の初速度ベクトルを設定する
        */
     }
     break;
@@ -188,7 +188,7 @@ static void motion(int x, int y)
 
 static void keyboard(unsigned char key, int x, int y)
 {
-  /* ESC $B$+(B q $B$r%?%$%W$7$?$i=*N;(B */
+  /* ESC か q をタイプしたら終了 */
   if (key == '\033' || key == 'q') {
     exit(0);
   }
@@ -196,13 +196,13 @@ static void keyboard(unsigned char key, int x, int y)
 
 static void init(void)
 {
-  /* $B;~4V$N=i4|2=(B */
+  /* 時間の初期化 */
   glutGet(GLUT_ELAPSED_TIME);
 
-  /* $BMp?t$N7ONs(B */
+  /* 乱数の系列 */
   srand(time(0));
   
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -225,85 +225,85 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p>$B$3$N%W%m%0%i%`$O!$%^%&%9%\%?%s$r2!$9$H%9%F!<%8>e$N$I$3$+$KL\I8$H$J$k5e$,8=$l$k$h$&$K$J$C$F$$$^$9!%$^$?!$%^%&%9$N%\%?%s$r2!$7$?$^$^%^%&%9$r:81&$KF0$+$;$P!$8~$$$F$$$kJ}8~$rJQ$($i$l$^$9!%$?$@$7!$%S!<6L$rF0$+$9$3$H$O$G$-$J$$$N$G!$L\I8$r@5LL$K$H$i$($F%^%&%9%\%?%s$rN%$7$?$H$-$K%S!<6L$,@5LL$K8~$+$C$F<M=P$5$l!$L\I8$H>WFM$9$k$h$&$K%W%m%0%i%`$rJQ99$7$F$/$@$5$$!%(B</p>
-<p>$B%W%m%0%i%`$r4JC1$K$9$k$?$a$K!$%S!<6L$dL\I8$OF1$8Bg$-$5$G<ANL$bF1$85e$G$"$k$H$7!$2sE>$d47@-%b!<%a%s%H$N1F6A!$E>$,$jK`;$$d>WFM$K$h$k1?F0%(%M%k%.!<$NB;<:$J$I$O9MN8$7$J$$$b$N$H$7$^$9!%(B</p>
+<p>このプログラムは，マウスボタンを押すとステージ上のどこかに目標となる球が現れるようになっています．また，マウスのボタンを押したままマウスを左右に動かせば，向いている方向を変えられます．ただし，ビー玉を動かすことはできないので，目標を正面にとらえてマウスボタンを離したときにビー玉が正面に向かって射出され，目標と衝突するようにプログラムを変更してください．</p>
+<p>プログラムを簡単にするために，ビー玉や目標は同じ大きさで質量も同じ球であるとし，回転や慣性モーメントの影響，転がり摩擦や衝突による運動エネルギーの損失などは考慮しないものとします．</p>
 
 <div class="figure">
-<img src="ball0.gif" width="384" height="288" alt="$B%S!<6L$N>WFM8!=P(B">
+<img src="ball0.gif" width="384" height="288" alt="ビー玉の衝突検出">
 </div>
-<p>$B%S!<6L$,EyB.1?F0$9$k$J$i!$%S!<6L$N=i4|0LCV$r(B <b>P</b><sub><i>b</i></sub>$B!$B.EY%Y%/%H%k$r(B <b>V</b>$B!$=i4|0LCV$+$i$N;~9o$r(B <i>t</i> $B$H$9$k$H!$%S!<6L$N8=:_0LCV(B <b>P</b> $B$O<!<0$G5a$a$k$3$H$,$G$-$^$9!%(B</p>
+<p>ビー玉が等速運動するなら，ビー玉の初期位置を <b>P</b><sub><i>b</i></sub>，速度ベクトルを <b>V</b>，初期位置からの時刻を <i>t</i> とすると，ビー玉の現在位置 <b>P</b> は次式で求めることができます．</p>
 <div class="figure">
-<img src="ball-ex01.gif" width="384" height="48" alt="$B<0(B (1)">
+<img src="ball-ex01.gif" width="384" height="48" alt="式 (1)">
 </div>
-<p>$B%"%K%a!<%7%g%s$r9T$&>l9g!$$"$k%U%l!<%`$K$*$1$k%S!<6L$N8=:_0LCV$,(B <b>P</b><sub><i>b</i></sub> $B$G!$%"%K%a!<%7%g%s$N%U%l!<%`4V3V!J%j%U%l%C%7%e%l!<%H$N5U?t!K$,(B <i>t<sub>step</sub></i> $B$G$"$l$P!$<!$N%U%l!<%`!J2hLLI=<(!K$K$*$1$k%S!<6L$N0LCV(B <b>P</b>'<sub><i>b</i></sub> $B$O<!$N$h$&$K$J$j$^$9!%(B</p>
+<p>アニメーションを行う場合，あるフレームにおけるビー玉の現在位置が <b>P</b><sub><i>b</i></sub> で，アニメーションのフレーム間隔（リフレッシュレートの逆数）が <i>t<sub>step</sub></i> であれば，次のフレーム（画面表示）におけるビー玉の位置 <b>P</b>'<sub><i>b</i></sub> は次のようになります．</p>
 <div class="figure">
-<img src="ball-ex02.gif" width="384" height="48" alt="$B<0(B (2)">
+<img src="ball-ex02.gif" width="384" height="48" alt="式 (2)">
 </div>
-<p>$B>e?^$K$*$$$F%S!<6L$O(B <b>P</b><sub><i>b</i></sub> $B$G$b(B <b>P</b>'<sub><i>b</i></sub> $B$G$bL\I8$H@\?($9$k$3$H$O$"$j$^$;$s$,!$<B:]$K$O(B <b>P</b> $B$G@\?($7$F$$$^$9!%$3$N$?$a!$%S!<6L$HL\I8$N>WFM$r!$3F%U%l!<%`$K$*$1$k%S!<6L$N0LCV$HL\I8$N0LCV$NHf3S$K$h$j8!=P$7$h$&$H$9$k$H!$>WFM$,8!=P$G$-$:$K%S!<6L$,L\I8$r$9$jH4$1$F$7$^$&>l9g$,$"$j$^$9!%(B</p>
-<p>$B$=$3$G!$$3$N$h$&$JLdBj$,5/$3$i$J$$>WFM$N8!=PJ}K!$r9M$($F$_$^$9!%%S!<6L$bL\I8$b$H$b$KH>7B(B <i>r</i> $B$N5e$@$H$7$?>l9g!$$3$NFs$D$,@\$9$k>r7o$O<!$N$h$&$K$J$j$^$9!%(B</p>
+<p>上図においてビー玉は <b>P</b><sub><i>b</i></sub> でも <b>P</b>'<sub><i>b</i></sub> でも目標と接触することはありませんが，実際には <b>P</b> で接触しています．このため，ビー玉と目標の衝突を，各フレームにおけるビー玉の位置と目標の位置の比較により検出しようとすると，衝突が検出できずにビー玉が目標をすり抜けてしまう場合があります．</p>
+<p>そこで，このような問題が起こらない衝突の検出方法を考えてみます．ビー玉も目標もともに半径 <i>r</i> の球だとした場合，この二つが接する条件は次のようになります．</p>
 <div class="figure">
-<img src="ball-ex03.gif" width="384" height="48" alt="$B<0(B (3)">
+<img src="ball-ex03.gif" width="384" height="48" alt="式 (3)">
 </div>
-<p>(3) $B<0$K(B (1) $B<0$rBeF~$7$?8e!$N>JU$rFs>h$7$^$9!%$3$3$G(B <b>V</b><sup>2</sup> = <b>V</b>&sdot;<b>V</b> $B$G$9!%1i;;;R(B&sdot;$B!J%I%C%H!K$O%Y%/%H%k$NFb@Q$rI=$7$^$9!%(B</p>
+<p>(3) 式に (1) 式を代入した後，両辺を二乗します．ここで <b>V</b><sup>2</sup> = <b>V</b>&sdot;<b>V</b> です．演算子&sdot;（ドット）はベクトルの内積を表します．</p>
 <div class="figure">
-<img src="ball-ex04.gif" width="384" height="48" alt="$B<0(B (4)">
+<img src="ball-ex04.gif" width="384" height="48" alt="式 (4)">
 </div>
-<p>$B$3$l$r(B <i>t</i> $B$K$D$$$F@0M}$9$k$H!$<!$NFs<!J}Dx<0$K$J$j$^$9!%(B</p>
+<p>これを <i>t</i> について整理すると，次の二次方程式になります．</p>
 <div class="figure">
-<img src="ball-ex05.gif" width="384" height="48" alt="$B<0(B (5)">
+<img src="ball-ex05.gif" width="384" height="48" alt="式 (5)">
 </div>
-<p>$B$3$NFs<!J}Dx<0$N2r$N8x<0$NH=JL<0(B <i>D</i> $B$r5a$a$^$9!%(B</p>
+<p>この二次方程式の解の公式の判別式 <i>D</i> を求めます．</p>
 <div class="figure">
-<img src="ball-ex06.gif" width="384" height="48" alt="$B<0(B (6)">
+<img src="ball-ex06.gif" width="384" height="48" alt="式 (6)">
 </div>
-<p><i>D</i> $B$,@5$J$i!$%S!<6L$N50@W$,L\I8$H8r:9$7$^$9!%(B</p>
+<p><i>D</i> が正なら，ビー玉の軌跡が目標と交差します．</p>
 <div class="figure">
-<img src="ball-ex07.gif" width="384" height="48" alt="$B<0(B (7)">
+<img src="ball-ex07.gif" width="384" height="48" alt="式 (7)">
 </div>
-<p>$B%S!<6L$,L\I8$H@\?($9$k;~9o(B <i>t</i> $B$O!$2r$N8x<0$h$j<!<0$GF@$i$l$^$9!%(B</p>
+<p>ビー玉が目標と接触する時刻 <i>t</i> は，解の公式より次式で得られます．</p>
 <div class="figure">
-<img src="ball-ex08.gif" width="384" height="48" alt="$B<0(B (8)">
+<img src="ball-ex08.gif" width="384" height="48" alt="式 (8)">
 </div>
-<p>$B$3$3$GL\I8$,%S!<6L$h$j$bA0J}$K$"$l$P(B <b>V</b>&sdot;(<b>P</b><sub><i>t</i></sub> - <b>P</b><sub><i>b</i></sub>) $B$O@5$K$J$k$N$G!$:,9f$NA0$NId9f$,(B -$B!J%^%$%J%9!K$N$H$-!$;~9o(B <i>t</i> $B$G%S!<6L$OL\I8$H=i$a$F@\?($9$k$3$H$K$J$j$^$9!%(B</p>
+<p>ここで目標がビー玉よりも前方にあれば <b>V</b>&sdot;(<b>P</b><sub><i>t</i></sub> - <b>P</b><sub><i>b</i></sub>) は正になるので，根号の前の符号が -（マイナス）のとき，時刻 <i>t</i> でビー玉は目標と初めて接触することになります．</p>
 <div class="figure">
-<img src="ball-ex09.gif" width="384" height="48" alt="$B<0(B (9)">
+<img src="ball-ex09.gif" width="384" height="48" alt="式 (9)">
 </div>
-<p>$B$^$?8=:_$N%U%l!<%`$H<!$N%U%l!<%`$H$N4V$G%S!<6L$,L\I8$H>WFM$9$k$J$i!$;~9o(B <i>t</i> $B$O<!$NHO0O$K$"$j$^$9!%(B</p>
+<p>また現在のフレームと次のフレームとの間でビー玉が目標と衝突するなら，時刻 <i>t</i> は次の範囲にあります．</p>
 <div class="figure">
-<img src="ball-ex10.gif" width="384" height="48" alt="$B<0(B (10)">
+<img src="ball-ex10.gif" width="384" height="48" alt="式 (10)">
 </div>
-<p>$B$7$?$,$C$F!$(B<em>(7) $B<0$H(B (10) $B<0$,$H$b$K@.N)(B</em>$B$9$l$P!$8=:_$N%U%l!<%`$+$i<!$N%U%l!<%`$^$G$N4V$G!$%S!<6L$OL\I8$H>WFM$7$^$9!%<!$K!$$3$N>WFM$K$h$k%S!<6L$ND7$MJV$jJ}8~$r5a$a$^$9!%(B</p>
+<p>したがって，<em>(7) 式と (10) 式がともに成立</em>すれば，現在のフレームから次のフレームまでの間で，ビー玉は目標と衝突します．次に，この衝突によるビー玉の跳ね返り方向を求めます．</p>
 <div class="figure">
-<img src="ball1.gif" width="384" height="288" alt="$B%S!<6L$ND7$MJV$j(B">
+<img src="ball1.gif" width="384" height="288" alt="ビー玉の跳ね返り">
 </div>
-<p>$B$^$:!$>WFM0LCV$K$*$1$k!$%S!<6L$NCf?4$+$iL\I8$NCf?4$K8~$+$&J}8~C10L%Y%/%H%k(B <b>N</b> $B$r5a$a$^$9!%(B</p>
+<p>まず，衝突位置における，ビー玉の中心から目標の中心に向かう方向単位ベクトル <b>N</b> を求めます．</p>
 <div class="figure">
-<img src="ball-ex11.gif" width="384" height="48" alt="$B<0(B (11)">
+<img src="ball-ex11.gif" width="384" height="48" alt="式 (11)">
 </div>
-<p>$B>WFM8e$N%S!<6L$NB.EY%Y%/%H%k(B <b>V</b><sub><i>b</i></sub> $B$HL\I8$NB.EY%Y%/%H%k(B <b>V</b><sub><i>t</i></sub> $B$O!$0J2<$N$h$&$K$7$F5a$a$k$3$H$K$7$^$9!%(B</p>
+<p>衝突後のビー玉の速度ベクトル <b>V</b><sub><i>b</i></sub> と目標の速度ベクトル <b>V</b><sub><i>t</i></sub> は，以下のようにして求めることにします．</p>
 <div class="figure">
-  <img src="ball2.gif" width="384" height="288" alt="$B>WFM8e$N%S!<6L$NB.EY(B">
+  <img src="ball2.gif" width="384" height="288" alt="衝突後のビー玉の速度">
 </div>
-<p>$B%S!<6L$NB.EY%Y%/%H%k(B <b>V</b> $B$N(B <b>N</b> $BJ}8~$N@.J,(B <b>V</b><sub><i>t</i></sub> $B$O<!<0$K$h$j5a$a$i$l$^$9!%(B</p>
-<div class="figure"> <img src="ball-ex12.gif" width="384" height="48" alt="$B<0(B (12)"> </div>
-<p>$B$3$l$,>WFM;~$KL\I8$+$i8+$?%S!<6L$NAjBPE*$JB.EY%Y%/%H%k$K$J$j$^$9!%%S!<6L$HL\I8$N<ANL$,Ey$7$/!$$^$?>WFM$K$h$k1?F0%(%M%k%.!<$NB;<:$,$J$1$l$P!$1?F0NLJ]B8$NK!B'$h$j!$L\I8$O%S!<6L$+$i$3$NB.EY$r$=$N$^$^<u$1<h$C$FF0$-=P$7$^$9!%(B</p>
-<p>$B0lJ}!$>WFM8e$N%S!<6L$NB.EY(B <b>V</b><sub><i>b</i></sub> $B$O!$$3$l$b1?F0NLJ]B8$NK!B'$+$i!$%S!<6L$HL\I8$N<ANL$,Ey$7$1$l$P<!<0$GF@$i$l$^$9!%(B</p>
+<p>ビー玉の速度ベクトル <b>V</b> の <b>N</b> 方向の成分 <b>V</b><sub><i>t</i></sub> は次式により求められます．</p>
+<div class="figure"> <img src="ball-ex12.gif" width="384" height="48" alt="式 (12)"> </div>
+<p>これが衝突時に目標から見たビー玉の相対的な速度ベクトルになります．ビー玉と目標の質量が等しく，また衝突による運動エネルギーの損失がなければ，運動量保存の法則より，目標はビー玉からこの速度をそのまま受け取って動き出します．</p>
+<p>一方，衝突後のビー玉の速度 <b>V</b><sub><i>b</i></sub> は，これも運動量保存の法則から，ビー玉と目標の質量が等しければ次式で得られます．</p>
 <div class="figure">
-  <img src="ball-ex13.gif" width="384" height="48" alt="$B<0(B (13)">
+  <img src="ball-ex13.gif" width="384" height="48" alt="式 (13)">
 </div>
-<p>$B$7$?$,$C$F%S!<6L$,L\I8$H>WFM$7$?>l9g$N!$%S!<6L$N<!$N%U%l!<%`!J(B<i>t<sub>step</sub></i> $B8e!K$K$*$1$k0LCV(B <b>P</b>'<sub><i>b</i></sub> $B$O<!$N$h$&$K$J$j$^$9!%(B</p>
+<p>したがってビー玉が目標と衝突した場合の，ビー玉の次のフレーム（<i>t<sub>step</sub></i> 後）における位置 <b>P</b>'<sub><i>b</i></sub> は次のようになります．</p>
 <div class="figure">
-<img src="ball-ex14.gif" width="384" height="48" alt="$B<0(B (14)">
+<img src="ball-ex14.gif" width="384" height="48" alt="式 (14)">
 </div>
-<p>$B<!$N%U%l!<%`$NIA2h$,40N;$7$?$i(B <b>P</b><sub><i>b</i></sub> $B$H(B <b>V</b> $B$r99?7$7$F!$$=$N<!$N%U%l!<%`$N=hM}$KHw$($^$9!%(B</p>
+<p>次のフレームの描画が完了したら <b>P</b><sub><i>b</i></sub> と <b>V</b> を更新して，その次のフレームの処理に備えます．</p>
 <div class="figure">
-<img src="ball-ex15.gif" width="384" height="48" alt="$B<0(B (15)">
+<img src="ball-ex15.gif" width="384" height="48" alt="式 (15)">
 </div>
 
 <ol>
-  <li>$B%^%&%9$N%\%?%s$rN%$7$?$H$-$K!$8=:_8~$$$F$$$kJ}8~(B r $B$N@5LL$K%S!<6L$,<M=P$5$l$k$h$&$K$7$F$/$@$5$$!%$3$3$G(B r $B$K3JG<$5$l$F$$$kCM$NC10L$OEY$G$"$k$3$H$KCm0U$7$F$/$@$5$$!%(B</li>
-  <li>$B%3%s%T%e!<%?$NIi2Y$r@aLs$9$k$?$a$K!$%S!<6L$,8+$($J$/$J$C$?$i!J%S!<6L$^$G$N5wN%$,(B ZFAR $B$rD6$($?$i!K!$%"%K%a!<%7%g%s$r;_$a$k$h$&$K$7$^$7$g$&!%(B</li>
-  <li>$B2DG=$J$iL\I8$rJ#?t$K$7$F!$%S!<6L$dL\I8$,%S%j%d!<%I$N$h$&$K8_$$$K>WFM$7$"$&%W%m%0%i%`$r:n@.$7$F$/$@$5$$!%$3$N>l9g!$L\I8$b0\F0$9$k$b$N$H$7$F>WFM$N8!=P$r9T$&I,MW$,$"$j$^$9!%$9$J$o$A!$(B(4) $B<0$K$*$$$F(B <b>P</b><sub><i>t</i></sub> $B$b(B <b>P</b> $BF1MM(B <i>t</i> $B$N4X?t$GI=$9I,MW$,$"$j$^$9$,!$(B(5) $B<0$,Fs<!J}Dx<0$G$"$k$3$H$OJQ$o$j$^$;$s!%(B</li>
+  <li>マウスのボタンを離したときに，現在向いている方向 r の正面にビー玉が射出されるようにしてください．ここで r に格納されている値の単位は度であることに注意してください．</li>
+  <li>コンピュータの負荷を節約するために，ビー玉が見えなくなったら（ビー玉までの距離が ZFAR を超えたら），アニメーションを止めるようにしましょう．</li>
+  <li>可能なら目標を複数にして，ビー玉や目標がビリヤードのように互いに衝突しあうプログラムを作成してください．この場合，目標も移動するものとして衝突の検出を行う必要があります．すなわち，(4) 式において <b>P</b><sub><i>t</i></sub> も <b>P</b> 同様 <i>t</i> の関数で表す必要がありますが，(5) 式が二次方程式であることは変わりません．</li>
 </ol>
 </body>
 </html>

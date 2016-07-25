@@ -2,58 +2,58 @@
 <html>
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>F. $B%(%"%[%C%1!<$N<B83(B</title>
+<title>F. エアホッケーの実験</title>
 </head>
 
 <body>
 
-<h1>$B%(%"%[%C%1!<$N<B83(B</h1>
+<h1>エアホッケーの実験</h1>
 
-<p>$B%(%"%[%C%1!<$N%Q%C%/!J6L!K$NF0$-$r:F8=$9$k%W%m%0%i%`$r:n$C$F$_$^$7$g$&!%(B
-$B2<$N%W%m%0%i%`$O%(%"%[%C%1!<Bf$NCf?4$K!$1_HW>u$N%Q%C%/$r@E;_2h$GI=<($7$^$9!%(B
-$B$3$l$r%^%&%9$N%/%j%C%/$K$h$C$F$3$N%Q%C%/$,CF$+$l$?$h$&$KF0$-$@$7!$(B $BJI$KEv$?$C$FD7$MJV$j$J$,$iF0$/$h$&$K$7$F$/$@$5$$!%(B
-$B$J$*!$%Q%C%/$OB.EY$KHfNc$7$?6u5$Dq93(B ($BCQ$:$+$7$$4V0c$$$r$7$F$$$?(B) $B$K$h$C$F<!Bh$KB.EY$r2<$2!$(B
-$BB.EY$,0lDjCM0J2<$K$J$l$P@E;_$9$k$b$N$H$7$^$9!%(B $B0lJ}!$JI$X$N>WFM$K$h$kB.EYDc2<$O9MN8$7$J$/$F$b9=$$$^$;$s(B
-$B!J$b$A$m$s9MN8$7$?J}$,$$$$$3$H$O8@$&$^$G$b$"$j$^$;$s!K!%(B $B$3$N%W%m%0%i%`$O7k9=D9$$$N$G!$(B
-$B;~4V$,L5$1$l$P(B Web $B%Z!<%8$+$i%3%T!<%"%s%I%Z!<%9%H$7$F9=$$$^$;$s!%(B $B%=!<%9%U%!%$%kL>$O(B
-prog8.c $B$H$7$F$/$@$5$$!%(B</p>
+<p>エアホッケーのパック（玉）の動きを再現するプログラムを作ってみましょう．
+下のプログラムはエアホッケー台の中心に，円盤状のパックを静止画で表示します．
+これをマウスのクリックによってこのパックが弾かれたように動きだし， 壁に当たって跳ね返りながら動くようにしてください．
+なお，パックは速度に比例した空気抵抗 (恥ずかしい間違いをしていた) によって次第に速度を下げ，
+速度が一定値以下になれば静止するものとします． 一方，壁への衝突による速度低下は考慮しなくても構いません
+（もちろん考慮した方がいいことは言うまでもありません）． このプログラムは結構長いので，
+時間が無ければ Web ページからコピーアンドペーストして構いません． ソースファイル名は
+prog8.c としてください．</p>
 
 <pre class="source">#include &lt;stdlib.h&gt;
 #include &lt;math.h&gt;
 #include &lt;GL/glut.h&gt;
 
-#define PX 0.0                     /* $B=i4|0LCV!!!!!!!!!!(B */
-#define PZ 0.0                     /* $B=i4|0LCV!!!!!!!!!!(B */
-#define W 4                        /* $BBf$NI}$N#2J,$N#1!!(B */
-#define D 6                        /* $BBf$ND9$5$N#2J,$N#1(B */
-#define H 0.5                      /* $BJI$N9b$5!!!!!!!!!!(B */
-#define R 0.3                      /* $B%Q%C%/$NH>7B!!!!!!(B */
-#define TIMESCALE 0.01             /* $B%U%l!<%`$4$H$N;~4V(B */
-#define SPEED 30.0                 /* $B%Q%C%/$N=iB.EY!!!!(B */
-#define MU 0.5                     /* $BBf$H$NK`;$78?t!!!!(B */
-#define WEIGHT 1.0                 /* $B%Q%C%/$N<ANL!!!!!!(B */
+#define PX 0.0                     /* 初期位置　　　　　 */
+#define PZ 0.0                     /* 初期位置　　　　　 */
+#define W 4                        /* 台の幅の２分の１　 */
+#define D 6                        /* 台の長さの２分の１ */
+#define H 0.5                      /* 壁の高さ　　　　　 */
+#define R 0.3                      /* パックの半径　　　 */
+#define TIMESCALE 0.01             /* フレームごとの時間 */
+#define SPEED 30.0                 /* パックの初速度　　 */
+#define MU 0.5                     /* 台との摩擦係数　　 */
+#define WEIGHT 1.0                 /* パックの質量　　　 */
 
-static int wh;                     /* $B%&%#%s%I%&$N9b$5!!(B */
-static int frame = 0;              /* $B8=:_$N%U%l!<%`?t!!(B */
-static double vx0, vz0;            /* $B%Q%C%/$N=iB.EY!!!!(B */
-static double px0 = PX, pz0 = PZ;  /* $B%Q%C%/$N=i4|0LCV!!(B */
+static int wh;                     /* ウィンドウの高さ　 */
+static int frame = 0;              /* 現在のフレーム数　 */
+static double vx0, vz0;            /* パックの初速度　　 */
+static double px0 = PX, pz0 = PZ;  /* パックの初期位置　 */
 
 /*
- * $BBf$rIA$/(B
+ * 台を描く
  */
 static void myGround(double height)
 {
-  const static GLfloat ground[][4] = {   /* $BBf$N?'!!!!!!(B */
+  const static GLfloat ground[][4] = {   /* 台の色　　　 */
     { 0.6, 0.6, 0.6, 1.0 },
     { 0.3, 0.3, 0.3, 1.0 }
   };
-  const static GLfloat wall[] = {        /* $BJI$N?'!!!!!!(B */
+  const static GLfloat wall[] = {        /* 壁の色　　　 */
     0.8, 0.8, 0.8, 1.0
   };
-  const static GLdouble panel[][9] = { /* $BJI$N7A>u%G!<%?(B */
+  const static GLdouble panel[][9] = { /* 壁の形状データ */
     {  0.0,  0.0,  1.0, -W, 0.0, -D, -W, H, -D },
     { -1.0,  0.0,  0.0,  W, 0.0, -D,  W, H, -D },
     {  0.0,  0.0, -1.0,  W, 0.0,  D,  W, H,  D },
@@ -64,7 +64,7 @@ static void myGround(double height)
 
   glBegin(GL_QUADS);
 
-  /* $B>2$rIA$/(B */
+  /* 床を描く */
   glNormal3d(0.0, 1.0, 0.0);
   for (j = -D; j &lt; D; ++j) {
     for (i = -W; i &lt; W; ++i) {
@@ -76,7 +76,7 @@ static void myGround(double height)
     }
   }
 
-  /* $BJI$rIA$/(B */
+  /* 壁を描く */
   glMaterialfv(GL_FRONT, GL_DIFFUSE, wall);
   for (i = 0; i &lt; 4; ++i) {
     glNormal3dv(panel[  i  ]);
@@ -90,14 +90,14 @@ static void myGround(double height)
 }
 
 /*
- * $B1_Cl$rIA$/(B
+ * 円柱を描く
  */
 static void myCylinder(double radius, double height, int sides)
 {
   double step = 6.2831853072 / (double)sides;
   int i = 0;
 
-  /* $B>eLL(B */
+  /* 上面 */
   glNormal3d(0.0, 1.0, 0.0);
   glBegin(GL_TRIANGLE_FAN);
   while (i &lt; sides) {
@@ -106,7 +106,7 @@ static void myCylinder(double radius, double height, int sides)
   }
   glEnd();
 
-  /* $BDlLL(B */
+  /* 底面 */
   glNormal3d(0.0, -1.0, 0.0);
   glBegin(GL_TRIANGLE_FAN);
   while (--i &gt;= 0) {
@@ -115,7 +115,7 @@ static void myCylinder(double radius, double height, int sides)
   }
   glEnd();
 
-  /* $BB&LL(B */
+  /* 側面 */
   glBegin(GL_QUAD_STRIP);
   while (i &lt;= sides) {
     double t = step * (double)i++;
@@ -130,45 +130,45 @@ static void myCylinder(double radius, double height, int sides)
 }
 
 /*
- * $B2hLLI=<((B
+ * 画面表示
  */
 static void display(void)
 {
-  const static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* $B8w8;$N0LCV(B */
-  const static GLfloat yellow[] = { 0.9, 0.9, 0.2, 1.0 };   /* $B%Q%C%/$N?'(B */
+  const static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* 光源の位置 */
+  const static GLfloat yellow[] = { 0.9, 0.9, 0.2, 1.0 };   /* パックの色 */
 
-  double t = TIMESCALE * frame;         /* $B%U%l!<%`?t$+$i8=:_;~9o$r5a$a$k(B */
+  double t = TIMESCALE * frame;         /* フレーム数から現在時刻を求める */
 
-  double v = exp(-MU * t / WEIGHT);                   /* $B%Q%C%/$NB.EYHf!!(B */
-  double p = WEIGHT * (1.0 - v) / MU;                 /* $B%Q%C%/$NAjBP0LCV(B */
+  double v = exp(-MU * t / WEIGHT);                   /* パックの速度比　 */
+  double p = WEIGHT * (1.0 - v) / MU;                 /* パックの相対位置 */
 
-  double px = vx0 * p + px0;                          /* $B%Q%C%/$N8=:_0LCV(B */
-  double pz = vz0 * p + pz0;                          /* $B%Q%C%/$N8=:_0LCV(B */
+  double px = vx0 * p + px0;                          /* パックの現在位置 */
+  double pz = vz0 * p + pz0;                          /* パックの現在位置 */
 
   /*
-  ** $B%Q%C%/$,Bf$NJI$KEv$?$C$?$i=i4|0LCV$H=iB.EY$rJQ99$9$k(B
-  ** $BB.EY!JHf!K$,0lDj0J2<$K$J$C$?$i8=:_0LCV$r=i4|0LCV$K$7$F(B
-  ** $B%"%K%a!<%7%g%s$r;_$a$k(B
-  ** $B!J$3$3$O<+J,$G9M$($F$/$@$5$$!K(B
+  ** パックが台の壁に当たったら初期位置と初速度を変更する
+  ** 速度（比）が一定以下になったら現在位置を初期位置にして
+  ** アニメーションを止める
+  ** （ここは自分で考えてください）
   */
 
-  /* $B%U%l!<%`?t!J2hLLI=<($r9T$C$?2s?t!K$r%+%&%s%H$9$k(B */
+  /* フレーム数（画面表示を行った回数）をカウントする */
   ++frame;
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-  /* $B;kE@$N0\F0!JJ*BN$NJ}$r1|$K0\$9!K(B*/
+  /* 視点の移動（物体の方を奥に移す）*/
   glTranslated(0.0, 0.0, -20.0);
   glRotated(45.0, 1.0, 0.0, 0.0);
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   myGround(0.0);
   glPushMatrix();
   glTranslated(px, 0.0, pz);
@@ -181,23 +181,23 @@ static void display(void)
 
 static void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, wh = h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
 static void keyboard(unsigned char key, int x, int y)
 {
-  /* ESC $B$+(B q $B$r%?%$%W$7$?$i=*N;(B */
+  /* ESC か q をタイプしたら終了 */
   if (key == '\033' || key == 'q') {
     exit(0);
   }
@@ -209,8 +209,8 @@ static void mouse(int button, int state, int x, int y)
   case GLUT_LEFT_BUTTON:
 
   /*
-  ** $B%^%&%9$r%/%j%C%/$7$?%&%#%s%I%&>e$N:BI8$+$i(B
-  ** $BI=<($5$l$F$$$kBf$NI=LL$N6u4V0LCV$r5a$a$k(B
+  ** マウスをクリックしたウィンドウ上の座標から
+  ** 表示されている台の表面の空間位置を求める
   */
 
     if (state == GLUT_DOWN) {
@@ -219,29 +219,29 @@ static void mouse(int button, int state, int x, int y)
       GLfloat z;
       GLdouble ox, oy, oz;
 
-      /* $B%/%j%C%/$7$?;~$K%U%l!<%`?t$r(B 0$B!J$9$J$o$A;~4V$r(B 0$B!K$K$9$k(B */
+      /* クリックした時にフレーム数を 0（すなわち時間を 0）にする */
       frame = 0;
 
       /*
-      ** $B%b%G%k%S%e!<JQ499TNs!&F);kJQ499TNs!&%S%e!<%]!<%HJQ499TNs$r<h$j=P$9(B
+      ** モデルビュー変換行列・透視変換行列・ビューポート変換行列を取り出す
       */
       glGetDoublev(GL_MODELVIEW_MATRIX, model);
       glGetDoublev(GL_PROJECTION_MATRIX, proj);
       glGetIntegerv(GL_VIEWPORT, view);
 
       /*
-      ** $B%/%j%C%/$7$?0LCV$N1|9T$-$r(B z $B$K<h$j=P$9(B
-      ** $B!JBf$N30$r%/%j%C%/$9$k$H$^$:$$$1$I$b$&$$$$$d!K(B
+      ** クリックした位置の奥行きを z に取り出す
+      ** （台の外をクリックするとまずいけどもういいや）
       */
       glReadPixels(x, wh - y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &amp;z);
 
-      /* $B%/%j%C%/$7$?$H$3$m$NBf$N>e$N0LCV$r5a$a$k(B */
+      /* クリックしたところの台の上の位置を求める */
       gluUnProject(x, wh - y, z, model, proj, view, &amp;ox, &amp;oy, &amp;oz);
 
       /*
-      ** (px0, pz0) $B$H(B (ox, oz) $B$r;H$C$F%Q%C%/$rBG$A=P$9J}8~$r7h$a!$(B
-      ** $B%Q%C%/$N=iB.EY(B (vx0, vz0) $B$r7h$a$F!$%"%K%a!<%7%g%s$r3+;O$9$k!%(B
-      ** $B!J$3$3$O<+J,$G9M$($F2<$5$$!K(B
+      ** (px0, pz0) と (ox, oz) を使ってパックを打ち出す方向を決め，
+      ** パックの初速度 (vx0, vz0) を決めて，アニメーションを開始する．
+      ** （ここは自分で考えて下さい）
       */
 
       break;
@@ -257,7 +257,7 @@ static void mouse(int button, int state, int x, int y)
 
 static void init(void)
 {
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -279,45 +279,45 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p>$B>e$N%W%m%0%i%`Fb$N4X?t(B mouse() $B$O%^%&%9$r%/%j%C%/$7$?$H$-$K8F$S=P$5$l!$(B
-$B$=$N%&%#%s%I%&>e$N%^%&%9$N:BI8$+$i!$(B $B%/%j%C%/$7$?0LCV$KI=<($5$l$F$$$kJ*BNI=LL$N6u4V0LCV$r5a$a$^$9!%(B
-$B$3$N:BI8(B (ox, oy, oz) $B$H%Q%C%/$N=i4|0LCV(B (px0, pz0) $B$r;H$C$F%Q%C%/$NBG$A=P$7J}8~$r7h$a!$B.EY$r7hDj$7$F$/$@$5$$!%(B
-$B$^$?!$$3$N$H$-F1;~$K%"%K%a!<%7%g%s$r3+;O$9$kI,MW$,$"$j$^$9!%(B</p>
+<p>上のプログラム内の関数 mouse() はマウスをクリックしたときに呼び出され，
+そのウィンドウ上のマウスの座標から， クリックした位置に表示されている物体表面の空間位置を求めます．
+この座標 (ox, oy, oz) とパックの初期位置 (px0, pz0) を使ってパックの打ち出し方向を決め，速度を決定してください．
+また，このとき同時にアニメーションを開始する必要があります．</p>
 
 <div class="figure">
-<img src="hockey1.gif" width="578" height="362" alt="$B%(%"%[%C%1!<$NBf(B">
-<img src="hockeymov.gif" width="120" height="120" alt="$BJb$/H"CK(B">
+<img src="hockey1.gif" width="578" height="362" alt="エアホッケーの台">
+<img src="hockeymov.gif" width="120" height="120" alt="歩く箱男">
 </div>
 
-<p>$BBf$OI}$,(B 2W$B!$1|9T$-$,(B 2D $B$NBg$-$5$G!$Cf?4$K86E@$,$"$j$^$9!%(B $B$^$?%Q%C%/$O(B
-(px, pz) $B$KCf?4$r$b$A!$H>7B$,(B R $B$N1_HW$G$9!%(B $B$7$?$,$C$F!$(B $B%Q%C%/$N2DF0HO0O$O0lE@:?@~Fb$NNN0h!J2)?'$NNN0h!K$K8B$i$l$^$9!%(B</p>
+<p>台は幅が 2W，奥行きが 2D の大きさで，中心に原点があります． またパックは
+(px, pz) に中心をもち，半径が R の円盤です． したがって， パックの可動範囲は一点鎖線内の領域（鴬色の領域）に限られます．</p>
 
-<p>$B%Q%C%/$,Bf$NJI$K>WFM$7$?;~!$%Q%C%/$OH?BPB&$KD7$MJV$k$b$N$H$7$^$9!%(B $B>WFM$K$h$kB.EYDc2<$O9MN8$7$J$/$F$b9=$$$^$;$s!%(B</p>
+<p>パックが台の壁に衝突した時，パックは反対側に跳ね返るものとします． 衝突による速度低下は考慮しなくても構いません．</p>
 
 <ol>
 
-<li>$B%Q%C%/$N8=:_0LCV$O4X?t(B display() $BFb$N(B px $B$*$h$S(B pz $B$NFs$D$NJQ?t$G@_Dj$7$F$$$^$9!%(B
-  $B$3$NCM$rJQ99$9$l$P!$%Q%C%/$N0LCV$rJQ$($k$3$H$,$G$-$^$9!%(B</li>
+<li>パックの現在位置は関数 display() 内の px および pz の二つの変数で設定しています．
+  この値を変更すれば，パックの位置を変えることができます．</li>
 
-<li>$B%Q%C%/$N<ANL$r(B m $B$H$7!$$=$l$,B.EY(B v $B$KHfNc$7$?K`;$NO(B -&micro;v $B$r<u$1$F1?F0$9$k$H$-!$=i4|0LCV$r(B
-  p<sub>0</sub>$B!$=iB.EY$r(B v<sub>0</sub> $B$H$9$l$P!$;~9o(B t $B$K$*$1$kB.EY(B v $B$H0LCV(B p $B$O<!<0$G5a$a$k$3$H$,$G$-$^$9!%(B
+<li>パックの質量を m とし，それが速度 v に比例した摩擦力 -&micro;v を受けて運動するとき，初期位置を
+  p<sub>0</sub>，初速度を v<sub>0</sub> とすれば，時刻 t における速度 v と位置 p は次式で求めることができます．
   <div class="expression">
 v = v<sub>0</sub> e<sup>-(&micro;/m) t</sup><br>
 p = p<sub>0</sub> + v<sub>0</sub> (m/&micro;) {1 - e<sup>-(&micro;/m) t</sup>}
 </div></li>
 
-<li>$B;~9o(B t $B$K$*$1$k%Q%C%/$N0LCV(B p $B$,Bf>e$N2TF/HO0O30$K=P$l$P!$(Bp $B$r>WFM$7$?JI$KBP$7$FH?BPB&$N0LCV(B
-  p' $B$K0\F0$5$;!$$=$N(B p' $B$r?7$7$$=i4|0LCV(B p<sub>0</sub> $B$H$7$^$9!%(B</li>
+<li>時刻 t におけるパックの位置 p が台上の稼働範囲外に出れば，p を衝突した壁に対して反対側の位置
+  p' に移動させ，その p' を新しい初期位置 p<sub>0</sub> とします．</li>
 
-<li>$B$=$7$F!$$=$N;~9o(B t $B$K$*$1$kB.EY(B v $B$NId9f$rH?E>$7$?$b$N(B -v $B$r$=$N0LCV$K$*$1$k?7$7$$=iB.EY(B
-  v<sub>0</sub> $B$H$7$^$9!%$?$@$7!$>e5-$N%W%m%0%i%`$G$OB.EY(B v $B$rBf>e$N:BI8<4$KJ,2r$7$?$b$N(B
-  (v<sub>x</sub>, v<sub>z</sub>) $B$H$7$F<h$j07$C$F$$$k$N$G!$(B $BJI$N8~$-$K$h$C$F(B v<sub>x</sub> $B$"$k$$$O(B v<sub>z</sub> $B$N$$$:$l$+$NId9f$rH?E>$7$^$9!%(B</li>
+<li>そして，その時刻 t における速度 v の符号を反転したもの -v をその位置における新しい初速度
+  v<sub>0</sub> とします．ただし，上記のプログラムでは速度 v を台上の座標軸に分解したもの
+  (v<sub>x</sub>, v<sub>z</sub>) として取り扱っているので， 壁の向きによって v<sub>x</sub> あるいは v<sub>z</sub> のいずれかの符号を反転します．</li>
 
-<li>$B;~4V(B t $B$r(B 0 $B$K$7$^$9!%(B</li>
+<li>時間 t を 0 にします．</li>
 
-<li>$B$3$N(B 3 $B!A(B 5 $B$N=hM}$r#4$D$NJI$K$D$$$F9T$$$^$9!%(B</li>
+<li>この 3 〜 5 の処理を４つの壁について行います．</li>
 
-<li>$B$b$A$m$s!$%Q%C%/$O(B<em>$B3j$i$+$K(B</em>$BF0$/$h$&$K$7$F$/$@$5$$!%(B $B$^$?2hLL$N(B<em>$B$A$i$D$-$bM^@)(B</em>$B$9$k$h$&$K$7$F$/$@$5$$!%(B</li>
+<li>もちろん，パックは<em>滑らかに</em>動くようにしてください． また画面の<em>ちらつきも抑制</em>するようにしてください．</li>
 
 </ol>
 

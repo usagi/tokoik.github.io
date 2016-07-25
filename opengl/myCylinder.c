@@ -3,10 +3,10 @@
 #define PI2 (3.14159265358979323846 * 2.0)
 
 /*
- * $B1_Cl$rIA$/(B
- *   radius: $BH>7B(B
- *   height: $B9b$5(B
- *   sides: $BB&LL$N?t!J?t$,B?$$$[$I3j$i$+$K$J$k!K(B
+ * 円柱を描く
+ *   radius: 半径
+ *   height: 高さ
+ *   sides: 側面の数（数が多いほど滑らかになる）
  *
  */
 
@@ -15,7 +15,7 @@ void myCylinder(double radius, double height, int sides)
   double step = PI2 / (double)sides;
   int i;
 
-  /* $B>eLL(B */
+  /* 上面 */
   glNormal3d(0.0, 1.0, 0.0);
   glBegin(GL_TRIANGLE_FAN);
   for (i = 0; i < sides; i++) {
@@ -24,7 +24,7 @@ void myCylinder(double radius, double height, int sides)
   }
   glEnd();
 
-  /* $BDlLL(B */
+  /* 底面 */
   glNormal3d(0.0, -1.0, 0.0);
   glBegin(GL_TRIANGLE_FAN);
   for (i = sides; --i >= 0;) {
@@ -33,7 +33,7 @@ void myCylinder(double radius, double height, int sides)
   }
   glEnd();
 
-  /* $BB&LL(B */
+  /* 側面 */
   glBegin(GL_QUAD_STRIP);
   for (i = 0; i <= sides; i++) {
     double t = step * (double)i;

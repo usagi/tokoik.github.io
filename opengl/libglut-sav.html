@@ -2,317 +2,317 @@
 <html lang="ja">
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>GLUT$B$K$h$k!V<jH4$-!W(BOpenGL$BF~Lg(B</title>
+<title>GLUTによる「手抜き」OpenGL入門</title>
 </head>
 
 <body>
 
-<h1 class="title">GLUT$B$K$h$k!V<jH4$-!W(BOpenGL$BF~Lg(B</h1>
+<h1 class="title">GLUTによる「手抜き」OpenGL入門</h1>
 <h3 class="title">
-<a href="http://www.wakayama-u.ac.jp/">$BOB2N;3Bg3X(B</a>
-<a href="http://www.sys.wakayama-u.ac.jp/">$B%7%9%F%`9)3XIt(B</a>
-<a href="http://www.sys.wakayama-u.ac.jp/di/">$B%G%6%$%s>pJs3X2J(B</a>
+<a href="http://www.wakayama-u.ac.jp/">和歌山大学</a>
+<a href="http://www.sys.wakayama-u.ac.jp/">システム工学部</a>
+<a href="http://www.sys.wakayama-u.ac.jp/di/">デザイン情報学科</a>
 </h3>
-<h2 class="title"><a href="mailto:tokoi@sys.wakayama-u.ac.jp">$B>20f9@J?(B</a></h2>
+<h2 class="title"><a href="mailto:tokoi@sys.wakayama-u.ac.jp">床井浩平</a></h2>
 
-<h3 class="title">$B$3$NJ8=q$N0LCV$E$1(B</h3>
+<h3 class="title">この文書の位置づけ</h3>
 <blockquote>
-$B$3$NJ8=q$O3X@8<B83$N%F!<%^!V#V#R<B83!W$N;29M;qNA$N!"(B
-GLUT $B$rMQ$$$?(B OpenGL $B$N%A%e!<%H%j%"%k$G$9!#(B
-180 $BJ,!_(B 2 $BF|!\&A$G<B83ItJ,$KE~C#$G$-$k$H;W$$$^$9!#(B
-$B$?$@$7FbMF$OIT==J,$J$N$G!"(B
-$BI,MW$K1~$8$F(B<a href="#reference">$B;qNA(B</a>$B$d%*%s%i%$%s%^%K%e(B
-$B%"%kEy$r;2>H$7$F$/$@$5$$!#(B
-$B$^$?4V0c$$$b4^$^$l$F$$$k$H;W$$$^$9!#(B
-$B%3%a%s%H$r$*4j$$$7$^$9!#(B
-$B$J$*!"$3$N%Z!<%8$O%j%s%/!u%3%T!<%U%j!<$G$9!#$3$N%G%#%l%/%H%j$r$^$H$a$?$b$N$r(B
-<a href="http://www.sys.wakayama-u.ac.jp/~tokoi/tenuki.tar.gz">$B$3$3(B</a>
-$B$KMQ0U$7$F$$$^$9$N$G!"$4<+M3$K$*;H$$$/$@$5$$!#(B
+この文書は学生実験のテーマ「ＶＲ実験」の参考資料の、
+GLUT を用いた OpenGL のチュートリアルです。
+180 分× 2 日＋αで実験部分に到達できると思います。
+ただし内容は不十分なので、
+必要に応じて<a href="#reference">資料</a>やオンラインマニュ
+アル等を参照してください。
+また間違いも含まれていると思います。
+コメントをお願いします。
+なお、このページはリンク＆コピーフリーです。このディレクトリをまとめたものを
+<a href="../tenuki.tar.gz">ここ</a>
+に用意していますので、ご自由にお使いください。
 </blockquote>
 
 <p class="title">
-$B=iHG(B 1997/09/30, $B:G=*99?7(B <!--#config timefmt="%Y/%m/%d"-->
+初版 1997/09/30, 最終更新 <!--#config timefmt="%Y/%m/%d"-->
 <!--#echo var="LAST_MODIFIED"-->
 </p>
 
 <blockquote>
-<h3>$BL\<!(B</h3>
-<div>$B!!(B<a href="#1">$B#1!%$O$8$a$K(B</a></div>
-<div>$B!!!!(B<a href="#1.1">$B#1!%#1(B $B$J$<(B GLUT $B$+(B</a></div>
-<div>$B!!!!(B<a href="#1.2">$B#1!%#2(B $B$=$l0JA0$K!"$J$<(B OpenGL $B$+(B</a></div>
-<div>$B!!(B<a href="#2">$B#2!%(BGLUT $B$N%$%s%9%H!<%k(B</a></div>
-<div>$B!!!!(B<a href="#2.1">$B#2!%#1(B GLUT $B$rF~<j$9$k(B</a></div>
-<div>$B!!!!(B<a href="#2.2">$B#2!%#2(B UNIX $B7O(B OS $B$K%$%s%9%H!<%k$9$k(B</a></div>
-<div>$B!!!!(B<a href="#2.3">$B#2!%#3(B Windows $B7O(B OS $B$K%$%s%9%H!<%k$9$k(B</a></div>
-<div>$B!!!!(B<a href="#2.4">$B#2!%#4(B Mac OS X $B$K%$%s%9%H!<%k$9$k(B</a></div>
-<div>$B!!(B<a href="#3">$B#3!%%3%s%Q%$%k$N;EJ}(B</a></div>
-<div>$B!!!!(B<a href="#3.1">$B#3!%#1(B UNIX $B7O(B OS $B$N>l9g(B</a></div>
-<div>$B!!!!(B<a href="#3.2">$B#3!%#2(B Windows $B7O(B OS (Visual C++) $B$N>l9g(B</a></div>
-<div>$B!!!!(B<a href="#3.3">$B#3!%#3(B Mac OS X (Developer Tools) $B$N>l9g(B</a></div>
-<div>$B!!(B<a href="#4">$B#4!%%&%#%s%I%&$r3+$/(B</a></div>
-<div>$B!!!!(B<a href="#4.1">$B#4!%#1(B $B6u$N%&%#%s%I%&$r3+$/(B</a></div>
-<div>$B!!!!(B<a href="#4.2">$B#4!%#2(B $B%&%#%s%I%&$rEI$j$D$V$9(B</a></div>
-<div>$B!!(B<a href="#5">$B#5!%#2<!85?^7A$rIA$/(B</a></div>
-<div>$B!!!!(B<a href="#5.1">$B#5!%#1(B $B@~$r0z$/(B</a></div>
-<div>$B!!!!(B<a href="#5.2">$B#5!%#2(B $B?^7A$N%?%$%W(B</a></div>
-<div>$B!!!!(B<a href="#5.3">$B#5!%#3(B $B@~$K?'$rIU$1$k(B</a></div>
-<div>$B!!!!(B<a href="#5.4">$B#5!%#4(B $B?^7A$rEI$j$D$V$9(B</a></div>
-<div>$B!!!!(B<a href="#5.5">$B#5!%#5(B $B4X?t$NL?L>K!(B</a></div>
-<div>$B!!(B<a href="#6">$B#6!%:BI8<4$r@_Dj$9$k(B</a></div>
-<div>$B!!!!(B<a href="#6.1">$B#6!%#1(B $B:BI8<4$H%S%e!<%]!<%H(B</a></div>
-<div>$B!!!!(B<a href="#6.2">$B#6!%#2(B $B0LCV$d%5%$%:$r;XDj$7$F%&%#%s%I%&$r3+$/(B</a></div>
-<div>$B!!(B<a href="#7">$B#7!%%^%&%9$H%-!<%\!<%I(B</a></div>
-<div>$B!!!!(B<a href="#7.1">$B#7!%#1(B $B%^%&%9%\%?%s$r%/%j%C%/$9$k(B</a></div>
-<div>$B!!!!(B<a href="#7.2">$B#7!%#2(B $B%^%&%9$r%I%i%C%0$9$k(B</a></div>
-<div>$B!!!!(B<a href="#7.3">$B#7!%#3(B $B%-!<%\!<%I$+$iFI$_9~$`(B</a></div>
-<div>$B!!(B<a href="#8">$B#8!%#3<!85?^7A$rIA$/(B</a></div>
-<div>$B!!!!(B<a href="#8.1">$B#8!%#1(B $B#2<!85$H#3<!85(B</a></div>
-<div>$B!!!!(B<a href="#8.2">$B#8!%#2(B $B@~2h$rI=<($9$k(B</a></div>
-<div>$B!!!!(B<a href="#8.3">$B#8!%#3(B $BF);kEj1F$9$k(B</a></div>
-<div>$B!!!!(B<a href="#8.4">$B#8!%#4(B $B;kE@$N0LCV$rJQ99$9$k(B</a></div>
-<div>$B!!(B<a href="#9">$B#9!%%"%K%a!<%7%g%s(B</a></div>
-<div>$B!!!!(B<a href="#9.1">$B#9!%#1(B $B?^7A$rF0$+$9(B</a></div>
-<div>$B!!!!(B<a href="#9.2">$B#9!%#2(B $B%@%V%k%P%C%U%!%j%s%0(B</a></div>
-<div><a href="#10">$B#1#0!%1#LL>C5n(B</a></div>
-<div>$B!!(B<a href="#10.1">$B#1#0!%#1(B $BB?LLBN$rEI$j$D$V$9(B</a></div>
-<div>$B!!(B<a href="#10.2">$B#1#0!%#2(B $B%G%W%9%P%C%U%!$r;H$&(B</a></div>
-<div>$B!!(B<a href="#10.3">$B#1#0!%#3(B $B%+%j%s%0(B</a></div>
-<div><a href="#11">$B#1#1!%1"1FIU$1(B</a></div>
-<div>$B!!(B<a href="#11.1">$B#1#1!%#1(B $B8w$rEv$F$F$_$k(B</a></div>
-<div>$B!!(B<a href="#11.2">$B#1#1!%#2(B $B8w8;$r@_Dj$9$k(B</a></div>
-<div>$B!!(B<a href="#11.3">$B#1#1!%#3(B $B:`<A$r@_Dj$9$k(B</a></div>
-<div><a href="#12">$B#1#2!%3,AX9=B$(B</a></div>
-<div><a href="#ex1">$B<B83#1!%4pK\<B83(B</a></div>
-<div><a href="#ex2">$B<B83#2!%N)BN;k$N<B83(B</a></div>
-<div><a href="#ex3">$B<B83#3!%2>A[$N$>$-7j$N<B83(B</a></div>
-<div><a href="#ex4">$B<B83#4!%2>A[%Q%Z%C%H$N<B83(B</a></div>
-<div><a href="#ex5">$B<B83#5!%2>A[%Q%s%A%s%0%\!<%k$N<B83(B</a></div>
+<h3>目次</h3>
+<div>　<a href="#1">１．はじめに</a></div>
+<div>　　<a href="#1.1">１．１ なぜ GLUT か</a></div>
+<div>　　<a href="#1.2">１．２ それ以前に、なぜ OpenGL か</a></div>
+<div>　<a href="#2">２．GLUT のインストール</a></div>
+<div>　　<a href="#2.1">２．１ GLUT を入手する</a></div>
+<div>　　<a href="#2.2">２．２ UNIX 系 OS にインストールする</a></div>
+<div>　　<a href="#2.3">２．３ Windows 系 OS にインストールする</a></div>
+<div>　　<a href="#2.4">２．４ Mac OS X にインストールする</a></div>
+<div>　<a href="#3">３．コンパイルの仕方</a></div>
+<div>　　<a href="#3.1">３．１ UNIX 系 OS の場合</a></div>
+<div>　　<a href="#3.2">３．２ Windows 系 OS (Visual C++) の場合</a></div>
+<div>　　<a href="#3.3">３．３ Mac OS X (Developer Tools) の場合</a></div>
+<div>　<a href="#4">４．ウィンドウを開く</a></div>
+<div>　　<a href="#4.1">４．１ 空のウィンドウを開く</a></div>
+<div>　　<a href="#4.2">４．２ ウィンドウを塗りつぶす</a></div>
+<div>　<a href="#5">５．２次元図形を描く</a></div>
+<div>　　<a href="#5.1">５．１ 線を引く</a></div>
+<div>　　<a href="#5.2">５．２ 図形のタイプ</a></div>
+<div>　　<a href="#5.3">５．３ 線に色を付ける</a></div>
+<div>　　<a href="#5.4">５．４ 図形を塗りつぶす</a></div>
+<div>　　<a href="#5.5">５．５ 関数の命名法</a></div>
+<div>　<a href="#6">６．座標軸を設定する</a></div>
+<div>　　<a href="#6.1">６．１ 座標軸とビューポート</a></div>
+<div>　　<a href="#6.2">６．２ 位置やサイズを指定してウィンドウを開く</a></div>
+<div>　<a href="#7">７．マウスとキーボード</a></div>
+<div>　　<a href="#7.1">７．１ マウスボタンをクリックする</a></div>
+<div>　　<a href="#7.2">７．２ マウスをドラッグする</a></div>
+<div>　　<a href="#7.3">７．３ キーボードから読み込む</a></div>
+<div>　<a href="#8">８．３次元図形を描く</a></div>
+<div>　　<a href="#8.1">８．１ ２次元と３次元</a></div>
+<div>　　<a href="#8.2">８．２ 線画を表示する</a></div>
+<div>　　<a href="#8.3">８．３ 透視投影する</a></div>
+<div>　　<a href="#8.4">８．４ 視点の位置を変更する</a></div>
+<div>　<a href="#9">９．アニメーション</a></div>
+<div>　　<a href="#9.1">９．１ 図形を動かす</a></div>
+<div>　　<a href="#9.2">９．２ ダブルバッファリング</a></div>
+<div><a href="#10">１０．隠面消去</a></div>
+<div>　<a href="#10.1">１０．１ 多面体を塗りつぶす</a></div>
+<div>　<a href="#10.2">１０．２ デプスバッファを使う</a></div>
+<div>　<a href="#10.3">１０．３ カリング</a></div>
+<div><a href="#11">１１．陰影付け</a></div>
+<div>　<a href="#11.1">１１．１ 光を当ててみる</a></div>
+<div>　<a href="#11.2">１１．２ 光源を設定する</a></div>
+<div>　<a href="#11.3">１１．３ 材質を設定する</a></div>
+<div><a href="#12">１２．階層構造</a></div>
+<div><a href="#ex1">実験１．基本実験</a></div>
+<div><a href="#ex2">実験２．立体視の実験</a></div>
+<div><a href="#ex3">実験３．仮想のぞき穴の実験</a></div>
+<div><a href="#ex4">実験４．仮想パペットの実験</a></div>
+<div><a href="#ex5">実験５．仮想パンチングボールの実験</a></div>
 
-<h3><a class="label" name="reference">$B;qNA!'(B</a></h3>
+<h3><a class="label" name="reference">資料：</a></h3>
 <ul>
-<li><a href="faq.html">$B:#$^$G$K$"$C$?<ALd(B</a></li>
-<li><a href="refresh.html">$B%j%U%l%C%7%e%l!<%H$NJQ99(B</a></li>
-<li>$B0JA0$K=q$$$?(B
-<a href="libaux.html">AUX $BHG(B</a>$B!"(B<a href="libglut-old.html">Indy $BHG(B</a></li>
-<li>$B%V%m%0$O$"$s$^$j=q$$$F$J$$(B<a href="http://www.wakayama-u.ac.jp/~tokoi/">$B>20f8&5f<<(B</a></li>
-<li><a href="kenshin/">$B<F;37r?-@h@8$N:.FY$H$7$?%5%s%W%k(B</a></li>
+<li><a href="faq.html">今までにあった質問</a></li>
+<li><a href="refresh.html">リフレッシュレートの変更</a></li>
+<li>以前に書いた
+<a href="libaux.html">AUX 版</a>、<a href="libglut-old.html">Indy 版</a></li>
+<li>ブログはあんまり書いてない<a href="http://www.wakayama-u.ac.jp/~tokoi/">床井研究室</a></li>
+<li><a href="kenshin/">柴山健伸先生の混沌としたサンプル</a></li>
 <li><a href="http://www.sys.wakayama-u.ac.jp/~chen/MotifGL.html">
-$BDD8,@h@8$N(B Motif $B$r;H$C$?%5%s%W%k(B</a></li>
-<li><a href="delphi.html">$BCf;3Ni;y;a$N(B Delphi $B$K$D$$$F$N2r@b(B</a></li>
-<li><a href="http://www.opengl.org/">The OpenGL WEB Site</a>$B!J(BOpenGL $B$NAmK\;3!K(B</li>
-<li><a href="http://www.opengl.org/resources/libraries/glut.html">GLUT - The OpenGL Utility Toolkit</a>$B!J(BOpenGL.org $B$N(B GLUT $B$N%Z!<%8!K(B</li>
-<li><a href="http://www.opengl.org/resources/tutorials/">OpenGL Coding Tutorials</a>$B!J(BOpenGL.org $B$N%A%e!<%H%j%"%k=8!K(B
-<li><a href="http://www.opengl.org/resources/tutorials/classes.html">OpenGL Training Classes</a>$B!J(BOpenGL.org $B$N%A%e!<%H%j%"%k%j%s%/=8!K(B
-<li><a href="http://www.opengl.org/resources/faq/technical/">OpenGL Technical FAQ</a>$B!J(BOpenGL $B$K$D$$$FNI$/J9$+$l$k<ALd!K(B</li>
-<li><a href="http://www.gimlay.org/~andoh/opengl/faq/openglfaq.html">OpenGL FAQ $BF|K\8l(B</a>$B!J(BOpenGL $B$K$D$$$FNI$/J9$+$l$k<ALd$NF|K\8lHG!K(B</li>
-<li><a href="http://www.opengl.org/resources/libraries/glut/spec3/spec3.html">GLUT Programming Interface API Version 3</a>$B!J(BGLUT $B$N%^%K%e%"%k!K(B</li>
-<li><a href="http://www.gimlay.org/~andoh/opengl/glut/">GLUT $B%,%$%IF|K\8lHG(B</a>$B!J(BGLUT Programming Interface API Version 3 $B$NLu!K(B</li>
-<li><a href="http://www.opengl.org/resources/libraries/glut/glut_faq.html">GLUT FAQ</a>$B!J(BGLUT $B$K$D$$$FNI$/J9$+$l$k<ALd!K(B</li>
-<li><a href="http://www.exa-corp.co.jp/">$B3t<02q<R%(%/%5(B</a>$B$5$s$N(B<a href="http://www.exa-corp.co.jp/solution/VISUAL/OpenGL/index.shtml">
-OpenGL $B%W%m%0%i%_%s%0%3!<%9(B</a>$B!J:G=i$K$3$l$,$"$l$P!DI|3hK|:P!K(B</li>
-<li><a href="http://black.sakura.ne.jp/~third/index.html">$B@V:dNh2;(B</a>$B$5$s$N(B <a href="http://black.sakura.ne.jp/~third/system/opengl/gl.html">OpenGL $BF~Lg(B</a>$B!J%^%K%e%"%k$H$7$F$O$3$3$,%Y%9%H$+$b!K(B</li>
-<li><a href="http://miso.ice.ous.ac.jp/~oka/">$B$_$A!wFG0rCn(B</a>$B$5$s$N(B<a href="http://miso.ice.ous.ac.jp/~oka/opengl/index.html">OpenGL $BF~Lg9V:B(B</a>$B!J4X?t$N2r@b$,CzG+!K(B</li>
-<li><a href="http://www.nara-edu.ac.jp/~asait/">$B?t3X$H7W;;(B</a>$B!J(BOpenGL $B$N$[$+!"(BC/C++$B!"(BLaTeX $BEyK-IY$J%A%e!<%H%j%"%k$"$j!K(B</li>
-<li><a href="http://www.geocities.jp/yuichiy2001/">sonson@Picture&amp;Software</a> (GLUT $B$KMj$i$J$$(B OpenGL $B$N;H$$J}Ey>\$7$$2r@b$,$"$k(B)</li>
-<li><a href="http://www.gimlay.org/~andoh/opengl/ml/">OpenGL Mailing List</a>$B!JF|K\$N(B OpenGL $B%(%-%9%Q!<%H$,=8$&!K(B</li>
+陳謙先生の Motif を使ったサンプル</a></li>
+<li><a href="delphi.html">中山礼児氏の Delphi についての解説</a></li>
+<li><a href="http://www.opengl.org/">The OpenGL WEB Site</a>（OpenGL の総本山）</li>
+<li><a href="http://www.opengl.org/resources/libraries/glut.html">GLUT - The OpenGL Utility Toolkit</a>（OpenGL.org の GLUT のページ）</li>
+<li><a href="http://www.opengl.org/resources/tutorials/">OpenGL Coding Tutorials</a>（OpenGL.org のチュートリアル集）
+<li><a href="http://www.opengl.org/resources/tutorials/classes.html">OpenGL Training Classes</a>（OpenGL.org のチュートリアルリンク集）
+<li><a href="http://www.opengl.org/resources/faq/technical/">OpenGL Technical FAQ</a>（OpenGL について良く聞かれる質問）</li>
+<li><a href="http://www.gimlay.org/~andoh/opengl/faq/openglfaq.html">OpenGL FAQ 日本語</a>（OpenGL について良く聞かれる質問の日本語版）</li>
+<li><a href="http://www.opengl.org/resources/libraries/glut/spec3/spec3.html">GLUT Programming Interface API Version 3</a>（GLUT のマニュアル）</li>
+<li><a href="http://www.gimlay.org/~andoh/opengl/glut/">GLUT ガイド日本語版</a>（GLUT Programming Interface API Version 3 の訳）</li>
+<li><a href="http://www.opengl.org/resources/libraries/glut/glut_faq.html">GLUT FAQ</a>（GLUT について良く聞かれる質問）</li>
+<li><a href="http://www.exa-corp.co.jp/">株式会社エクサ</a>さんの<a href="http://www.exa-corp.co.jp/solution/VISUAL/OpenGL/index.shtml">
+OpenGL プログラミングコース</a>（最初にこれがあれば…復活万歳）</li>
+<li><a href="http://black.sakura.ne.jp/~third/index.html">赤坂玲音</a>さんの <a href="http://black.sakura.ne.jp/~third/system/opengl/gl.html">OpenGL 入門</a>（マニュアルとしてはここがベストかも）</li>
+<li><a href="http://miso.ice.ous.ac.jp/~oka/">みち＠毒芋虫</a>さんの<a href="http://miso.ice.ous.ac.jp/~oka/opengl/index.html">OpenGL 入門講座</a>（関数の解説が丁寧）</li>
+<li><a href="http://www.nara-edu.ac.jp/~asait/">数学と計算</a>（OpenGL のほか、C/C++、LaTeX 等豊富なチュートリアルあり）</li>
+<li><a href="http://www.geocities.jp/yuichiy2001/">sonson@Picture&amp;Software</a> (GLUT に頼らない OpenGL の使い方等詳しい解説がある)</li>
+<li><a href="http://www.gimlay.org/~andoh/opengl/ml/">OpenGL Mailing List</a>（日本の OpenGL エキスパートが集う）</li>
 </ul>
 </blockquote>
 
-<h2><a class="label" name="1">$B#1!%$O$8$a$K(B</a></h2>
+<h2><a class="label" name="1">１．はじめに</a></h2>
 
-<h3><a class="label" name="1.1">$B#1!%#1(B $B$J$<(B GLUT $B$+(B</a></h3>
+<h3><a class="label" name="1.1">１．１ なぜ GLUT か</a></h3>
 
-<p>OpenGL $B$O%7%j%3%s%0%i%U%#%C%/%9<R!J0J2<(B SGI$B!K$,3+H/$7$?!"(B
-OS $B$K0MB8$7$J$$#3<!85$N%0%i%U%#%C%/%9%i%$%V%i%j(B (API) $B$G$9!#(B
-$B$G$b!"$3$N!V(BOS $B$K0MB8$7$J$$!W$H$$$&$H$3$m$,<B$O6J<T$G!"(B
-$B%&%#%s%I%&$r3+$$$?$j%&%#%s%I%&%^%M!<%8%c$HDL?.$7$?$j$9$k$H$3$m$O!"(B
-$B$A$c$s$H$=$l$>$l$NN.57$KB'$C$F!"(B
-OS $B$d%&%#%s%I%&%7%9%F%`$K$*4j$$$7$J$$$H$$$1$^$;$s!#(B
-$B$9$J$o$A!"(BOpenGL $B$N5!G=$,;H$($k$h$&$K!"(B
-Windows $B$J$i(B Windows $B$N$d$jJ}$G!"(B
-X $B$J$i(B X $B$N$d$jJ}$G!"(B
-$B$*A7N)$F$r$7$F$d$kI,MW$,$"$k$N$G$9!#(B</p>
+<p>OpenGL はシリコングラフィックス社（以下 SGI）が開発した、
+OS に依存しない３次元のグラフィックスライブラリ (API) です。
+でも、この「OS に依存しない」というところが実は曲者で、
+ウィンドウを開いたりウィンドウマネージャと通信したりするところは、
+ちゃんとそれぞれの流儀に則って、
+OS やウィンドウシステムにお願いしないといけません。
+すなわち、OpenGL の機能が使えるように、
+Windows なら Windows のやり方で、
+X なら X のやり方で、
+お膳立てをしてやる必要があるのです。</p>
 
-<p>$B<B$O$3$l$,7k9=LLE]$J:n6H$J$N$G!"652J=q$N(B
+<p>実はこれが結構面倒な作業なので、教科書の
 <a href="http://fly.srk.fer.hr/%7eunreal/theredbook/">
-OpenGL Programming Guide $B$NBh#1HG(B</a>
-$B$G$O!"Jd=u%i%$%V%i%j!J(BAUX $B%i%$%V%i%j!"0l<o$N(B toolkit$B!K$H$$$&$N$rF3F~$7$F!"(B
-$B$=$NItJ,$r$H$j$"$($:1#$7$F$$$^$7$?!#(B
-$B$D$^$j!"(BAUX $B%i%$%V%i%j$K(B OS $B$K0MB8$9$k=hM}$rG$$;$k$3$H$G!"(B
-$BFI<T$O(B OpenGL
-$B$=$N$b$N$N3X=,$K@lG0$G$-$k$h$&$K$J$C$F$$$?$N$G$9!#(B</p>
+OpenGL Programming Guide の第１版</a>
+では、補助ライブラリ（AUX ライブラリ、一種の toolkit）というのを導入して、
+その部分をとりあえず隠していました。
+つまり、AUX ライブラリに OS に依存する処理を任せることで、
+読者は OpenGL
+そのものの学習に専念できるようになっていたのです。</p>
 
 <blockquote>
-OpenGL Programming Guide $B$NBh#2HG$G$O!"(BAUX
-$B%i%$%V%i%j$KBe$($F(B GLUT $B$r;H$&$h$&$K$J$j$^$7$?!#(B
+OpenGL Programming Guide の第２版では、AUX
+ライブラリに代えて GLUT を使うようになりました。
 </blockquote>
 
-<p>$B$H$3$m$G!"(BMicrosoft $B<R!J0J2<(B MS$B!K$,(B
-SGI $B$+$i(B OpenGL $B$N%i%$%;%s%9$rGc$C$F<+J,$N$H$3$m$N(B OS $B$K:\$C$1$?$N$G!"(B
-OpenGL $B$O0l5$$K%0%i%U%#%C%/%9%i%$%V%i%j$N!H6H3&I8=`!I$NCO0L$KEP$j5M$a$^$7$?!#(B
-$B$=$N:]!"$3$N(B AUX $B%i%$%V%i%j$b(B Windows (NT/95) $B$K0\?"$5$l$^$7$?!#(B
-$B$3$N7k2L!"?^$i$:$b!)$3$N(B AUX $B%i%$%V%i%j$r;H$C$F=q$$$?%=!<%9%W%m%0%i%`$O!"(B
-UNIX $B$H(B Windows $B$N$I$A$i$G$b%3%s%Q%$%k$G$-$k$H$$$&(B
-$BJXMx$J;EAH$_$,$G$->e$,$j$^$7$?!#(B</p>
+<p>ところで、Microsoft 社（以下 MS）が
+SGI から OpenGL のライセンスを買って自分のところの OS に載っけたので、
+OpenGL は一気にグラフィックスライブラリの“業界標準”の地位に登り詰めました。
+その際、この AUX ライブラリも Windows (NT/95) に移植されました。
+この結果、図らずも？この AUX ライブラリを使って書いたソースプログラムは、
+UNIX と Windows のどちらでもコンパイルできるという
+便利な仕組みができ上がりました。</p>
 
-<p>$B$7$+$7!"(BAUX $B%i%$%V%i%j$O$b$H$b$H3X=,MQ$G$"$j!"(B
-$B$A$c$s$H$7$?%"%W%j%1!<%7%g%s$r=q$3$&$H$9$k$H5!G=$KITB-$r46$8$^$9!#(B
-$B$=$l$K(B MS $B$K$h$k(B AUX $B%i%$%V%i%j$N0\?"$O$d$O$j(B MS $B$NN.57$G9T$o$l$F$$$F!"(B
-$BNc$($P!"%$%Y%s%H$N%O%s%I%i$K$O(B
-CALLBACK $B$H$$$&7?$rIU$1$J$$$H$$$1$J$$$H$+!"(B
-$B$d$C$Q$j5$?'$N0-$$ItJ,$,$"$C$?$j$7$^$9!#(B</p>
+<p>しかし、AUX ライブラリはもともと学習用であり、
+ちゃんとしたアプリケーションを書こうとすると機能に不足を感じます。
+それに MS による AUX ライブラリの移植はやはり MS の流儀で行われていて、
+例えば、イベントのハンドラには
+CALLBACK という型を付けないといけないとか、
+やっぱり気色の悪い部分があったりします。</p>
 
-<p>$B$=$3$G(B AUX $B%i%$%V%i%j$r!"(B
-$BB?>/$J$j$H$b$^$H$b$J%"%W%j%1!<%7%g%s$,:n$l$k$h$&$K2~NI$7$?$b$N$,(B
-GLUT $B$H8@$($^$9!#(B
-$B$3$l$O(B SGI $B$N(B Mark Kilgard $B$K$h$C$F:n@.$5$l$^$7$?(B
-$B!J:#$O(B nVIDIA $B$K5o$k$_$?$$$G$9$1$I!K!#(B
-$B$^$?%f%?Bg3X$N(B Nate Robins$B!J$3$N?M$b:#$O(B
-nVIDIA $B$K5o$k$N$+$b!K$H$$$&?M$K$h$C$F!"(B
-Windows $B$K$b0\?"$5$l$^$7$?!#(B
-$B$3$N$?$a(B GLUT $B$K$O(B AUX $B%i%$%V%i%j$N$h$&$JLdBj!)$O$"$j$^$;$s!#(B
-$B%P!<%8%g%s(B 3.6 $B0J9_$G$O(B Windows $BHG$H(B UNIX $BHG$N%=!<%9%3!<%I$,E}9g$5$l!"(B
-$B$^$H$a$FDs6!$5$l$F$$$^$9!#(B</p>
+<p>そこで AUX ライブラリを、
+多少なりともまともなアプリケーションが作れるように改良したものが
+GLUT と言えます。
+これは SGI の Mark Kilgard によって作成されました
+（今は nVIDIA に居るみたいですけど）。
+またユタ大学の Nate Robins（この人も今は
+nVIDIA に居るのかも）という人によって、
+Windows にも移植されました。
+このため GLUT には AUX ライブラリのような問題？はありません。
+バージョン 3.6 以降では Windows 版と UNIX 版のソースコードが統合され、
+まとめて提供されています。</p>
 
 <blockquote>
-Linux $B$d(B Macintosh $B$G$O(B <a href="#Mesa">Mesa</a> $B$N>e$K(B AUX
-$B%i%$%V%i%j$d(B GLUT $B$,0\?"$5$l$F$$$^$9!#$^$?(B Apple $B<+?H$b$D$$$K(B?
+Linux や Macintosh では <a href="#Mesa">Mesa</a> の上に AUX
+ライブラリや GLUT が移植されています。また Apple 自身もついに?
 <a href="http://developer.apple.com/opengl/">OpenGL</a>
-$B$r:NMQ$7!"$3$N>e$G$b(B GLUT $B$O;HMQ2DG=$G$9!#(B
-Mac OS X $B$N(B Developer Tools $B$K$OI8=`$G(B GLUT $B$,4^$^$l$F$$$^$9!#(B
-$B$$$/$D$+%G%b%W%m%0%i%`$bF~$C$F$$$^$9!#(B
+を採用し、この上でも GLUT は使用可能です。
+Mac OS X の Developer Tools には標準で GLUT が含まれています。
+いくつかデモプログラムも入っています。
 </blockquote>
 
-<p>$B$J$*!"(BGLUT $B$K$O(B C/C++ $BMQ$NB>!"(BFortran $B$d(B
-Ada $BMQ$N%$%s%?%U%'!<%9%i%$%V%i%j$bMQ0U$5$l$F$$$^$9!#(B</p>
+<p>なお、GLUT には C/C++ 用の他、Fortran や
+Ada 用のインタフェースライブラリも用意されています。</p>
 
-<h3><a class="label" name="1.2">$B#1!%#2(B $B$=$l0JA0$K!"$J$<(B OpenGL $B$+(B</a></h3>
+<h3><a class="label" name="1.2">１．２ それ以前に、なぜ OpenGL か</a></h3>
 
-<p>$B%7%_%e%l!<%7%g%s7k2L$N;k3P2=$J$I!"(B
-$B%0%i%U%#%C%/%9$r@lLg$H$7$J$$?M$,(B
-$B%0%i%U%#%C%/%9%W%m%0%i%_%s%0$r$7$J$1$l$P$J$i$J$$$H$$$&$3$H$O7k9=$"$j$^$9$h$M!#(B
-$B;d$N5-21$,@5$7$1$l$P!"$+$D$F!J$$$D$NOC$@!)!K$O(B
-Calcomp $B$N%W%m%C%?%i%$%V%i%j$H$+!"(BTektronix 4014
-$B%?!<%_%J%k$N%(%9%1!<%W%7!<%1%s%9$H$+!"$"$k$$$O(B
-N88BASIC $B$N%0%i%U%#%C%/%9!J(BGLIO $B8F$S=P$7$H$+!K(B
-$B$J$s$+$,$=$&$$$&L\E*$K;H$o$l$F$?$h$&$K;W$$$^$9!#(B</p>
+<p>シミュレーション結果の視覚化など、
+グラフィックスを専門としない人が
+グラフィックスプログラミングをしなければならないということは結構ありますよね。
+私の記憶が正しければ、かつて（いつの話だ？）は
+Calcomp のプロッタライブラリとか、Tektronix 4014
+ターミナルのエスケープシーケンスとか、あるいは
+N88BASIC のグラフィックス（GLIO 呼び出しとか）
+なんかがそういう目的に使われてたように思います。</p>
 
-<p>$B8=:_$J$i!"$=$&$$$&L\E*$K$O2?$r;H$($P$$$$$N$G$7$g$&$+!)(B
-Windows $B$J$i(B GDI $B$GIA$-$^$9$+!)$d$O$j(B DirectX $B$G$7$g$&$+!)(B
-X $B$J$i(B Xlib$B!)(B $B$=$l$H$b(B PEX$B!)(B
-$B$3$&$$$&$N$O!";H$C$?$3$H$,$"$k?M$O$o$+$k$H;W$$$^$9$,!"(B
-$B<B:]$K3($rIA$-;O$a$k$^$G$K(B
-$B$J$s$+Lu$NJ,$+$i$J$$<vJ8$r$$$C$Q$$JB$Y$J$$$H$$$1$J$/$F!"(B
-$B7k9=HQ$o$7$$$b$s$G$9$h$M!#FC$K%0%i%U%#%C%/%9$H$J$k$H!D(B</p>
+<p>現在なら、そういう目的には何を使えばいいのでしょうか？
+Windows なら GDI で描きますか？やはり DirectX でしょうか？
+X なら Xlib？ それとも PEX？
+こういうのは、使ったことがある人はわかると思いますが、
+実際に絵を描き始めるまでに
+なんか訳の分からない呪文をいっぱい並べないといけなくて、
+結構煩わしいもんですよね。特にグラフィックスとなると…</p>
 
-<p>$BK\3JE*$J(B GUI (Graphical User Interface)
-$B$r;}$C$?%"%W%j%1!<%7%g%s%W%m%0%i%`$r:n$j$?$1$l$P!"(B
-Windows $B$J$iAGD>$K(B Visual BASIC $B$J$j(B Visual C++ $B$KIU$$$F$$$k(B
-MFC (Microsoft Foundation Class) $B$J$j$r;H$&$Y$-$G$7$g$&$7!"(B
-X Window $B$J$i(B Motif $B$J$I$N(B toolkit
-$B$r;H$($P8+1I$($N$$$$$b$N$,$G$-$k$G$7$g$&!#$G$b!"$3$l$i$O$"$/$^$G(B
-$B!V%f!<%6!<%$%s%?%U%'!<%9:n@.$N$?$a$NItIJ=8!W(B
-$B$J$N$G!"$3$l$i<+BN$O$"$^$j(B
-$B!V%0%i%U%#%C%/%9%W%m%0%i%_%s%0!W(B
-$B$NLr$KN)$A$=$&$K$"$j$^$;$s!#(B</p>
+<p>本格的な GUI (Graphical User Interface)
+を持ったアプリケーションプログラムを作りたければ、
+Windows なら素直に Visual BASIC なり Visual C++ に付いている
+MFC (Microsoft Foundation Class) なりを使うべきでしょうし、
+X Window なら Motif などの toolkit
+を使えば見栄えのいいものができるでしょう。でも、これらはあくまで
+「ユーザーインタフェース作成のための部品集」
+なので、これら自体はあまり
+「グラフィックスプログラミング」
+の役に立ちそうにありません。</p>
 
-<p>OpenGL $B$O#3<!85$N%0%i%U%#%C%/%9%i%$%V%i%j$G$9$,!"(B
-$B$b$A$m$s#2<!85$N5!G=$b;}$C$F$$$^$9!#(B
-$B$J$K$h$j!"$3$l$r;H$&$H(B N88BASIC $B$N(B
-LINE $BJ8$G?^7A$r=q$$$F$$$?:"!J1s$/$J$C$?$J$!!K$N5$3Z$5$G(B
-$B%0%i%U%#%C%/%9%W%m%0%i%_%s%0$,$G$-$^$9!J$"$/$^$G8D?ME*$J0u>]$G$9!K!#(B
-$B$=$l$G$$$F!"!JEv$?$jA0$@$1$I!K(B
-N88BASIC $B$H$OHf3S$K$J$i$J$$$[$I$$$m$s$J$3$H$,$G$-$^$9!#(B</p>
+<p>OpenGL は３次元のグラフィックスライブラリですが、
+もちろん２次元の機能も持っています。
+なにより、これを使うと N88BASIC の
+LINE 文で図形を書いていた頃（遠くなったなぁ）の気楽さで
+グラフィックスプログラミングができます（あくまで個人的な印象です）。
+それでいて、（当たり前だけど）
+N88BASIC とは比較にならないほどいろんなことができます。</p>
 
-<p>$B$H$$$&$3$H$G!"(BGLUT $B$H(B OpenGL $B$rAH$_9g$o$;$l$P!"(B</p>
+<p>ということで、GLUT と OpenGL を組み合わせれば、</p>
 
 <ol>
-<li>UNIX $B7O(B OS$B!J(BLinux$B!"(BFreeBSD $BEy$r4^$`!K$H(B Windows $B$H(B Macintosh $B$N$$$:$l$G$bF0$/!"(B</li>
-<li>$B%j%"%k%?%$%`$K#3<!85I=<($r9T$&%W%m%0%i%`$,!"(B</li>
-<li>$B$H$C$F$b4JC1$K=q$1$F$7$^$&!"(B</li>
+<li>UNIX 系 OS（Linux、FreeBSD 等を含む）と Windows と Macintosh のいずれでも動く、</li>
+<li>リアルタイムに３次元表示を行うプログラムが、</li>
+<li>とっても簡単に書けてしまう、</li>
 </ol>
 
-<p>$B$H$$$&;0Go;R$=$m$C$?%a%j%C%H$,F@$i$l$^$9!#(B</p>
+<p>という三拍子そろったメリットが得られます。</p>
 
-<p>$B$b$A$m$s(B GLUT $B$O!"(B
-$BK\3JE*$J(B GUI $B$r;}$C$?%W%m%0%i%`$N3+H/$K$O8~$-$^$;$s!#(B
-$B$7$+$78&5f$J$I$G!"(B
-$B<jAa$/%0%i%U%#%C%/%9$N%W%m%0%i%`$r;E>e$2$J$$$H$$$1$J$$$H$$$&>l9g$K$O!"(B
-$B$H$F$bJXMx$JAH$_9g$o$;$@$H;W$$$^$9!#(B</p>
+<p>もちろん GLUT は、
+本格的な GUI を持ったプログラムの開発には向きません。
+しかし研究などで、
+手早くグラフィックスのプログラムを仕上げないといけないという場合には、
+とても便利な組み合わせだと思います。</p>
 
-<p>$B$J$*(B GUI $B$K$D$$$F$O!"(BGLUT $B<+?H$K0l1~(B
+<p>なお GUI については、GLUT 自身に一応
 <a href="http://www.sgi.com/software/opengl/examples/glut/mui/">
 MUI - micro-UI</a>
-$B$H$$$&4JC1$J%f!<%6%$%s%?%U%'!<%9:n@.MQ$N(B toolkit $B$,IU$$$F$$$^$9!#(B
-$B$^$?(B <a href="http://www.cs.unc.edu/~rademach/glui/">GLUI</a>
-$B$H$$$&(B C++ $B$G=q$+$l$?(B toolkit $B$b%j%j!<%9$5$l$F$$$k$h$&$G$9!#(B
-$B$3$l$K$D$$$F$O!"(B
+という簡単なユーザインタフェース作成用の toolkit が付いています。
+また <a href="http://www.cs.unc.edu/~rademach/glui/">GLUI</a>
+という C++ で書かれた toolkit もリリースされているようです。
+これについては、
 <a href="http://www.ina.sd.keio.ac.jp/Haoyama/public/glui/GluiHP.htm">
-GLUI$B$K$h$k(BOpenGL$B%@%$%"%m%0(B</a>
-$B$KF|K\8l$G=q$+$l$?J,$+$j$d$9$$%A%e!<%H%j%"%k$,$"$j$^$9!#(B
-Linux $B$J$I$G;H$o$l$k(B GTK $B$r%Y!<%9$K$7$?$b$N$K$O!"(B
+GLUIによるOpenGLダイアログ</a>
+に日本語で書かれた分かりやすいチュートリアルがあります。
+Linux などで使われる GTK をベースにしたものには、
 <a href="http://www.student.oulu.fi/~jlof/gtkglarea/">GtkGLArea</a>
-$B!J%j%s%/@Z$l!K$d(B
+（リンク切れ）や
 <a href="http://gtkglext.sourceforge.net/">GtkGLExt</a>
-$B$,$"$j$^$9!#(B
-$B$=$NB>$N(B OpenGL $B$HAH$_9g$o$;$F;H$($k(B toolkit $B$K$D$$$F$O!"(B
-<a href="http://www.opengl.org">OpenGL.org</a> $B$N(B
+があります。
+その他の OpenGL と組み合わせて使える toolkit については、
+<a href="http://www.opengl.org">OpenGL.org</a> の
 <a href="http://www.opengl.org/resources/libraries/windowtoolkits.html">
-GLUT-like Windowing Toolkits</a> $B$K>R2p$,$"$j$^$9!#(B
+GLUT-like Windowing Toolkits</a> に紹介があります。
 
-<h2><a class="label" name="2">$B#2!%(BGLUT $B$r%$%s%9%H!<%k$9$k(B</a></h2>
+<h2><a class="label" name="2">２．GLUT をインストールする</a></h2>
 
-<h3><a class="label" name="2.1">$B#2!%#1(B GLUT $B$rF~<j$9$k(B</a></h3>
+<h3><a class="label" name="2.1">２．１ GLUT を入手する</a></h3>
 
-<p>GLUT $B$N%=!<%9%U%!%$%k$O(B
+<p>GLUT のソースファイルは
 <A href="http://www.opengl.org/resources/libraries/glut.html">GLUT -
 The OpenGL Utility Toolkit</A>
-$B$N%Z!<%8$+$i$?$I$k$3$H$,$G$-$^$9(B
+のページからたどることができます
 (<A href="http://www.opengl.org/resources/libraries/glut/glut-3.7.tar.gz">
 glut-3.7.tar.gz</A>/<a href="http://www.opengl.org/resources/libraries/glut/glut37.zip">glut37.zip</a>
-$B$H(B
-<A href="http://www.opengl.org/resources/libraries/glut/glut_data-3.7.tar.gz">glut_data-3.7.tar.gz</A>/<a href="http://www.opengl.org/resources/libraries/glut/glut37data.zip">glut37data.zip</a>)$B!#(BIRIX
-$BMQ$N%P%$%J%j$O(B <a href="http://freeware.sgi.com/index-by-alpha.html">
-SGI $B$N(B freeware $B$N%Z!<%8(B</a>$B$K$"$j$^$9!#(B
-$B$^$?(B Windows (95/98/98SE/Me/NT/2000/XP)
-$BHG$N:G?7HG$O(B <a href="http://www.xmission.com/~nate/glut.html">
+と
+<A href="http://www.opengl.org/resources/libraries/glut/glut_data-3.7.tar.gz">glut_data-3.7.tar.gz</A>/<a href="http://www.opengl.org/resources/libraries/glut/glut37data.zip">glut37data.zip</a>)。IRIX
+用のバイナリは <a href="http://freeware.sgi.com/index-by-alpha.html">
+SGI の freeware のページ</a>にあります。
+また Windows (95/98/98SE/Me/NT/2000/XP)
+版の最新版は <a href="http://www.xmission.com/~nate/glut.html">
 http://www.xmission.com/~nate/glut.html</a>
-$B$+$iF@$i$l$^$9!#(B</p>
+から得られます。</p>
 
-<h3><a class="label" name="2.2">$B#2!%#2(B UNIX $B7O(B OS $B$K%$%s%9%H!<%k$9$k(B</a></h3>
+<h3><a class="label" name="2.2">２．２ UNIX 系 OS にインストールする</a></h3>
 
-<p>IRIX $BMQ$N%P%$%J%j(B (glut_dev.tardist) $B$O!"(B
-IRIX $B$N(B Web $B%V%i%&%6$G%@%&%s%m!<%I$9$k$H%$%s%9%H!<%i(B
-(swmgr) $B$,<+F0E*$K5/F0$7$^$9!#(Btardist $B%U%!%$%k$r<h$C$F$-$F(B
-tardist $B%3%^%s%I$G%$%s%9%H!<%k$9$k$3$H$b$G$-$^$9!#(B</p>
+<p>IRIX 用のバイナリ (glut_dev.tardist) は、
+IRIX の Web ブラウザでダウンロードするとインストーラ
+(swmgr) が自動的に起動します。tardist ファイルを取ってきて
+tardist コマンドでインストールすることもできます。</p>
 
 <pre class="source">% tardist glut_dev.tardist</pre>
 
-<p>$B$3$l$G(B swmgr $B$,5/F0$7$^$9!#(B
-swmgr $B$r;H$($P!"(B
-$B%7%9%F%`I8=`$N%X%C%@%U%!%$%k!?%i%$%V%i%j$N%Q%9$K%$%s%9%H!<%k$G$-$^$9!#(B
-$B$?$@$7!"(B
-$B$=$l$K$O(B root $B$N8"8B$,I,MW$G$9!#(B</p>
+<p>これで swmgr が起動します。
+swmgr を使えば、
+システム標準のヘッダファイル／ライブラリのパスにインストールできます。
+ただし、
+それには root の権限が必要です。</p>
 
 <blockquote>
-tardist $B%U%!%$%k$O(B tar $B$GE83+$G$-$^$9!#$=$N>l9g$O(B
-$B!H(Bswmgr -f $BE83+$7$?%G%#%l%/%H%j!I$"$k$$$O(B
-$B!H(Binst -f $BE83+$7$?%G%#%l%/%H%j!I$r<B9T$7$F$/$@$5$$!#(B
+tardist ファイルは tar で展開できます。その場合は
+“swmgr -f 展開したディレクトリ”あるいは
+“inst -f 展開したディレクトリ”を実行してください。
 </blockquote>
 
 <a class="label" name="source"></a>
-<p>IRIX $B0J30$N(B UNIX $B7O(B OS $B$d(B IRIX $B$G(B root $B$N8"8B$,$J$$$H$-$O!"(B
+<p>IRIX 以外の UNIX 系 OS や IRIX で root の権限がないときは、
 <A href="http://www.opengl.org/resources/libraries/glut.html">GLUT
-- The OpenGL Utility Toolkit</A> $B$N%Z!<%8$+$i%=!<%9%U%!%$%k(B
+- The OpenGL Utility Toolkit</A> のページからソースファイル
 (<A href="http://www.opengl.org/resources/libraries/glut/glut-3.7.tar.gz">glut-3.7.tar.gz</A>, <A href="http://www.opengl.org/resources/libraries/glut/glut_data-3.7.tar.gz">glut_data-3.7.tar.gz</A>)
-$B$r<h$C$F$-$F%3%s%Q%$%k$7$F$/$@$5$$!#(B $B$=$N:]$O(B
-glut-3.7/lib/glut $B$K(B cd $B$7$F(B make $B$7$?$[$&$,$$$$$G$7$g$&!#(B
-glut-3.7 $B$G(B make $B$9$k$H(B $B%5%s%W%k%W%m%0%i%`$+$i2?$+$i%3%s%Q%$%k$9$k$N$G!"(B
-$B$9$4$/;~4V$,$+$+$j$^$9(B $B!JHs>o$K;29M$K$J$k%5%s%W%k%W%m%0%i%`$J$N$G!"(B
-$BL\$rDL$7$F$*$/$3$H$r4+$a$^$9!K!#(B</p>
+を取ってきてコンパイルしてください。 その際は
+glut-3.7/lib/glut に cd して make したほうがいいでしょう。
+glut-3.7 で make すると サンプルプログラムから何からコンパイルするので、
+すごく時間がかかります （非常に参考になるサンプルプログラムなので、
+目を通しておくことを勧めます）。</p>
 
 <pre class="source">% gunzip -d -c glut-3.7.tar.gz | tar xf -
 % cd glut-3.7
@@ -323,11 +323,11 @@ glut-3.7 $B$G(B make $B$9$k$H(B $B%5%s%W%k%W%m%0%i%`$+$i2?$+$i%3%s%Q%$%k$9$
 % cd lib/glut
 % make</pre>
 
-<p>$B$G$->e$,$C$?(B glut-3.7/lib/glut/libglut.a $B$H(B 
-glut-3.7/include/GL/glut.h $B$r!"(B
-$BE,Ev$J%G%#%l%/%H%j$K0\F0$7$^$9!#(B
-$BNc$($P%[!<%`%G%#%l%/%H%jD>2<$K(B GLUT $B$H$$$&%G%#%l%/%H%j$r:n$j!"(B
-~/GLUT/GL/glut.h $B$H(B~/GLUT/libglut.a $B$H$7$FCV$1$P$$$$$G$7$g$&!#(B</p>
+<p>でき上がった glut-3.7/lib/glut/libglut.a と 
+glut-3.7/include/GL/glut.h を、
+適当なディレクトリに移動します。
+例えばホームディレクトリ直下に GLUT というディレクトリを作り、
+~/GLUT/GL/glut.h と~/GLUT/libglut.a として置けばいいでしょう。</p>
 
 <pre class="source">% mkdir ~/GLUT
 % cp libglut.a ~/GLUT
@@ -335,116 +335,116 @@ glut-3.7/include/GL/glut.h $B$r!"(B
 % cp ../../include/GL/glut.h ~/GLUT/GL</pre>
 
 <p><a class="label" name="Mesa">OpenGL</a>
-$B$,0\?"$5$l$F$$$J$$(B UNIX $B7O(B OS $B$d(B Macintosh $B$J$I$G$O!"(B
+が移植されていない UNIX 系 OS や Macintosh などでは、
 <a href="http://www.mesa3d.org/">Mesa</a>
-$B$H8F$P$l$k(B OpenGL $B8_49$NL5NA$N%i%$%V%i%j$,;HMQ$G$-$^$9!#(B
-<a href="http://sourceforge.net/projects/mesa3d">SourceForge $B$N(B
-Mesa3D $B%W%m%8%'%/%H(B</a>$B$+$iF~<j$G$-$^$9!#(B
-Linux $B$N>l9g!"(BMesa $B$d(B GLUT
-$B$O$?$$$F$$$N%G%#%9%H%j%S%e!<%7%g%s$K4^$^$l$F$$$k$H;W$$$^$9!#(B</p>
+と呼ばれる OpenGL 互換の無料のライブラリが使用できます。
+<a href="http://sourceforge.net/projects/mesa3d">SourceForge の
+Mesa3D プロジェクト</a>から入手できます。
+Linux の場合、Mesa や GLUT
+はたいていのディストリビューションに含まれていると思います。</p>
 
-<blockquote>SGI $B$+$i(B Mark Kilgard
-$B$r4^$`BgNL$N%(%s%8%K%"$,(B nVIDIA $B$K0\@R$7$?$H;W$C$?$i!"(B1999 $BG/(B 2 $B7n$K$O(B
-SGI $B$,(B <a href="http://www.sgi.com/software/opensource/glx/">
-GLX (X Window $B$N(B OpenGL $B3HD%!K$r%*!<%W%s%=!<%92=(B</a>$B$7$F!"(B
-XFree86 $B$G$b(B GLX $B$,;H$($k$h$&$K$J$j$^$7$?!#(B
-$B8=:_(B <a href="http://www.nvidia.com">nVIDIA</a>
-$B$O(B RIVA 128 $B%7%j!<%:$d(B TNT$B!"(BGeForce $B%7%j!<%:!"$=$l$K(B
-Quadro $B$KBP1~$7$?!"(BOpenGL $B$N%O!<%I%&%'%"%"%/%;%i%l!<%7%g%s$,M-8z$J(B
-<a href="http://www.nvidia.com/content/drivers/drivers.asp">$B%I%i%$%P(B</a>
-$B$rDs6!$7$F$$$^$9!#(B
-$B$^$?(B <a href="http://www.ati.com/">ATI</A>
-$B$b(B RADEON 8500$B!A(B9700$B!J(BFireGL 8700/8800 $B$r4^$`!K$K$D$$$F$O(B OpenGL
-$B$N%O!<%I%&%'%"%"%/%;%i%l!<%7%g%s$,M-8z$J(B
-<a href="http://mirror.ati.com/support/driver.html">$B%I%i%$%P(B</a>
-$B$rDs6!$7$F$$$^$9!#(B
-$B$=$NB>$N%0%i%U%#%C%/%9%W%m%;%C%5%a!<%+!<$b!"(B
-$B$=$l$>$l$K(B Open Source $B$J%I%i%$%P$rMQ0U$7$F$$$k$h$&$G$9!#>\$7$/$O(B
+<blockquote>SGI から Mark Kilgard
+を含む大量のエンジニアが nVIDIA に移籍したと思ったら、1999 年 2 月には
+SGI が <a href="http://www.sgi.com/software/opensource/glx/">
+GLX (X Window の OpenGL 拡張）をオープンソース化</a>して、
+XFree86 でも GLX が使えるようになりました。
+現在 <a href="http://www.nvidia.com">nVIDIA</a>
+は RIVA 128 シリーズや TNT、GeForce シリーズ、それに
+Quadro に対応した、OpenGL のハードウェアアクセラレーションが有効な
+<a href="http://www.nvidia.com/content/drivers/drivers.asp">ドライバ</a>
+を提供しています。
+また <a href="http://www.ati.com/">ATI</A>
+も RADEON 8500〜9700（FireGL 8700/8800 を含む）については OpenGL
+のハードウェアアクセラレーションが有効な
+<a href="http://mirror.ati.com/support/driver.html">ドライバ</a>
+を提供しています。
+その他のグラフィックスプロセッサメーカーも、
+それぞれに Open Source なドライバを用意しているようです。詳しくは
 <a href="http://dri.sourceforge.net/">DRI
 (Direct Rendering Infrastracture)</a>
-$B$r;2>H$7$F$/$@$5$$!#$^$?(B
+を参照してください。また
 <a href="http://utah-glx.sourceforge.net/">Utah-GLX</a>
-$B$K$b$$$/$D$+$N%0%i%U%#%C%/%9%W%m%;%C%5$N%I%i%$%P$,$"$j$^$9!#(B
-$B$H$3$m$G(B SGI $B$O(B 2000 $BG/$N(B 1 $B7n!$$D$$$K(B 
+にもいくつかのグラフィックスプロセッサのドライバがあります。
+ところで SGI は 2000 年の 1 月，ついに 
 <a href="http://oss.sgi.com/projects/ogl-sample/">
-OpenGL $B$N%5%s%W%k%$%s%W%j%a%s%F!<%7%g%s$r%*!<%W%s%=!<%92=(B</a>$B$7$F$7$^$$$^$7$?!#(B
+OpenGL のサンプルインプリメンテーションをオープンソース化</a>してしまいました。
 </blockquote>
 
-<h3><a class="label" name="2.3">$B#2!%#3(B Windows $B7O(B OS $B$K%$%s%9%H!<%k$9$k(B</A></h3>
+<h3><a class="label" name="2.3">２．３ Windows 系 OS にインストールする</A></h3>
 
-<p>OpenGL $B$,;H$($k$N$O!"(BOpenGL $B$N(B DLL $B$r%$%s%9%H!<%k$7$?(B Windows 95 $B$*$h$S(B
-Windows 98/98SE/Me$B!"(BWindows NT 3.5/4.0/2000$B!"$=$7$F(B Windows XP $B$G$9!#(B
-Windows 95 $B$N>l9g!"(B
-OSR2 $B0J9_$J$iB?J,I8=`$GF~$C$F$$$k$N$G$O$J$$$+$H;W$$$^$9$,!"(B
-$BL5$$>l9g$O(B MS $B$+$i%@%&%s%m!<%I$7$F$-$F$/$@$5$$!#(B
-$B$3$l$O(B<a href="ftp://ftp.microsoft.com/softlib/MSLFILES/opengl95.exe">
+<p>OpenGL が使えるのは、OpenGL の DLL をインストールした Windows 95 および
+Windows 98/98SE/Me、Windows NT 3.5/4.0/2000、そして Windows XP です。
+Windows 95 の場合、
+OSR2 以降なら多分標準で入っているのではないかと思いますが、
+無い場合は MS からダウンロードしてきてください。
+これは<a href="ftp://ftp.microsoft.com/softlib/MSLFILES/opengl95.exe">
 ftp://ftp.microsoft.com/softlib/MSLFILES/opengl95.exe</a>
-$B$K$"$j$^$9!#(B</p>
+にあります。</p>
 
-<p>$B3+H/4D6-$K$O(B Visual C++ 6.0 $B$rA[Dj$7$F$$$^$9!#(B
-Windows $BMQ$N%P%$%J%j(B (glut-3.7.x-bin.zip) $B$rE83+$7$?8e!"(B
-$B3F%U%!%$%k$r0J2<$N$h$&$K!V<j$G!WG[CV$7$F$/$@$5$$!#(B</p>
+<p>開発環境には Visual C++ 6.0 を想定しています。
+Windows 用のバイナリ (glut-3.7.x-bin.zip) を展開した後、
+各ファイルを以下のように「手で」配置してください。</p>
 
 <dl>
 <dt>glut.h</dt>
-<dd>$B%3%s%Q%$%i$N%X%C%@%U%!%$%k$N%Q%9(B
-(C:\Program Files\DevStudio\Vc\include\GL $B$J$I(B)</dd>
+<dd>コンパイラのヘッダファイルのパス
+(C:\Program Files\DevStudio\Vc\include\GL など)</dd>
 <dt>*.lib</dt>
-<dd>$B%3%s%Q%$%i$N%i%$%V%i%j$N%Q%9(B
-(C:\Program Files\DevStudio\Vc\lib $B$J$I(B)</dd>
+<dd>コンパイラのライブラリのパス
+(C:\Program Files\DevStudio\Vc\lib など)</dd>
 <dt>*.dll</dt>
-<dd>$B%7%9%F%`$N%G%#%l%/%H%j(B
-(C:\WINDOWS\system $B$d(B C:\WINNT\system32 $B$"$?$j(B)</dd>
+<dd>システムのディレクトリ
+(C:\WINDOWS\system や C:\WINNT\system32 あたり)</dd>
 </dl>
 
-<p>NT $B7O$N(B OS (Windows NT/2000/XP) $B$G$O!"$=$N$^$^G[CV$9$k$HG[CV$7$?%f!<%6(B
-(Administrator $BEy(B) $B$7$+FI$_<h$j$d<B9T$,9T$($J$/$J$C$F$7$^$&$3$H$,$"$j$^$9!#(B
-$BG[CV8e$K$3$l$i$N%U%!%$%k$N%W%m%Q%F%#$r8+$F(B
-$B!J%U%!%$%k$r%^%&%9$N1&%\%?%s$G%/%j%C%/!K!"(B
-$B!V%;%-%e%j%F%#!W$N%?%V$G!V(BEveryone$B!W$,!VFI$_<h$j$H<B9T!W$G$-$k$h$&$K(B
-$B%A%'%C%/%^!<%/$rF~$l$F$*$$$F$/$@$5$$!#(B
-$B!V7Q>52DG=$J%"%/%;%95v2D$r?F$+$i$3$N%*%V%8%'%/%H$K7Q>5$G$-$k$h$&$K$9$k!W(B
-$B$r%A%'%C%/$7$F$b$$$$$s$8$c$J$$$+$H;W$$$^$9!#(B</p>
+<p>NT 系の OS (Windows NT/2000/XP) では、そのまま配置すると配置したユーザ
+(Administrator 等) しか読み取りや実行が行えなくなってしまうことがあります。
+配置後にこれらのファイルのプロパティを見て
+（ファイルをマウスの右ボタンでクリック）、
+「セキュリティ」のタブで「Everyone」が「読み取りと実行」できるように
+チェックマークを入れておいてください。
+「継承可能なアクセス許可を親からこのオブジェクトに継承できるようにする」
+をチェックしてもいいんじゃないかと思います。</p>
 
-<p>$B$J$*!"(BC++ Builder $B$N>l9g$O!H$($`$C$A!I$5$s$N(B
+<p>なお、C++ Builder の場合は“えむっち”さんの
 <a href="http://www.nk.rim.or.jp/~m_iida/programming/diary/19990421.html">
-$B$X$C$]$3(B<strike>$B%W%m%0%i%^!<(B</strike>$BF|5-(B</a>$B$,;29M$K$J$j$^$9!#(B
-Cygwin $B$N>l9g$O(B
+へっぽこ<strike>プログラマー</strike>日記</a>が参考になります。
+Cygwin の場合は
 <a href="http://www.cim.pe.u-tokyo.ac.jp/~kawachi/software/cygwin.html">
-cygwin $B$r;H$C$F(B OpenGL $B$r;H$C$?%W%m%0%i%`$r=q$/OC(B</a>
-$B$G>\$7$/2r@b$5$l$F$$$^$9!#$^$?!"%U%j!<$N=hM}7O$N(B
+cygwin を使って OpenGL を使ったプログラムを書く話</a>
+で詳しく解説されています。また、フリーの処理系の
 <a href="http://www.cs.virginia.edu/~lcc-win32/">LCC-Win32</a>
-$B$H$$$&$N$b;H$($k$=$&$G$9!J(B
+というのも使えるそうです（
 <a href="http://www.cc.rim.or.jp/~yukkun/glut.html">
-Using GLUT with LCC-Win32</a>$B!";3K\=(0l@h@8$"$j$,$H$&!K!#(B
-$B$3$NB>!":k6LBg3X$N]/0f@h@8$,(B OpenGL $B$H(B GLUT $B$r(B Windows9*/NT $B$G;H$&J}K!$K$D$$$F(B
+Using GLUT with LCC-Win32</a>、山本秀一先生ありがとう）。
+この他、埼玉大学の櫻井先生が OpenGL と GLUT を Windows9*/NT で使う方法について
 <a href="http://www.rimath.saitama-u.ac.jp/lab.jp/tsakurai/opengl/index.html">
-OpenGL $B$NIt20(B</a>
-$B$K>\$7$/$*$^$H$a$K$J$C$F$$$^$9!#(B</p>
+OpenGL の部屋</a>
+に詳しくおまとめになっています。</p>
 
-<h3><a class="label" name="2.4">$B#2!%#4(B Mac OS X $B$K%$%s%9%H!<%k$9$k(B</A></h3>
+<h3><a class="label" name="2.4">２．４ Mac OS X にインストールする</A></h3>
 
-<p>Mac OS X $B$G(B OpenGL/GLUT $B$r;H$&$K$O!"0J2<$N#2$H$*$j$NJ}K!$,$"$j$^$9!#(B</p>
+<p>Mac OS X で OpenGL/GLUT を使うには、以下の２とおりの方法があります。</p>
 
 <ul>
-<li>X Windows System $B$r%$%s%9%H!<%k$9$k(B</li>
-<li>Developer Tools (Xcode) $B$r;H$&(B</li>
+<li>X Windows System をインストールする</li>
+<li>Developer Tools (Xcode) を使う</li>
 </ul>
 
-<p>MacOS X $B$G;H$($k(B X Window System $B$K$O!"%*!<%W%s%=!<%9$N(B
+<p>MacOS X で使える X Window System には、オープンソースの
 <a href="http://www.xdarwin.org/">XDarwin</a>
-$B$H!"(BApple $B<+?H$,Ds6!$9$k(B
+と、Apple 自身が提供する
 <a href="http://www.apple.co.jp/macosx/x11/">X11 for Mac OS X</a>
-$B$,$"$j$^$9!#(BXDarwin $B$O(B
+があります。XDarwin は
 <a href="http://sourceforge.net/projects/xonx">
-SourceForge $B$N(B XonX Project</a> $B$"$?$j$+$iF~<j$G$-$^$9!#$^$?(B
-X11 for Mac OS X $B$O!"(B10.3 (Panther)
-$B$K$OI8=`$G4^$^$l$F$$$^$9!J%+%9%?%`%$%s%9%H!<%k$9$kI,MW$,$"$j$^$9!K!#(B
-$B$$$:$l$b(B GLX (OpenGL Extension) $B$O%5%]!<%H$5$l$F$$$^$9!#(B
-$B$?$@$7!"(B GLUT
-$B$O4^$^$l$F$$$J$$$N$G!"(B<a href="#source">$B%=!<%9$+$i%3%s%Q%$%k(B</a>$B$7$F!"(B
-$B%$%s%9%H!<%k$7$F$/$@$5$$!#$3$N>l9g$O(B 
-/usr/local $B0J2<$K%$%s%9%H!<%k$9$k$HJXMx$G$7$g$&!#(B</p>
+SourceForge の XonX Project</a> あたりから入手できます。また
+X11 for Mac OS X は、10.3 (Panther)
+には標準で含まれています（カスタムインストールする必要があります）。
+いずれも GLX (OpenGL Extension) はサポートされています。
+ただし、 GLUT
+は含まれていないので、<a href="#source">ソースからコンパイル</a>して、
+インストールしてください。この場合は 
+/usr/local 以下にインストールすると便利でしょう。</p>
 
 <pre class="source">% cd glut-3.7/lib/glut
 % sudo mkdir /usr/local/lib
@@ -453,78 +453,78 @@ X11 for Mac OS X $B$O!"(B10.3 (Panther)
 % sudo mkdir /usr/local/include/GL
 % cp ../../include/GL/glut.h /usr/local/include/GL</pre>
 
-<p>$B0lJ}!"8e<T$N(B Developer Tools (Xcode) $B$r;H$&J}K!$G$O!"(BMac OS X $B<+BN$,(B
-OpenGL $B$rK\3JE*$K%5%]!<%H$7$F$*$j!"(BGLUT
-$B$b:G=i$+$i4^$^$l$F$$$k$N$G!"FC$K2?$bF~<j$9$kI,MW$O$"$j$^$;$s!#(B
-$B$?$@$7!"0J2<$N%=!<%9%W%m%0%i%`$r$=$N$^$^%3%s%Q%$%k$G$-$k$h$&$K$9$k$?$a$K$O!"(B
-/usr/local/include $B$"$?$j$K(B GL $B$H$$$&%G%#%l%/%H%j$r7!$C$F(B
+<p>一方、後者の Developer Tools (Xcode) を使う方法では、Mac OS X 自体が
+OpenGL を本格的にサポートしており、GLUT
+も最初から含まれているので、特に何も入手する必要はありません。
+ただし、以下のソースプログラムをそのままコンパイルできるようにするためには、
+/usr/local/include あたりに GL というディレクトリを掘って
 /System/Library/Frameworks/GLUT.framework/Versions/A/Headers/glut.h
-$B$X$N%7%s%\%j%C%/%j%s%/$rD%$C$F$*$$$F$/$@$5$$!#(B</p>
+へのシンボリックリンクを張っておいてください。</p>
 
 <pre class="source">% sudo mkdir /usr/local/include
 % sudo mkdir /usr/local/include/GL
 % cd /usr/local/include/GL
 % sudo ln -s /System/Library/Frameworks/GLUT.framework/Versions/A/Headers/glut.h .</pre>
 
-<h2><a class="label" name="3">$B#3!%%3%s%Q%$%k$N;EJ}(B</a></h2>
+<h2><a class="label" name="3">３．コンパイルの仕方</a></h2>
 
-<h3><a class="label" name="3.1">$B#3!%#1(B UNIX $B7O(B OS $B$N>l9g(B</a></h3>
+<h3><a class="label" name="3.1">３．１ UNIX 系 OS の場合</a></h3>
 
-<p>cc$B!J$"$k$$$O(B gcc$B!K%3%^%s%I$K0J2<$N$h$&$J%*%W%7%g%s$rIU$1$F$/$@$5$$!#(B</p>
+<p>cc（あるいは gcc）コマンドに以下のようなオプションを付けてください。</p>
 
 <pre class="source">% cc -I/usr/X11R6/include program.c -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm</pre>
 
-<p>GLUT $B$N%=!<%9$r%3%s%Q%$%k$7$?>l9g$O!">e$N%3%^%s%I$K$*$$$F(B
-glut.h $B$H(B libglut.a $B$rCV$$$?>l=j$r%*%W%7%g%s$G;XDj$7$F$/$@$5$$!#(B
-$B2>$K!"$3$l$i$r%[!<%`%G%#%l%/%H%jD>2<$N(B GLUT
-$B$KCV$$$?$H$9$l$P!"(B-I ~/GLUT -L ~/GLUT $B$rDI2C$7$^$9!#$^$?(B IRIX
-$B$J$I$NB?$/$N(B UNIX $B%Y!<%9(B OS $B$G$O(B
--L/usr/X11R6/lib $B$H(B -I/usr/X11R6/include
-$B$H$$$&%*%W%7%g%s$OITMW$G$9!#$^$?B?$/$N(B Linux
-$B%G%#%9%H%j%S%e!<%7%g%s$G$O(B -I/usr/X11R6/include
-$B$H$$$&%*%W%7%g%s$OITMW$G$9!#(B</p>
+<p>GLUT のソースをコンパイルした場合は、上のコマンドにおいて
+glut.h と libglut.a を置いた場所をオプションで指定してください。
+仮に、これらをホームディレクトリ直下の GLUT
+に置いたとすれば、-I ~/GLUT -L ~/GLUT を追加します。また IRIX
+などの多くの UNIX ベース OS では
+-L/usr/X11R6/lib と -I/usr/X11R6/include
+というオプションは不要です。また多くの Linux
+ディストリビューションでは -I/usr/X11R6/include
+というオプションは不要です。</p>
 
-<p>$B%3%s%Q%$%k$NEY$K$3$s$J$KD9$$%3%^%s%I$rBG$D$N$OLLE]$G$9$+$i!"(B
-$B3Z$r$9$kJ}K!$r9M$($^$7$g$&!#$3$l$K$O$$$/$D$+J}K!$,9M$($i$l$^$9!#(B</p>
+<p>コンパイルの度にこんなに長いコマンドを打つのは面倒ですから、
+楽をする方法を考えましょう。これにはいくつか方法が考えられます。</p>
 
-<h4>alias $B$9$k(B</h4>
-<p>$B$"$i$+$8$a0J2<$N$h$&$J%3%^%s%I$r<B9T$7$F$*$-$^$9!#(B</p>
+<h4>alias する</h4>
+<p>あらかじめ以下のようなコマンドを実行しておきます。</p>
 <pre class="source">% alias ccgl 'cc -I/usr/X11R6/include \!* -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm'</pre>
-<p>$B$=$&$9$k$H!"0J9_$O0J2<$N%3%^%s%I$G%3%s%Q%$%k!J!u%j%s%/!K$,9T$($^$9!#(B</p>
+<p>そうすると、以降は以下のコマンドでコンパイル（＆リンク）が行えます。</p>
 <pre class="source">% ccgl program.c</pre>
-<p>$B$3$l$r(B .cshrc $B$NCf$K=q$$$F$*$1$P!"%m%0%$%s$9$kEY$K(B
-alias $B%3%^%s%I$r<B9T$9$k<j4V$,>J$1$^$9!#(B</p>
-<h4>$B%7%'%k%9%/%j%W%H$r=q$/(B</h4>
-<p>$B0J2<$N$h$&$JFbMF$N%U%!%$%k(B ccgl $B$r:n@.$7$F$/$@$5$$!#(B</p>
+<p>これを .cshrc の中に書いておけば、ログインする度に
+alias コマンドを実行する手間が省けます。</p>
+<h4>シェルスクリプトを書く</h4>
+<p>以下のような内容のファイル ccgl を作成してください。</p>
 <pre class="source">#!/bin/sh
 exec cc -I/usr/X11R6/include "$@" -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm</pre>
-<p>$B$=$N$"$H(B chmod $B%3%^%s%I$r<B9T$7$F!"$3$N%7%'%k%9%/%j%W%H$r<B9T2DG=$K$7$^$9!#(B</p>
+<p>そのあと chmod コマンドを実行して、このシェルスクリプトを実行可能にします。</p>
 <pre class="source">% chmod +x ccgl</pre>
-<p>$B0J9_$O$3$N(B ccgl $B%3%^%s%I$r;H$C$F%3%s%Q%$%k$G$-$^$9!#(B</p>
+<p>以降はこの ccgl コマンドを使ってコンパイルできます。</p>
 <pre class="source">% ccgl program.c</pre>
-<h4>Makefile $B$r:n$k(B</h4>
-<p>$B0J2<$NFbMF$N(B Makefile $B$H$$$&%U%!%$%k$r:n$j$^$9!#(B
-&quot;<kbd>--Tab--&gt;</kbd>&quot; $B$N$H$3$m$O!"(B
-$B%?%V(B (Tab) $B$r;H$C$F;z2<$2$7$F$/$@$5$$!#(B</p>
+<h4>Makefile を作る</h4>
+<p>以下の内容の Makefile というファイルを作ります。
+&quot;<kbd>--Tab--&gt;</kbd>&quot; のところは、
+タブ (Tab) を使って字下げしてください。</p>
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LIBS = -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm
 a.out: program.c
 <kbd>--Tab--&gt;</kbd>cc $(CFLAGS) program.c $(LIBS)</pre>
-<p>Makefile $B$N$"$k%G%#%l%/%H%j$G(B make $B%3%^%s%I$r<B9T$9$k$H!"(B
-program.c $B$,%3%s%Q%$%k$5$l$F(B a.out $B$H$$$&<B9T%U%!%$%k$,@8@.$5$l$^$9!#(B</p>
+<p>Makefile のあるディレクトリで make コマンドを実行すると、
+program.c がコンパイルされて a.out という実行ファイルが生成されます。</p>
 <pre class="source">% make</pre>
-<p>$B$3$N%3%^%s%I$O(B emacs $B$NCf$+$i$b(B M-x compile $B$G5/F0$G$-$^$9!#(B</p>
+<p>このコマンドは emacs の中からも M-x compile で起動できます。</p>
 
-<p>Makefile $B$K$O%U%!%$%k$N!V@8@.5,B'!W$r5-=R$7$^$9!#(B
-make $B$O<B9T$9$k$H!"(BMakefile $BCf$N:G=i$N@8@.5,B'$rC5$7$^$9!#(B
-$B>e$N%U%!%$%k$N>l9g!"(Ba.out $B$N9T$,$=$l$K$J$j$^$9!#(B
-$B$3$N9T$K$O(B a.out $B$H$$$&%?!<%2%C%H$r@8@.$9$k$N$K(B program.c
-$B$,I,MW$@$H$$$&0MB84X78$r5-=R$7$F$*$j!"(B
-$B$=$N<!$N9T$K<B:]$K(B a.out $B$r@8@.$9$k$?$a$N<jB3$-$r5-=R$7$F$$$^$9(B
-$B!J(B<a href="make.html">$BCm(B</a>$B!K!#(B
-$B$3$N9T$N9TF,$O(B Tab $BJ8;z$K$7$F$/$@$5$$!#(B</p>
+<p>Makefile にはファイルの「生成規則」を記述します。
+make は実行すると、Makefile 中の最初の生成規則を探します。
+上のファイルの場合、a.out の行がそれになります。
+この行には a.out というターゲットを生成するのに program.c
+が必要だという依存関係を記述しており、
+その次の行に実際に a.out を生成するための手続きを記述しています
+（<a href="make.html">注</a>）。
+この行の行頭は Tab 文字にしてください。</p>
 
-<p>$B%?!<%2%C%H$,J#?t$"$k$H$-$O0J2<$N$h$&$K$7$^$9!#(B</p>
+<p>ターゲットが複数あるときは以下のようにします。</p>
 
 <pre class="source">CFLAGS = -I/usr/X11R6/include
 LIBS = -L/usr/X11R6/lib -lglut -lGLU -lGL -lXmu -lXi -lXext -lX11 -lm
@@ -534,94 +534,94 @@ prog1: prog1.c
 prog2: prog2.c<br>
 <kbd>--Tab--&gt;</kbd>cc prog2.c -o prog2 $(LIBS)</pre>
 
-<p>$B$3$N:G=i$N@8@.5,B'$O(B all $B$N9T$G!"(Ball $B$r@8@.$9$k$K$O(B prog1 $B$H(B prog2
-$B$,I,MW$@$H$$$&0MB84X78$r5-=R$7$F$$$^$9!#(B
-$B$7$+$7(B all $B$N@8@.J}K!$O5-=R$7$F$$$J$$$N$G!"(Bmake $B$O(B prog1 $B$H(B prog2
-$B$NN>J}$N@8@.$@$1$,40N;$7$?;~E@$G=*N;$7$^$9!#(B
-$BFCDj$N%?!<%2%C%H$@$1$r@8@.$7$?$$$H$-$O!"(B
-$B$=$N%?!<%2%C%HL>$r(B make $B$N0z?t$K;XDj$7$^$9!#(B</p>
+<p>この最初の生成規則は all の行で、all を生成するには prog1 と prog2
+が必要だという依存関係を記述しています。
+しかし all の生成方法は記述していないので、make は prog1 と prog2
+の両方の生成だけが完了した時点で終了します。
+特定のターゲットだけを生成したいときは、
+そのターゲット名を make の引数に指定します。</p>
 
 <pre class="source">% make prog1</pre>
 
-<h3><a class="label" name="3.2">$B#3!%#2(B Windows $B7O(B OS (Visual C++) $B$N>l9g(B</A></h3>
+<h3><a class="label" name="3.2">３．２ Windows 系 OS (Visual C++) の場合</A></h3>
 
-<p>$B$^$:!"?75,:n@.$G(B
-<a href="project.gif">$B!V(BWin32 Console Application$B!W$N%W%m%8%'%/%H(B</a>$B$r:n@.$7$F$/$@$5$$!#(BVisual C++ $B$N;H$$J}$rCN$i$J$$?M$O!"$^$:(B<a href="vcpp/">$B$3$A$i(B</a>$B$r8+$F$/$@$5$$!#(B</p>
+<p>まず、新規作成で
+<a href="project.gif">「Win32 Console Application」のプロジェクト</a>を作成してください。Visual C++ の使い方を知らない人は、まず<a href="vcpp/">こちら</a>を見てください。</p>
 
 <blockquote>
-$B0J9_$G<($9%W%m%0%i%`$O!"(BUNIX $B7O(B OS $B>e$G$N<B9T$rA0Ds$K:n@.$7$F$$$^$9!#(B
-Windows $B>e$G$O!V(BWin32 Console Application$B!W$N%W%m%8%'%/%H$K$9$k$3$H$G!"(B
-$B$3$l$i$N%W%m%0%i%`$r$=$N$^$^(B Visual C++ $B$G%3%s%Q%$%k$G$-$k$h$&$K$J$j$^$9!#(B
-$B%3%s%=!<%k%&%#%s%I%&$r3+$-$?$/$J$$>l9g$O(B
+以降で示すプログラムは、UNIX 系 OS 上での実行を前提に作成しています。
+Windows 上では「Win32 Console Application」のプロジェクトにすることで、
+これらのプログラムをそのまま Visual C++ でコンパイルできるようになります。
+コンソールウィンドウを開きたくない場合は
 <a href="http://www.opengl.org/resources/libraries/glut/glut_faq.html#Q36">GLUT
-FAQ $B$N(B Q36</a> $B$r;29M$K$7$F$/$@$5$$!#(B</blockquote>
+FAQ の Q36</a> を参考にしてください。</blockquote>
 
-<p>GLUT 3.7.2 $B0J9_$H(B Visual C++ 6.0
-$B$NAH9g$o$;$J$i!"%=!<%9%U%!%$%k$K(B GL/glut.h $B$,(B include $B$7$F$$$l$P<+F0E*$K(B
+<p>GLUT 3.7.2 以降と Visual C++ 6.0
+の組合わせなら、ソースファイルに GL/glut.h が include していれば自動的に
 glut32.lib glu32.lib opengl32.lib
-$B$rAH$_9~$s$G$/$l$^$9!J;32<??MM$"$j$,$H$&$4$6$$$^$7$?!K!#(B
-$B$7$?$,$C$F!"IaDL$K%S%k%I$9$l$P<B9T%U%!%$%k$,$G$-$"$,$k$O$:$G$9!#(B</p>
+を組み込んでくれます（山下真様ありがとうございました）。
+したがって、普通にビルドすれば実行ファイルができあがるはずです。</p>
 
-<blockquote>$B$b$7!"$&$^$/9T$+$J$$$h$&$J$i!"(B
-<a href="link.gif">$B%W%m%8%'%/%H$N@_Dj(B (Alt+F7)</a>
-$B$N%j%s%/$N%?%V$G!"(B
-$B%*%V%8%'%/%H!?%i%$%V%i%j%b%8%e!<%k$K(B
+<blockquote>もし、うまく行かないようなら、
+<a href="link.gif">プロジェクトの設定 (Alt+F7)</a>
+のリンクのタブで、
+オブジェクト／ライブラリモジュールに
 glut32.lib glu32.lib opengl32.lib
-$B$N#3$D$rDI2C$7$F$/$@$5$$!#(B
-SGI $B$N(B OpenGL $B$r;HMQ$9$k>l9g$O!"(B
-$BBe$o$j$K(B glut.lib glu.lib opengl.lib $B$rDI2C$7$F$/$@$5$$!#(B
-$B$"$H!"(BC/C++ $B$N%?%V$G%W%j%W%m%;%C%5$NDj5A$K(B
-WIN32 $B$,$"$k$3$H$r3N$+$a$F$/$@$5$$!JL5$$$3$H$OL5$$$H;W$$$^$9$,!K!#(B
-$B$b$7$J$1$l$PDI2C$7$F$/$@$5$$!#(B</blockquote>
+の３つを追加してください。
+SGI の OpenGL を使用する場合は、
+代わりに glut.lib glu.lib opengl.lib を追加してください。
+あと、C/C++ のタブでプリプロセッサの定義に
+WIN32 があることを確かめてください（無いことは無いと思いますが）。
+もしなければ追加してください。</blockquote>
 
-<h3><a class="label" name="3.3">$B#3!%#3(B Mac OS X (Developer Tools) $B$N>l9g(B</a></h3>
+<h3><a class="label" name="3.3">３．３ Mac OS X (Developer Tools) の場合</a></h3>
 
-<p>XDarwin $B$r;HMQ$9$k>l9g$O(B
-<a href="#3.1">$B#3!%#1(B</a>$B$G=R$Y$?(B UNIX $B7O(B OS $B$N>l9g$K=`$8$^$9(B
-$B!J(B<code>-I/usr/X11R6/include</code>
-$B$H$$$&%*%W%7%g%s$rDI2C$9$kI,MW$,$"$k$+$bCN$l$^$;$s!K!#(B
-$B$3$3$G$O8e<T$N(B Developer Tools $B$r;H$&J}K!$K$D$$$F2r@b$7$^$9!#(B</p>
+<p>XDarwin を使用する場合は
+<a href="#3.1">３．１</a>で述べた UNIX 系 OS の場合に準じます
+（<code>-I/usr/X11R6/include</code>
+というオプションを追加する必要があるかも知れません）。
+ここでは後者の Developer Tools を使う方法について解説します。</p>
 
-<p>$B%W%m%0%i%`$r%3%^%s%I%i%$%s$G%3%s%Q%$%k$9$k>l9g$O!"(Bcc$B!J$"$k$$$O(B
-gcc$B!K%3%^%s%I$K0J2<$N$h$&$J%*%W%7%g%s$rIU$1$F$/$@$5$$(B
-$B!J1]K\9dMM$"$j$,$H$&$4$6$$$^$7$?!K!#(B</p>
+<p>プログラムをコマンドラインでコンパイルする場合は、cc（あるいは
+gcc）コマンドに以下のようなオプションを付けてください
+（榎本剛様ありがとうございました）。</p>
 
 <pre class="source">% cc -framework OpenGL -framework GLUT -framework Foundation program.c</pre>
 
-<p>$B$G$-$?(B a.out $B$r<B9T$9$l$P!"%&%#%s%I%&$,3+$-$^$9!#(B
-$B%a%K%e!<$bIU$$$F$$$k$O$:$G$9!#(B</p>
+<p>できた a.out を実行すれば、ウィンドウが開きます。
+メニューも付いているはずです。</p>
 
-<p>Project Builder $B$r;H$&>l9g$O!"4{$KMQ0U$5$l$F$$$k(B GLUT
-$B$N%5%s%W%k%W%m%0%i%`$N!J7k9g!K%W%m%8%'%/%H$K%?!<%2%C%H$rDI2C$9$k$N$,!"(B
-$B0lHV<j$C<h$jAa$$$h$&$K;W$$$^$9!#(B
-$B?7$?$K%W%m%8%'%/%H$r5/$3$9>l9g$O!"<!$N$h$&$J<j=g$K$J$j$^$9!#(B</p>
+<p>Project Builder を使う場合は、既に用意されている GLUT
+のサンプルプログラムの（結合）プロジェクトにターゲットを追加するのが、
+一番手っ取り早いように思います。
+新たにプロジェクトを起こす場合は、次のような手順になります。</p>
 <ol>
-<li>$B?75,%W%m%8%'%/%H$H$7$F6u$N%W%m%8%'%/%H$r:n@.$9$k!#(B</li>
-<li>$B?75,%?!<%2%C%H$H$7$F%"%W%j%1!<%7%g%s$rDI2C$9$k!#(B</li>
-<li>Foundation.framework, OpenGL.framework, $B$*$h$S(B
-GLUT.framework $B$H$$$&#3$D$N%U%l!<%`%o!<%/$rDI2C$9$k!#(B</li>
-<li>$B%=!<%9%U%!%$%k$r:n@.$"$k$$$ODI2C$9$k!#(B</li>
-<li>$B%S%k%I$9$k!#(B</li>
+<li>新規プロジェクトとして空のプロジェクトを作成する。</li>
+<li>新規ターゲットとしてアプリケーションを追加する。</li>
+<li>Foundation.framework, OpenGL.framework, および
+GLUT.framework という３つのフレームワークを追加する。</li>
+<li>ソースファイルを作成あるいは追加する。</li>
+<li>ビルドする。</li>
 </ol>
 
-<p>$B>\$7$/$O(B<a href="macosx/">$B$3$3(B (Project Builder)</a>
-$B$"$k$$$O(B<a href="xcode/">$B$3$3(B (Xcode)</a>
-$B$r;2>H$7$F$/$@$5$$!#$J$*!"(B<a href="#2.4">$B#2!%#4(B</a>$B$G<($7$?$h$&$K(B
-/usr/local/include/GL $BEy$K(B glut.h $B$r(B<strong>$BCV$$$F$$$J$$>l9g(B</strong>$B$O!"(B
-$B%X%C%@%U%!%$%k$H$7$F(B <strong>GL</strong>/glut.h
-$B$G$O$J$/(B <strong>GLUT</strong>/glut.h
-$B$r(B #include $B$9$k$h$&$K$7$F$/$@$5$$!J(BMac OS X $B$G$O$=$&$9$k$N$,%9%8$G$7$g$&!K!#(B</p>
+<p>詳しくは<a href="macosx/">ここ (Project Builder)</a>
+あるいは<a href="xcode/">ここ (Xcode)</a>
+を参照してください。なお、<a href="#2.4">２．４</a>で示したように
+/usr/local/include/GL 等に glut.h を<strong>置いていない場合</strong>は、
+ヘッダファイルとして <strong>GL</strong>/glut.h
+ではなく <strong>GLUT</strong>/glut.h
+を #include するようにしてください（Mac OS X ではそうするのがスジでしょう）。</p>
 
-<h2><a class="label" name="4">$B#4!%%&%#%s%I%&$r3+$/(B</a></h2>
+<h2><a class="label" name="4">４．ウィンドウを開く</a></h2>
 
-<h3><a class="label" name="4.1">$B#4!%#1(B $B6u$N%&%#%s%I%&$r3+$/(B</a></h3>
+<h3><a class="label" name="4.1">４．１ 空のウィンドウを開く</a></h3>
 
-<p>$B$$$h$$$h%W%m%0%i%`$N:n@.$KF~$j$^$9!#(B
-$B%&%#%s%I%&$r3+$/$@$1$N%W%m%0%i%`$O!"(B
-GLUT $B$r;H$&$H$3$s$JIw$K$J$j$^$9!#(B
-$B$3$N%=!<%9%W%m%0%i%`$r(B prog1.c $B$H$H$$$&%U%!%$%kL>$G:n@.$7!"(B
-<a href="#3">$B%3%s%Q%$%k(B</a>$B$7$F=PMh>e$,$C$?<B9T%W%m%0%i%`(B
-(a.out) $B$r<B9T$7$F$_$F$/$@$5$$!#(B</p>
+<p>いよいよプログラムの作成に入ります。
+ウィンドウを開くだけのプログラムは、
+GLUT を使うとこんな風になります。
+このソースプログラムを prog1.c とというファイル名で作成し、
+<a href="#3">コンパイル</a>して出来上がった実行プログラム
+(a.out) を実行してみてください。</p>
 
 <pre class="source"><em>#include &lt;GL/glut.h&gt;
 
@@ -641,93 +641,93 @@ int main(int argc, char *argv[])
 <dl>
 <dt><code>void glutInit(int *argcp, char **argv)</code></dt>
 
-<dd>GLUT $B$*$h$S(B OpenGL $B4D6-$r=i4|2=$7$^$9!#(B
-$B0z?t$K$O(B main $B$N0z?t$r$=$N$^$^EO$7$^$9!#(B
-X Window $B$G;H$o$l$k%*%W%7%g%s(B -display $B$J$I$O$3$3$G=hM}$5$l$^$9!#(B
-$B$3$N4X?t$K$h$C$F0z?t$NFbMF$,JQ99$5$l$^$9!#(B
-$B%W%m%0%i%`<+?H$G=hM}$9$Y$-0z?t$,$"$k$H$-$O!"(B
-$B$3$N8e$G=hM}$7$^$9!#(B</dd>
+<dd>GLUT および OpenGL 環境を初期化します。
+引数には main の引数をそのまま渡します。
+X Window で使われるオプション -display などはここで処理されます。
+この関数によって引数の内容が変更されます。
+プログラム自身で処理すべき引数があるときは、
+この後で処理します。</dd>
 
 <dt><code>int glutCreateWindow(char *name)</code></dt>
 
-<dd>$B%&%#%s%I%&$r3+$-$^$9!#(B
-$B0z?t(B name $B$O$=$N%&%#%s%I%&$NL>A0$NJ8;zNs$G!"(B
-$B%?%$%H%k%P!<$J$I$KI=<($5$l$^$9!#(B
-$B0J9_$N(B OpenGL $B$K$h$k?^7A$NIA2hEy$O!"(B
-$B3+$$$?%&%#%s%I%&$KBP$7$F9T$o$l$^$9!#(B
-$B$J$*!"La$jCM$O3+$$$?%&%#%s%I%&$N<1JL;R$G$9!#(B</dd>
+<dd>ウィンドウを開きます。
+引数 name はそのウィンドウの名前の文字列で、
+タイトルバーなどに表示されます。
+以降の OpenGL による図形の描画等は、
+開いたウィンドウに対して行われます。
+なお、戻り値は開いたウィンドウの識別子です。</dd>
 
 <dt><code>void glutDisplayFunc(void (*func)(void))</code></dt>
 
-<dd>$B0z?t(B func $B$O3+$$$?%&%#%s%I%&Fb$KIA2h$9$k4X?t$X$N%]%$%s%?$G$9!#(B
-$B%&%#%s%I%&$,3+$+$l$?$j!"(B
-$BB>$N%&%#%s%I%&$K$h$C$F1#$5$l$?%&%#%s%I%&$,:F$S8=$l$?$j$7$F!"(B
-$B%&%#%s%I%&$r:FIA2h$9$kI,MW$,$"$k$H$-$K!"(B
-$B$3$N4X?t$,<B9T$5$l$^$9!#(B
-$B$7$?$,$C$F!"$3$N4X?tFb$G?^7AI=<($r9T$$$^$9!#(B</dd>
+<dd>引数 func は開いたウィンドウ内に描画する関数へのポインタです。
+ウィンドウが開かれたり、
+他のウィンドウによって隠されたウィンドウが再び現れたりして、
+ウィンドウを再描画する必要があるときに、
+この関数が実行されます。
+したがって、この関数内で図形表示を行います。</dd>
 
 <dt><code>void glutMainLoop(void)</code></dt>
 
-<dd>$B$3$l$OL58B%k!<%W$G$9!#(B
-$B$3$N4X?t$r8F$S=P$9$3$H$G!"(B
-$B%W%m%0%i%`$O%$%Y%s%H$NBT$A<u$1>uBV$K$J$j$^$9!#(B</dd>
+<dd>これは無限ループです。
+この関数を呼び出すことで、
+プログラムはイベントの待ち受け状態になります。</dd>
 
 </dl>
 
-<p>$B8+$l$PJ,$+$kDL$j!"%W%m%0%i%`$O!"(B</p>
+<p>見れば分かる通り、プログラムは、</p>
 
 <ol>
-<li>$B=i4|2=$7$F!"(B</li>
-<li>$B%&%#%s%I%&$r3+$$$F!"(B</li>
-<li>$B$=$N%&%#%s%I%&Fb$K3($rIA$/4X?t$r7h$a$F!"(B</li>
-<li>$B2?$+$3$H$,5/$3$k$N$rBT$D!#(B</li>
+<li>初期化して、</li>
+<li>ウィンドウを開いて、</li>
+<li>そのウィンドウ内に絵を描く関数を決めて、</li>
+<li>何かことが起こるのを待つ。</li>
 </ol>
 
-<p>$B$H$$$&=g$K$J$j$^$9!#(B
-C $B8@8l$N652J=q$J$s$+$KNI$/=P$F$/$k(B
-$B!VI8=`F~=PNO$r;H$C$?%W%m%0%i%`!W$J$s$+$H0c$&$H$3$m$O!"(B
-$BCf?4$H$J$k=hM}!J$3$N>l9g(B display()$B!K$r<B9T$9$k%?%$%_%s%0$,!"(B
-$B%=!<%9%W%m%0%i%`$r8+$?$@$1$G$O2?;~$J$N$+$o$+$i$J$$!"(B
-$B$H$$$&$H$3$m$G$7$g$&$+!#(B</p>
+<p>という順になります。
+C 言語の教科書なんかに良く出てくる
+「標準入出力を使ったプログラム」なんかと違うところは、
+中心となる処理（この場合 display()）を実行するタイミングが、
+ソースプログラムを見ただけでは何時なのかわからない、
+というところでしょうか。</p>
 
-<p>$B:G=i$K(B display() $B$,<B9T$5$l$k$N$O!"(B
-$B=i$a$F%&%#%s%I%&$,3+$$$?$H$-!"$9$J$o$A!"(B
-glutMainLoop() $B$,(B glutCreateWindow()
-$B$N;X<($r<u$1$F%&%#%s%I%&$N@8@.$r40N;$7$?$H$-$K$J$j$^$9!#(B
-$B$^$?!"$=$N8e$b!"(B
-$B$3$N%&%#%s%I%&$,$[$+$N%&%#%s%I%&$K1#$5$l:F$S8=$l$?$H$-$N$h$&$K!"(B
-$B%&%#%s%I%&$N:FIA2h$,I,MW$K$J$C$?$H$-$K<B9T$5$l$^$9!#(B</p>
+<p>最初に display() が実行されるのは、
+初めてウィンドウが開いたとき、すなわち、
+glutMainLoop() が glutCreateWindow()
+の指示を受けてウィンドウの生成を完了したときになります。
+また、その後も、
+このウィンドウがほかのウィンドウに隠され再び現れたときのように、
+ウィンドウの再描画が必要になったときに実行されます。</p>
 
-<p>$B>e$N%W%m%0%i%`$G$O(B display() $B$NCf?H$K2?$b5-=R$7$F$$$J$$$?$a!"(B
-display() $B$,8F$S=P$5$l$F$b2?$b;E;v$r$7$^$;$s!#(B
-$B;n$7$K$3$N%&%#%s%I%&$r0\F0$7$?$j!"(B
-$BB>$N%&%#%s%I%&$G1#$7$?$j$7$F$_$F$/$@$5$$!#(B
-$B%&%#%s%I%&$NCf$NI=<($O$*$+$7$J$b$N$K$J$C$F$$$k$H;W$$$^$9!#(B</p>
+<p>上のプログラムでは display() の中身に何も記述していないため、
+display() が呼び出されても何も仕事をしません。
+試しにこのウィンドウを移動したり、
+他のウィンドウで隠したりしてみてください。
+ウィンドウの中の表示はおかしなものになっていると思います。</p>
 
-<p>$B$3$N$h$&$KJ#?t$N(B
-$B!J%*!<%P!<%i%C%W2DG=$J!K(B
-$B%&%#%s%I%&$,;HMQ$G$-$k%&%#%s%I%&%7%9%F%`$KBP1~$7$?%W%m%0%i%`$G$O!"(B
-$B=hM}$NN.$l$O;~4V<4$K1h$C$F!V%W%m%0%i%`$N;O$a$+$i=*$j$X!W$G$O$J$/!"(B
-$B2?$+$3$H!J;v>]!K$,5/$k$?$S$K!V%W%m%0%i%`$N3FIt$,%i%s%@%`$K!W<B9T$5$l$^$9!#(B
-$B=>$C$F!"$=$N%W%m%0%i%_%s%0%9%?%$%k$b!"(B
-$B!V;v>]!W$KBP$7$F!"$=$N!VBP=hJ}K!!W$rEPO?$7$F$$$/$H$$$&$b$N$K$J$j$^$9!#(B
-$B$3$3$G$O$3$N;v>]$r(B<em>$B%$%Y%s%H(B</em>$B$H8F$S!"(B
-$BBP=hJ}K!$N<jB3$-$r(B<em>$B%O%s%I%i(B</em>$B$H8F$V$3$H$K$7$^$9!#(B</p>
+<p>このように複数の
+（オーバーラップ可能な）
+ウィンドウが使用できるウィンドウシステムに対応したプログラムでは、
+処理の流れは時間軸に沿って「プログラムの始めから終りへ」ではなく、
+何かこと（事象）が起るたびに「プログラムの各部がランダムに」実行されます。
+従って、そのプログラミングスタイルも、
+「事象」に対して、その「対処方法」を登録していくというものになります。
+ここではこの事象を<em>イベント</em>と呼び、
+対処方法の手続きを<em>ハンドラ</em>と呼ぶことにします。</p>
 
-<p>$B$J$*!"$3$N%W%m%0%i%`$K$O!V=*N;$9$kJ}K!!W$rAH$_9~$s$G$$$J$$$N$G!"(B
-$B%W%m%0%i%`$r=*N;$9$k$K$O<B9T$7$?%&%#%s%I%&$G(B Ctrl-C $B$r%?%$%W$9$k$+!"(B
-$B%&%#%s%I%&$N%?%$%H%k%P!<$N:8$N%\%?%s$r%/%j%C%/$7$F(B
-$B!VJD$8$k!W$+!VCf;_!W$rA*$s$G$/$@$5$$!#(B</p>
+<p>なお、このプログラムには「終了する方法」を組み込んでいないので、
+プログラムを終了するには実行したウィンドウで Ctrl-C をタイプするか、
+ウィンドウのタイトルバーの左のボタンをクリックして
+「閉じる」か「中止」を選んでください。</p>
 
-<h3><a class="label" name="4.2">$B#4!%#2(B $B%&%#%s%I%&$rEI$j$D$V$9(B</a></h3>
+<h3><a class="label" name="4.2">４．２ ウィンドウを塗りつぶす</a></h3>
 
-<p>$B:#$^$G$O4X?t(B display() $B$NCf$K2?$b5-=R$7$F$$$J$+$C$?$N$G!"(B
-$B%&%#%s%I%&$NCf?H$O$G$?$i$a(B
-$B!J$*$=$i$/!"$=$N%&%#%s%I%&$N0LCV$K0JA0$KIA$+$l$F$$$?FbMF$N;D3<!K(B
-$B$@$H;W$$$^$9!#(B
-$B$=$3$G!":#EY$O3+$$$?%&%#%s%I%&$rEI$j$D$V$7$F$_$^$9!#(B
-prog1.c $B$KB@;z$N$H$3$m$rDI2C$7!"(B
-$B$b$&0lEY%3%s%Q%$%k$7$F%W%m%0%i%`$r<B9T$7$F$_$F$/$@$5$$!#(B</p>
+<p>今までは関数 display() の中に何も記述していなかったので、
+ウィンドウの中身はでたらめ
+（おそらく、そのウィンドウの位置に以前に描かれていた内容の残骸）
+だと思います。
+そこで、今度は開いたウィンドウを塗りつぶしてみます。
+prog1.c に太字のところを追加し、
+もう一度コンパイルしてプログラムを実行してみてください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -757,77 +757,77 @@ int main(int argc, char *argv[])
 
 <dt><code>void glutInitDisplayMode(unsigned int mode)</code></dt>
 
-<dd>$B%G%#%9%W%l%$$NI=<(%b!<%I$r@_Dj$7$^$9!#(B
-mode $B$K(B GLUT_RGBA $B$r;XDj$7$?>l9g$O!"(B
-$B?'$N;XDj$r(B RGB$B!J@VNP@D!"8w$N#386?'!K$G9T$($k$h$&$K$7$^$9!#(B
-$BB>$K%$%s%G%C%/%9%+%i!<%b!<%I(B (GLUT_INDEX) $B$b;XDj$G$-$^$9!#(B
-$B8e<T$O$&$^$/;H$($P8zN($NNI$$I=<($,9T$($^$9$,!"(B
-$B$=$l$J$j$KLLE]$J$N$G!"(B
-$B$3$3$G$O$*G$$;$G;H$($k(B RGBA $B%b!<%I$r;H$$$^$9!#(B</dd>
+<dd>ディスプレイの表示モードを設定します。
+mode に GLUT_RGBA を指定した場合は、
+色の指定を RGB（赤緑青、光の３原色）で行えるようにします。
+他にインデックスカラーモード (GLUT_INDEX) も指定できます。
+後者はうまく使えば効率の良い表示が行えますが、
+それなりに面倒なので、
+ここではお任せで使える RGBA モードを使います。</dd>
 
 <dt><code>void glClearColor(GLclampf R, GLclampf G, GLclampf B, GLclampf A)</code></dt>
 
 <dd>glClear(GL_COLOR_BUFFER_BIT)
-$B$G%&%#%s%I%&$rEI$j$D$V$9:]$N?'$r;XDj$7$^$9!#(B
-R$B!$(BG$B!$(BB $B$O$=$l$>$l@V!"NP!"@D?'$N@.J,$N6/$5$r<($9(B GLclampf $B7?(B
-$B!J(Bfloat $B7?$HEy2A!K$NCM$G!"(B
-0$B!A(B1 $B$N4V$NCM$r;}$A$^$9!#(B
-1 $B$,:G$bL@$k$/!"$3$N#3$D$K(B (0, 0, 0)
-$B$r;XDj$9$l$P9u?'!"(B(1, 1, 1) $B$r;XDj$9$l$PGr?'$K$J$j$^$9!#(B
-$B>e$NNc$G$O%&%#%s%I%&$O(B<span class="blue">$B@D?'(B</span>$B$GEI$j$D$V$5$l$^$9!#(B
-$B:G8e$N(B A $B$O&ACM$H8F$P$l!"(BOpenGL $B$G$OITF)L@EY$H$7$F07$o$l$^$9(B
-$B!J(B0 $B$GF)L@!"(B1 $B$GITF)L@!K!#$3$3$G$O$H$j$"$($:(B
-0 $B$K$7$F$*$$$F$/$@$5$$!#(B</dd>
+でウィンドウを塗りつぶす際の色を指定します。
+R，G，B はそれぞれ赤、緑、青色の成分の強さを示す GLclampf 型
+（float 型と等価）の値で、
+0〜1 の間の値を持ちます。
+1 が最も明るく、この３つに (0, 0, 0)
+を指定すれば黒色、(1, 1, 1) を指定すれば白色になります。
+上の例ではウィンドウは<span class="blue">青色</span>で塗りつぶされます。
+最後の A はα値と呼ばれ、OpenGL では不透明度として扱われます
+（0 で透明、1 で不透明）。ここではとりあえず
+0 にしておいてください。</dd>
 
 <dt><code><a class="label" name="glClear">void glClear(GLbitfield mask)</a></code></dt>
 
-<dd>$B%&%#%s%I%&$rEI$j$D$V$7$^$9!#(B
-mask $B$K$OEI$j$D$V$9%P%C%U%!$r;XDj$7$^$9!#(B
-OpenGL $B$,4IM}$9$k2hLL>e$N%P%C%U%!!J%a%b%j!K$K$O!"(B
-$B?'$r3JG<$9$k%+%i!<%P%C%U%!$NB>!"(B
-$B1#LL>C5n$K;H$&%G%W%9%P%C%U%!!"(B
-$B6E$C$?$3$H$r$9$k$H$-$K;H$&%9%F%s%7%k%P%C%U%!!"(B
-$B%+%i!<%P%C%U%!$N>e$K=E$M$FI=<($5$l$k%*!<%P!<%l%$%P%C%U%!$J$I!"(B
-$B$$$/$D$+$N$b$N$,$"$j!"(B
-$B$3$l$i$,0l$D$N%&%#%s%I%&$K=E$J$C$FB8:_$7$F$$$^$9!#(B
-mask $B$K(B GL_COLOR_BUFFER_BIT $B$r;XDj$7$?$H$-$O!"(B
-$B%+%i!<%P%C%U%!$@$1$,EI$j$D$V$5$l$^$9!#(B</dd>
+<dd>ウィンドウを塗りつぶします。
+mask には塗りつぶすバッファを指定します。
+OpenGL が管理する画面上のバッファ（メモリ）には、
+色を格納するカラーバッファの他、
+隠面消去に使うデプスバッファ、
+凝ったことをするときに使うステンシルバッファ、
+カラーバッファの上に重ねて表示されるオーバーレイバッファなど、
+いくつかのものがあり、
+これらが一つのウィンドウに重なって存在しています。
+mask に GL_COLOR_BUFFER_BIT を指定したときは、
+カラーバッファだけが塗りつぶされます。</dd>
 
 <dt><code>glFlush(void)</code></dt>
 
-<dd>glFlush() $B$O$^$@<B9T$5$l$F$$$J$$(B OpenGL $B$NL?Na$rA4It<B9T$7$^$9!#(B
-OpenGL $B$O4X?t8F$S=P$7$K$h$C$F@8@.$5$l$k(B OpenGL
-$B$NL?Na$r$=$NETEY<B9T$9$k$N$G$O$J$/!"(B
-$B$$$/$D$+N/$a9~$s$G$*$$$F$^$H$a$F<B9T$7$^$9!#(B
-$B$3$N$?$a!"$"$kDxEYL?Na$,N/$^$i$J$$$H(B
-$B4X?t$r8F$S=P$7$F$b<B9T$,3+;O$5$l$J$$>l9g$,$"$j$^$9!#(B
-glFlush() $B$O$=$&$$$&>u67$G(B
-$B$^$@<B9T$5$l$F$$$J$$;D$j$NL?Na$N<B9T$r3+;O$7$^$9!#(B
-$B$R$s$Q$s$K(B glFlush() $B$r8F$S=P$9$H!"$+$($C$FIA2hB.EY$,Dc2<$7$^$9!#(B</dd>
+<dd>glFlush() はまだ実行されていない OpenGL の命令を全部実行します。
+OpenGL は関数呼び出しによって生成される OpenGL
+の命令をその都度実行するのではなく、
+いくつか溜め込んでおいてまとめて実行します。
+このため、ある程度命令が溜まらないと
+関数を呼び出しても実行が開始されない場合があります。
+glFlush() はそういう状況で
+まだ実行されていない残りの命令の実行を開始します。
+ひんぱんに glFlush() を呼び出すと、かえって描画速度が低下します。</dd>
 
 </dl>
 
-<p>glClearColor() $B$O!"(B
-$B%W%m%0%i%`$N<B9TCf$KGX7J?'$rJQ99$9$k$3$H$,$J$1$l$P!"(B
-$B:G=i$K0lEY$@$1@_Dj$9$l$P==J,$G$9!#(B
-$B$=$3$G$3$N$h$&$J=i4|2==hM}$r9T$&4X?t$O!"(B
-glMainLoop() $B$NA0$K<B9T$9$k4X?t(B init()
-$B$K$^$H$a$FCV$/$3$H$K$7$^$9!#(B</p>
+<p>glClearColor() は、
+プログラムの実行中に背景色を変更することがなければ、
+最初に一度だけ設定すれば十分です。
+そこでこのような初期化処理を行う関数は、
+glMainLoop() の前に実行する関数 init()
+にまとめて置くことにします。</p>
 
-<p>glFlush() $B$N$+$o$j$K(B glFinish() $B$r;H$&>l9g$b$"$j$^$9!#$3$l$O!"(B
-glFlush() $B$,$^$@<B9T$5$l$F$$$J$$(B OpenGL $B$NL?Na$N<B9T3+;O$rB%$9$N$K2C$($F!"(B
-glFinish() $B$O$=$l$,$9$Y$F40N;$9$k$N$rBT$A$^$9!#(B</p>
+<p>glFlush() のかわりに glFinish() を使う場合もあります。これは、
+glFlush() がまだ実行されていない OpenGL の命令の実行開始を促すのに加えて、
+glFinish() はそれがすべて完了するのを待ちます。</p>
 
-<p>gl*() $B$G;O$^$k!J(Bglu*() $B$d(B glut*() $B$G;O$^$i$J$$!K4X?t$,!"(B
-OpenGL $B$N(B API $B$G$9!#(B</p>
+<p>gl*() で始まる（glu*() や glut*() で始まらない）関数が、
+OpenGL の API です。</p>
 
-<h2><a class="label" name="5">$B#5!%#2<!85?^7A$rIA$/(B</a></h2>
+<h2><a class="label" name="5">５．２次元図形を描く</a></h2>
 
-<h3><a class="label" name="5.1">$B#5!%#1(B $B@~$r0z$/(B</a></h3>
+<h3><a class="label" name="5.1">５．１ 線を引く</a></h3>
 
-<p>$B%&%#%s%I%&Fb$K@~$r0z$$$F$_$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7!"(B
-$B%3%s%Q%$%k$7$F%W%m%0%i%`$r<B9T$7$F$/$@$5$$!#(B</p>
+<p>ウィンドウ内に線を引いてみます。
+prog1.c を以下のように変更し、
+コンパイルしてプログラムを実行してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -845,12 +845,12 @@ void display(void)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
@@ -858,61 +858,61 @@ int main(int argc, char *argv[])
 <dt><code>void glBegin(GLnum mode)</code></dt>
 <dt><code>void glEnd(void)</code></dt>
 
-<dd>$B?^7A$rIA$/$K$O!"(B
-glBegin()$B!A(BglEnd() $B$N4V$K$=$N?^7A$N3FD:E@$N:BI8CM$r@_Dj$9$k4X?t$rCV$-$^$9!#(B
-glBegin() $B$N0z?t(B mode $B$K$OIA2h$9$k?^7A$N%?%$%W$r;XDj$7$^$9!#(B</dd>
+<dd>図形を描くには、
+glBegin()〜glEnd() の間にその図形の各頂点の座標値を設定する関数を置きます。
+glBegin() の引数 mode には描画する図形のタイプを指定します。</dd>
 
 <dt><code><a class="label" name="glVertex2d">void glVertex2d(GLdouble x, GLdouble y)</a></code></dt>
 
-<dd>glVertex2d() $B$O#2<!85$N:BI8CM$r@_Dj$9$k$N$K;H$$$^$9!#(B
-$B0z?t$N7?$O(B GLdouble $B!J(Bdouble $B$HEy2A!K$G$9!#(B
-$B0z?t$,(B float $B7?$N$H$-$O(B glVertex2f()$B!"(B
-int $B7?$N$H$-$O(B glVertex2i() $B$r;H$$$^$9!#(B</dd>
+<dd>glVertex2d() は２次元の座標値を設定するのに使います。
+引数の型は GLdouble （double と等価）です。
+引数が float 型のときは glVertex2f()、
+int 型のときは glVertex2i() を使います。</dd>
 
 </dl>
 
-<h3><a class="label" name="5.2">$B#5!%#2(B $B?^7A$N%?%$%W(B</a></h3>
+<h3><a class="label" name="5.2">５．２ 図形のタイプ</a></h3>
 
-<p>glBegin() $B$N0z?t(B mode
-$B$K;XDj$G$-$k?^7A$N%?%$%W$K$O0J2<$N$h$&$J$b$N$,$"$j$^$9!#(B
-$B>\$7$/$O(B man glBegin $B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>glBegin() の引数 mode
+に指定できる図形のタイプには以下のようなものがあります。
+詳しくは man glBegin を参照してください。</p>
 
 <dl>
 <dt><code>GL_POINTS</code></dt>
-<dd>$BE@$rBG$A$^$9!#(B</dd>
+<dd>点を打ちます。</dd>
 <dt><code>GL_LINES</code></dt>
-<dd>$B#2E@$rBP$K$7$F!"$=$N4V$rD>@~$G7k$S$^$9!#(B</dd>
+<dd>２点を対にして、その間を直線で結びます。</dd>
 <dt><code>GL_LINE_STRIP</code></dt>
-<dd>$B@^$l@~$rIA$-$^$9!#(B</dd>
+<dd>折れ線を描きます。</dd>
 <dt><code>GL_LINE_LOOP</code></dt>
-<dd>$B@^$l@~$rIA$-$^$9!#;OE@$H=*E@$N4V$b7k$P$l$^$9!#(B</dd>
+<dd>折れ線を描きます。始点と終点の間も結ばれます。</dd>
 <dt><code>GL_TRIANGLES / GL_QUADS</code></dt>
-<dd>$B#3!?#4E@$rAH$K$7$F!";03Q7A!?;M3Q7A$rIA$-$^$9!#(B</dd>
+<dd>３／４点を組にして、三角形／四角形を描きます。</dd>
 <dt><code>GL_TRIANGLE_STRIP / GL_QUAD_STRIP</code></dt>
-<dd>$B0lJU$r6&M-$7$J$,$iBS>u$K;03Q7A!?;M3Q7A$rIA$-$^$9!#(B</dd>
+<dd>一辺を共有しながら帯状に三角形／四角形を描きます。</dd>
 <dt><code>GL_TRIANGLE_FAN</code></dt>
-<dd>$B0lJU$r6&M-$7$J$,$i@p>u$K;03Q7A$rIA$-$^$9!#(B</dd>
+<dd>一辺を共有しながら扇状に三角形を描きます。</dd>
 <dt><code>GL_POLYGON</code></dt>
-<dd>$BFLB?3Q7A$rIA$-$^$9!#(B</dd>
+<dd>凸多角形を描きます。</dd>
 </dl>
 <div class="figure"><img src="libaux1.gif" width="511" height="445"
-alt="$B?^7A%W%j%_%F%#%V0lMw(B"></div>
+alt="図形プリミティブ一覧"></div>
 
-<p>OpenGL $B$r=hM}$9$k%O!<%I%&%'%"$O!"(B
-$B<B:]$K$O#33Q7A$7$+EI$jDY$9$3$H$,$G$-$^$;$s(B
-$B!J%b%N$K$h$C$F$O#43Q7A$b$G$-$k$b$N$b$"$j$^$9!K!#(B
-$B$3$N$?$a(B GL_POLYGON $B$N>l9g$O!"(B
-$BB?3Q7A$r#33Q7A$KJ,3d$7$F$+$i=hM}$7$^$9!#(B
-$B=>$C$F!"$b$7IA2hB.EY$,=EMW$J$i(B
-GL_TRIANGLE_STRIP $B$d(B GL_TRIANGLE_FAN $B$r;H$&$h$&(B
-$B%W%m%0%i%`$r9)IW$7$F$_$F$/$@$5$$!#(B
-$B$^$?(B GL_QUADS $B$b(B GL_POLYGON $B$h$j9bB.$G$9!#(B</p>
+<p>OpenGL を処理するハードウェアは、
+実際には３角形しか塗り潰すことができません
+（モノによっては４角形もできるものもあります）。
+このため GL_POLYGON の場合は、
+多角形を３角形に分割してから処理します。
+従って、もし描画速度が重要なら
+GL_TRIANGLE_STRIP や GL_TRIANGLE_FAN を使うよう
+プログラムを工夫してみてください。
+また GL_QUADS も GL_POLYGON より高速です。</p>
 
-<h3><a class="label" name="5.3">$B#5!%#3(B $B@~$K?'$rIU$1$k(B</a></h3>
+<h3><a class="label" name="5.3">５．３ 線に色を付ける</a></h3>
 
-<p>$B@~$K?'$rIU$1$F$_$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7!"%3%s%Q%$%k$7$F$/$@$5$$!#(B
-$B%W%m%0%i%`$r<B9T$7$?$i@~$O2??'$GI=<($5$l$?$G$7$g$&$+!)(B</p>
+<p>線に色を付けてみます。
+prog1.c を以下のように変更し、コンパイルしてください。
+プログラムを実行したら線は何色で表示されたでしょうか？</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -931,32 +931,32 @@ void display(void)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code><a class="label" name="glColor3d">void glColor3d(GLdouble r, GLdouble g, GLdouble b)</a></code></dt>
 
-<dd>glColor3d() $B$O$3$l$+$iIA2h$9$k$b$N$N?'$r;XDj$7$^$9!#(B
-$B0z?t$N7?$O(B GLdouble $B7?!J(Bdouble $B$HEy2A!K$G!"(B
-r$B!$(Bg$B!$(Bb $B$K$O$=$l$>$l@V!"NP!"@D$N6/$5$r(B 0$B!A(B1 $B$NHO0O$G;XDj$7$^$9!#(B
-$B0z?t$,(B float $B7?$N$H$-$O(B glColor3f()$B!"(B
-int $B7?$N$H$-$O(B glColor3i() $B$r;H$$$^$9!#(B</dd>
+<dd>glColor3d() はこれから描画するものの色を指定します。
+引数の型は GLdouble 型（double と等価）で、
+r，g，b にはそれぞれ赤、緑、青の強さを 0〜1 の範囲で指定します。
+引数が float 型のときは glColor3f()、
+int 型のときは glColor3i() を使います。</dd>
 
 </dl>
 
-<h3><a class="label" name="5.4">$B#5!%#4(B $B?^7A$rEI$j$D$V$9(B</a></h3>
+<h3><a class="label" name="5.4">５．４ 図形を塗りつぶす</a></h3>
 
-<p>$B?^7A$rEI$j$D$V$7$F$_$^$9!#(B
-GL_LINE_LOOP $B$r(B GL_POLYGON $B$KJQ99$7!"(B
-$B$D$$$G$KGX7J$bGr?'$KJQ99$7$^$7$g$&!#(B
-$BJQ99$7$?%W%m%0%i%`$r%3%s%Q%$%k$7$F<B9T$7$F$/$@$5$$!#(B</p>
+<p>図形を塗りつぶしてみます。
+GL_LINE_LOOP を GL_POLYGON に変更し、
+ついでに背景も白色に変更しましょう。
+変更したプログラムをコンパイルして実行してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -980,13 +980,13 @@ void init(void)
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$B?'$OD:E@Kh$K;XDj$9$k$3$H$b$G$-$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B
-$B%3%s%Q%$%k$7$F%W%m%0%i%`$r<B9T$9$k$H!"(B
-$B$I$&$$$&?'$NIU$-J}$K$J$C$?$G$7$g$&$+!)(B</p>
+<p>色は頂点毎に指定することもできます。
+prog1.c を以下のように変更してください。
+コンパイルしてプログラムを実行すると、
+どういう色の付き方になったでしょうか？</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -995,13 +995,13 @@ void display(void)
   glClear(GL_COLOR_BUFFER_BIT);
   glColor3d(1.0, 0.0, 0.0);
   glBegin(GL_POLYGON);
-  <em>glColor3d(1.0, 0.0, 0.0); /* $B@V(B */</em>
+  <em>glColor3d(1.0, 0.0, 0.0); /* 赤 */</em>
   glVertex2d(-0.9, -0.9);
-  <em>glColor3d(0.0, 1.0, 0.0); /* $BNP(B */</em>
+  <em>glColor3d(0.0, 1.0, 0.0); /* 緑 */</em>
   glVertex2d(0.9, -0.9);
-  <em>glColor3d(0.0, 0.0, 1.0); /* $B@D(B */</em>
+  <em>glColor3d(0.0, 0.0, 1.0); /* 青 */</em>
   glVertex2d(0.9, 0.9);
-  <em>glColor3d(1.0, 1.0, 0.0); /* $B2+(B */</em>
+  <em>glColor3d(1.0, 1.0, 0.0); /* 黄 */</em>
   glVertex2d(-0.9, 0.9);
   glEnd();
   glFlush();
@@ -1009,72 +1009,72 @@ void display(void)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$BB?J,!"(B
-$BB?3Q7A$NFbIt$OD:E@$N?'$+$iJd4V$7$??'$GEI$j$D$V$5$l$?$H;W$$$^$9!#(B
-$B$3$N%W%m%0%i%`$O8e$G;HMQ$9$k$N$G!"(B
-prog2.c $B$H$$$&%3%T!<$r:n$C$F$*$$$F$/$@$5$$!#(B</p>
+<p>多分、
+多角形の内部は頂点の色から補間した色で塗りつぶされたと思います。
+このプログラムは後で使用するので、
+prog2.c というコピーを作っておいてください。</p>
 
 <pre class="source">% cp prog1.c prog2.c</pre>
 
-<h3><a class="label" name="5.5">$B#5!%#5(B $B4X?t$NL?L>K!(B</a></h3>
+<h3><a class="label" name="5.5">５．５ 関数の命名法</a></h3>
 
-<p>glVertex*() $B$d(B glColor*() $B$N$h$&$J4X?t$N(B * $B$NItJ,$O!"(B
-$B0z?t$N7?$d?t$J$I$r<($7$F$$$^$9!#(B
-$B>\$7$/$O(B man glVertex2d $B$d(B man glColor3d $B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>glVertex*() や glColor*() のような関数の * の部分は、
+引数の型や数などを示しています。
+詳しくは man glVertex2d や man glColor3d を参照してください。</p>
 
 <div class="figure"><img src="libaux2.gif" width="472" height="211"
-alt="$B4X?t$NL?L>K!35N,?^(B"></div>
+alt="関数の命名法概略図"></div>
 
-<h2><a class="label" name="6">$B#6!%:BI8<4$r@_Dj$9$k(B</a></h2>
+<h2><a class="label" name="6">６．座標軸を設定する</a></h2>
 
-<h3><a class="label" name="6.1">$B#6!%#1(B $B:BI8<4$H%S%e!<%]!<%H(B</a></h3>
+<h3><a class="label" name="6.1">６．１ 座標軸とビューポート</a></h3>
 
-<p>$B%&%#%s%I%&Fb$KI=<($9$k?^7A$N:BI8<4$O!"(B
-$B$=$N%&%#%s%I%&<+BN$NBg$-$5$H?^7AI=<($r9T$&!H6u4V!I$H$N4X78$G7hDj$7$^$9!#(B
-$B3+$$$?%&%#%s%I%&$N0LCV$dBg$-$5$O%^%&%9$r;H$C$FJQ99$9$k$3$H$,$G$-$^$9$,!"(B
-$B$=$N>pJs$O%&%#%s%I%&%^%M!<%8%c$rDL$8$F!"(B
-$B%$%Y%s%H$H$7$F%W%m%0%i%`$KEA$($i$l$^$9!#(B</p>
+<p>ウィンドウ内に表示する図形の座標軸は、
+そのウィンドウ自体の大きさと図形表示を行う“空間”との関係で決定します。
+開いたウィンドウの位置や大きさはマウスを使って変更することができますが、
+その情報はウィンドウマネージャを通じて、
+イベントとしてプログラムに伝えられます。</p>
 
-<p>$B$3$l$^$G$N%W%m%0%i%`$G$O!"(B
-$B%&%#%s%I%&$N%5%$%:$rJQ99$9$k$HI=<(FbMF$b$=$l$K$D$l$F3HBg=L>.$7$F$$$^$7$?!#(B
-$B$3$l$rI=<(FbMF$NBg$-$5$rJQ$($:$KI=<(NN0h$N$_$r9-$2$k$h$&$K$7$^$9!#(B</p>
+<p>これまでのプログラムでは、
+ウィンドウのサイズを変更すると表示内容もそれにつれて拡大縮小していました。
+これを表示内容の大きさを変えずに表示領域のみを広げるようにします。</p>
 
-<p>prog1.c $B$K0J2<$N$h$&$K(B resize() $B$H$$$&4X?t$rDI2C$7!"(B
-glutReshapeFunc() $B$r;H$C$F(B
-$B$=$l$r%&%#%s%I%&$N%j%5%$%:!J3HBg=L>.!K$N%$%Y%s%H$KBP$9$k%O%s%I%i$K;XDj$7$^$9!#(B
-$B%W%m%0%i%`$,JQ99$G$-$?$i%3%s%Q%$%k$7$F%W%m%0%i%`$r<B9T$7!"(B
-$B3+$$$?%&%#%s%I%&$r3HBg=L>.$7$F$_$F$/$@$5$$!#(B</p>
+<p>prog1.c に以下のように resize() という関数を追加し、
+glutReshapeFunc() を使って
+それをウィンドウのリサイズ（拡大縮小）のイベントに対するハンドラに指定します。
+プログラムが変更できたらコンパイルしてプログラムを実行し、
+開いたウィンドウを拡大縮小してみてください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 <em>void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BJQ499TNs$N=i4|2=(B */
+  /* 変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B%9%/%j!<%s>e$NI=<(NN0h$r%S%e!<%]!<%H$NBg$-$5$KHfNc$5$;$k(B */
+  /* スクリーン上の表示領域をビューポートの大きさに比例させる */
   glOrtho(-w / 200.0, w / 200.0, -h / 200.0, h / 200.0, -1.0, 1.0);
 }</em>
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1093,137 +1093,137 @@ int main(int argc, char *argv[])
 
 <dt><code><a class="label" name="glViewport">void glViewport(GLint x, GLint y, GLsizei w, GLsizei h)</a></code></dt>
 
-<dd>$B%S%e!<%]!<%H$r@_Dj$7$^$9!#(B
-$B%S%e!<%]!<%H$H$O!"3+$$$?%&%#%s%I%&$NCf$GIA2h$,9T$o$l$kNN0h$G!"(B
-$B@55,2=%G%P%$%9:BI87O$N#2E@(B (-1, -1), (1, 1)
-$B$r7k$V@~J,$rBP3Q@~$H$9$k6k7ANN0h$,$3$3$KI=<($5$l$^$9!#(B
-$B:G=i$N#2$D$N0z?t(B x$B!"(By $B$K$O$=$NNN0h$N:82<6y$N0LCV!"(B
-w $B$K$OI}!"(Bh $B$K$O9b$5$r%G%P%$%9:BI87O!"(B
-$B$9$J$o$A%G%#%9%W%l0J>e$N2hAG?t$G;XDj$7$^$9!#(B
-$B4X?t(B resize() $B$N0z?t(B w$B!"(Bh $B$K$O$=$l$>$l%&%#%s%I%&$NI}$H9b$5$,F~$C$F$$$^$9$+$i!"(B
+<dd>ビューポートを設定します。
+ビューポートとは、開いたウィンドウの中で描画が行われる領域で、
+正規化デバイス座標系の２点 (-1, -1), (1, 1)
+を結ぶ線分を対角線とする矩形領域がここに表示されます。
+最初の２つの引数 x、y にはその領域の左下隅の位置、
+w には幅、h には高さをデバイス座標系、
+すなわちディスプレ以上の画素数で指定します。
+関数 resize() の引数 w、h にはそれぞれウィンドウの幅と高さが入っていますから、
 glViewport(0, 0, w, h)
-$B$O%j%5%$%:8e$N%&%#%s%I%&$NA4LL$rI=<(NN0h$K;H$&$3$H$K$J$j$^$9!#(B</dd>
+はリサイズ後のウィンドウの全面を表示領域に使うことになります。</dd>
 
 <dt><code>void glLoadIdentity(void)</code></dt>
 
-<dd>$B$3$l$OJQ499TNs$r=i4|2=$7$^$9!#(B
-$B:BI8JQ49$N9g@.$O9TNs$N@Q$G$"$i$o$5$l$^$9$+$i!"(B
-$BJQ499TNs$K=i4|CM$H$7$FC10L9TNs$r@_Dj$7$^$9!#(B</dd>
+<dd>これは変換行列を初期化します。
+座標変換の合成は行列の積であらわされますから、
+変換行列に初期値として単位行列を設定します。</dd>
 
 <dt><code>void glOrtho(GLdouble l, GLdouble r, GLdouble b, GLdouble t, GLdouble n, GLdouble f)</code></dt>
 
-<dd>glOrtho() $B$O%o!<%k%I:BI87O$r@55,2=%G%P%$%9:BI87O$KJ?9TEj1F(B
-(orthographic projection : $B@5<M1F(B)
-$B$9$k9TNs$rJQ499TNs$K>h$8$^$9!#(B
-$B0z?t$K$O:8$+$i!"(B
-l $B$KI=<(NN0h$N:8C<(B (left) $B$N0LCV!"(B
-r $B$K1&C<(B (right) $B$N0LCV!"(B
-b $B$K2<C<(B (bottom) $B$N0LCV!"(B
-t $B$K>eC<(B (top) $B$N0LCV!"(B
-n $B$KA0J}LL(B (near) $B$N0LCV!"(B
-f $B$K8eJ}LL(B (far) $B$N0LCV$r;XDj$7$^$9!#(B
-$B$3$l$O!"%S%e!<%]!<%H$KI=<($5$l$k6u4V$N:BI8<4$r@_Dj$7$^$9!#(B</dd>
+<dd>glOrtho() はワールド座標系を正規化デバイス座標系に平行投影
+(orthographic projection : 正射影)
+する行列を変換行列に乗じます。
+引数には左から、
+l に表示領域の左端 (left) の位置、
+r に右端 (right) の位置、
+b に下端 (bottom) の位置、
+t に上端 (top) の位置、
+n に前方面 (near) の位置、
+f に後方面 (far) の位置を指定します。
+これは、ビューポートに表示される空間の座標軸を設定します。</dd>
 
 <dt><code>glutReshapeFunc(void (*func)(int w, int h))</code></dt>
 
-<dd>$B0z?t(B func $B$K$O!"(B
-$B%&%#%s%I%&$,%j%5%$%:$5$l$?$H$-$K<B9T$9$k4X?t$N%]%$%s%?$rM?$($^$9!#(B
-$B$3$N4X?t$N0z?t$K$O%j%5%$%:8e$N%&%#%s%I%&$NI}$H9b$5$,EO$5$l$^$9!#(B</dd>
+<dd>引数 func には、
+ウィンドウがリサイズされたときに実行する関数のポインタを与えます。
+この関数の引数にはリサイズ後のウィンドウの幅と高さが渡されます。</dd>
 
 </dl>
 
-<p>resize() $B$N=hM}$K$h$C$F!"%W%m%0%i%`$O(B
-glViewport() $B$G;XDj$7$?NN0h$K(B glOrtho()
-$B$G;XDj$7$?NN0hFb$N?^7A$rI=<($9$k$h$&$K$J$j$^$9!#$3$3$G(B glOrtho()
-$B$G;XDj$9$k$NNN0h$NBg$-$5$r%S%e!<%]!<%H$NBg$-$5$KHfNc$9$k$h$&$K@_Dj$9$l$P!"(B
-$BI=<(FbMF$NBg$-$5$r%S%e!<%]!<%H$NBg$-$5$K$+$+$o$i$:0lDj$KJ]$D$3$H$,$G$-$^$9!#(B
-$B$3$3$G%S%e!<%]!<%H$NBg$-$5$O3+$$$?%&%#%s%I%&$NBg$-$5$H0lCW$5$;$F$$$^$9$+$i!"(B
-$B%&%#%s%I%&$N%j%5%$%:$7$F$bI=<(FbMF$NBg$-$5$r0lDj$KJ]$D$3$H$,$G$-$^$9!#(B</p>
+<p>resize() の処理によって、プログラムは
+glViewport() で指定した領域に glOrtho()
+で指定した領域内の図形を表示するようになります。ここで glOrtho()
+で指定するの領域の大きさをビューポートの大きさに比例するように設定すれば、
+表示内容の大きさをビューポートの大きさにかかわらず一定に保つことができます。
+ここでビューポートの大きさは開いたウィンドウの大きさと一致させていますから、
+ウィンドウのリサイズしても表示内容の大きさを一定に保つことができます。</p>
 
 <div class="figure"><img src="libglut4.gif" width="487" height="227"
-alt="$B%&%#%s%I%&!]%S%e!<%]!<%HJQ49(B"></div>
+alt="ウィンドウ−ビューポート変換"></div>
 
-<p>$B?^7A$O%o!<%k%I:BI87O$H8F$P$l$k6u4V$K$"$j!"(B
-$B$=$N#2E@(B (l, b), (r, t) $B$r7k$V@~J,$rBP3Q@~$H$9$k6k7ANN0h$r!"(B
-$B#2E@(B (-1, -1), (1, 1) $B$rBP3Q@~$H$9$k6k7ANN0h$KEj1F$7$^$9!#(B
-$B$3$NEj1F$5$l$?:BI87O$r@55,2=%G%P%$%9:BI87O$H8F$S$^$9!#(B</p>
+<p>図形はワールド座標系と呼ばれる空間にあり、
+その２点 (l, b), (r, t) を結ぶ線分を対角線とする矩形領域を、
+２点 (-1, -1), (1, 1) を対角線とする矩形領域に投影します。
+この投影された座標系を正規化デバイス座標系と呼びます。</p>
 
-<p>$B$3$N@55,2=%G%P%$%9:BI87O$N@5J}7ANN0hFb$N?^7A$,%G%P%$%9:BI87O(B
-$B!J%G%#%9%W%l%$>e$N%&%#%s%I%&!K$N%S%e!<%]!<%H$KI=<($5$l$^$9$+$i!"(B
-$B7k2LE*$K%o!<%k%I:BI87O$+$i(B glOrtho()
-$B$G;XDj$7$?6k7ANN0h$r@Z$j<h$C$F%S%e!<%]!<%H$KI=<($9$k$3$H$K$J$j$^$9!#(B</p>
+<p>この正規化デバイス座標系の正方形領域内の図形がデバイス座標系
+（ディスプレイ上のウィンドウ）のビューポートに表示されますから、
+結果的にワールド座標系から glOrtho()
+で指定した矩形領域を切り取ってビューポートに表示することになります。</p>
 
-<p>$B%o!<%k%I:BI87O$+$i@Z$j<h$kNN0h$O!"(B
-$B!H#C#GMQ8l!IE*$K$O!V%&%#%s%I%&!W$H8F$P$l!"(B
-$B%o!<%k%I:BI87O$+$i@55,2=%G%P%$%9:BI87O$X$NJQ49$O(B
-$B!V%&%#%s%I%&%$%s%0JQ49!W$H8F$P$l$^$9!#(B
-$B$7$+$7%&%#%s%I%&%7%9%F%`!J(BX Window, MS Windows $BEy!K$K$*$$$F$O!"(B
-$B!V%&%#%s%I%&!W$O%"%W%j%1!<%7%g%s%W%m%0%i%`$,(B
-$B%G%#%9%W%l%$>e$K:n@.$9$kI=<(NN0h$N$3$H$r;X$9$N$G!"(B
-$B$3$3$N@bL@$G$O$3$l$r!V:BI8<4!W$H8F$s$G$$$^$9!#(B
-$B$J$*!"@55,2=%G%P%$%9:BI87O$+$i%G%P%$%9:BI87O$X$NJQ49$O(B
-$B%S%e!<%]!<%HJQ49$H8F$P$l$^$9!#(B</p>
+<p>ワールド座標系から切り取る領域は、
+“ＣＧ用語”的には「ウィンドウ」と呼ばれ、
+ワールド座標系から正規化デバイス座標系への変換は
+「ウィンドウイング変換」と呼ばれます。
+しかしウィンドウシステム（X Window, MS Windows 等）においては、
+「ウィンドウ」はアプリケーションプログラムが
+ディスプレイ上に作成する表示領域のことを指すので、
+ここの説明ではこれを「座標軸」と呼んでいます。
+なお、正規化デバイス座標系からデバイス座標系への変換は
+ビューポート変換と呼ばれます。</p>
 
-<p>glOrtho() $B$G$O0z?t$H$7$F(B l, r, t, b $B$NB>$K(B n $B$H(B f
-$B$b;XDj$9$kI,MW$,$"$j$^$9!#(B
-$B<B$O(B OpenGL $B$O#2<!85?^7A$NI=<($K$*$$$F$bFbItE*$K#3<!85$N=hM}$r9T$C$F$*$j!"(B
-$B%o!<%k%I:BI87O$O1|9T$-(B (Z) $BJ}8~$K$b<4$r;}$D#3<!856u4V$K$J$C$F$$$^$9!#(B
-n $B$H(B f $B$K$O!"(B
-$B$=$l$>$l$3$N6u4V$NA0J}LL!J2D;kHO0O$N<jA0B&$N8B3&!K(B
-$B$H8eJ}LL!J2D;kHO0O$N1sJ}$N8B3&!K$r;XDj$7$^$9!#(B
-n $B$h$j<jA0$K$"$kLL$d(B f $B$h$j1sJ}$K$"$kLL$OI=<($5$l$^$;$s!#(B</p>
+<p>glOrtho() では引数として l, r, t, b の他に n と f
+も指定する必要があります。
+実は OpenGL は２次元図形の表示においても内部的に３次元の処理を行っており、
+ワールド座標系は奥行き (Z) 方向にも軸を持つ３次元空間になっています。
+n と f には、
+それぞれこの空間の前方面（可視範囲の手前側の限界）
+と後方面（可視範囲の遠方の限界）を指定します。
+n より手前にある面や f より遠方にある面は表示されません。</p>
 
-<p>$B#2<!85?^7A$O1|9T$-(B (Z) $BJ}8~$,(B 0 $B$N#3<!85?^7A$H$7$F<h$j07$o$l$k$N$G!"(B
-$B$3$3$G$O(B n$B!JA0J}LL!"2D;kHO0O$N<jA0$N0LCV!K$r(B -1.0$B!"(B
-f $B!J8eJ}LL!"1sJ}$N0LCV!K$r(B 1 $B$K$7$F$$$^$9!#(B</p>
+<p>２次元図形は奥行き (Z) 方向が 0 の３次元図形として取り扱われるので、
+ここでは n（前方面、可視範囲の手前の位置）を -1.0、
+f （後方面、遠方の位置）を 1 にしています。</p>
 
-<p>glOrtho() $B$r;HMQ$7$J$1$l$PJQ499TNs$OC10L9TNs$N$^$^$J$N$G!"(B
-$B%o!<%k%I:BI87O$H@55,2=%G%P%$%9:BI87O$O0lCW$7!"(B
-$B%o!<%k%I:BI87O$N#2E@(B (-1, -1), (1, 1)
-$B$rBP3Q@~$H$9$k6k7ANN0h$,%S%e!<%]!<%H$KI=<($5$l$^$9!#(B
-$B%S%e!<%]!<%HFb$KI=<($9$k6u4V$N:BI8<4$,JQ2=$7$J$$$?$a!"(B
-$B$3$N>uBV$G%&%#%s%I%&$N%5%$%:$rJQ2=$5$;$k$H!"(B
-$B$=$l$K1~$8$FI=<($5$l$k?^7A$N%5%$%:$bJQ$o$j$^$9!#(B
-$B=i4|>uBV$O$3$N$h$&$K$J$C$F$$$^$9!#(B</p>
+<p>glOrtho() を使用しなければ変換行列は単位行列のままなので、
+ワールド座標系と正規化デバイス座標系は一致し、
+ワールド座標系の２点 (-1, -1), (1, 1)
+を対角線とする矩形領域がビューポートに表示されます。
+ビューポート内に表示する空間の座標軸が変化しないため、
+この状態でウィンドウのサイズを変化させると、
+それに応じて表示される図形のサイズも変わります。
+初期状態はこのようになっています。</p>
 
-<p>$BI=<(?^7A$N%5%$%:$r%S%e!<%]!<%H$NBg$-$5$K$+$+$o$i$:0lDj$K$9$k$K$O!"(BglOrtho()
-$B$G;XDj$9$k$NNN0h$NBg$-$5$r%S%e!<%]!<%H$NBg$-$5$KHfNc$9$k$h$&$K@_Dj$7$^$9!#(B
-$BNc$($P%o!<%k%I:BI87O$N:BI8<4$,>e5-$HF1MM$K(B
-l, r, t, b, n, f $B$GM?$($i$l$F$*$j!"$b$H$b$H$N%&%#%s%I%&$NBg$-$5$,(B
-W$B!_(BH$B!"%j%5%$%:8e$N%&%#%s%I%&$NBg$-$5$,(B w$B!_(Bh
-$B$J$i!"(BglOrtho(l * w / W, r * w / W, b * h / H, t * h / H, n, f)
-$B$H$7$^$9!#(B
-$B>e$N%W%m%0%i%`$G$O!"(B
-$B%o!<%k%I:BI87O$N#2E@(B (-1, -1), (1, 1)
-$B$rBP3Q@~$H$9$k6k7ANN0h$r(B 200$B!_(B200
-$B$NBg$-$5$N%&%#%s%I%&$KI=<($7$?;~$NI=<(FbMF$NBg$-$5$,(B
-$B>o$KJ]$?$l$k$h$&@_Dj$7$F$$$^$9!#(B</p>
+<p>表示図形のサイズをビューポートの大きさにかかわらず一定にするには、glOrtho()
+で指定するの領域の大きさをビューポートの大きさに比例するように設定します。
+例えばワールド座標系の座標軸が上記と同様に
+l, r, t, b, n, f で与えられており、もともとのウィンドウの大きさが
+W×H、リサイズ後のウィンドウの大きさが w×h
+なら、glOrtho(l * w / W, r * w / W, b * h / H, t * h / H, n, f)
+とします。
+上のプログラムでは、
+ワールド座標系の２点 (-1, -1), (1, 1)
+を対角線とする矩形領域を 200×200
+の大きさのウィンドウに表示した時の表示内容の大きさが
+常に保たれるよう設定しています。</p>
 
-<h3><a class="label" name="6.2">$B#6!%#2(B $B0LCV$d%5%$%:$r;XDj$7$F%&%#%s%I%&$r3+$/(B</a></h3>
+<h3><a class="label" name="6.2">６．２ 位置やサイズを指定してウィンドウを開く</a></h3>
 
-<p>$B%W%m%0%i%`$N5/F0;~$K3+$/%&%#%s%I%&$N0LCV$d%5%$%:$r;XDj$7$?$$$H$-$O!"(B
-glutInitWindowPosition() $B$*$h$S(B glutInitWindowSize()
-$B$r;H$$$^$9!#(B
-$B$3$l$i$r;HMQ$7$J$1$l$P!"(B
-$B%W%m%0%i%`$,5/F0$7$?$H$-$K3+$+$l$k%&%#%s%I%&$N%5%$%:$O(B
-$B%&%#%s%I%&%^%M!<%8%c$N@_Dj$K=>$$$^$9!#(B
-prog1.c $B$K;n$7$KB@;z$NItJ,$rDI2C$7$F$_$F$/$@$5$$!#(B</p>
+<p>プログラムの起動時に開くウィンドウの位置やサイズを指定したいときは、
+glutInitWindowPosition() および glutInitWindowSize()
+を使います。
+これらを使用しなければ、
+プログラムが起動したときに開かれるウィンドウのサイズは
+ウィンドウマネージャの設定に従います。
+prog1.c に試しに太字の部分を追加してみてください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1244,33 +1244,33 @@ int main(int argc, char *argv[])
 
 <dt><code>void glutInitWindowSize(int w, int h)</code></dt>
 
-<dd>$B?7$?$K3+$/%&%#%s%I%&$NI}$H9b$5$r;XDj$7$^$9!#(B
-$B$3$l$r;XDj$7$J$$$H$-$O!"(B300$B!_(B300 $B$N%&%#%s%I%&$r3+$-$^$9!#(B</dd>
+<dd>新たに開くウィンドウの幅と高さを指定します。
+これを指定しないときは、300×300 のウィンドウを開きます。</dd>
 
 <dt><code>void glutInitWindowPosition(int x, int y)</code></dt>
 
-<dd>$B?7$?$K3+$/%&%#%s%I%&$N0LCV$r;XDj$7$^$9!#(B
-$B$3$l$r;XDj$7$J$$$H$-$O!"(B
-$B%&%#%s%I%&%^%M!<%8%c$K$h$C$F%&%#%s%I%&$r3+$/0LCV$r7hDj$7$^$9!#(B</dd>
+<dd>新たに開くウィンドウの位置を指定します。
+これを指定しないときは、
+ウィンドウマネージャによってウィンドウを開く位置を決定します。</dd>
 
 </dl>
 
-<p>X Window $B$N>l9g!"(B
--geometry $B%*%W%7%g%s$K$h$C$F(B
-$B%3%^%s%I%i%$%s$+$i%&%#%s%I%&$r3+$/0LCV$d%5%$%:$r;XDj$G$-$^$9!#(B
-$B$3$l$O(B glutInit() $B$K$h$C$F=hM}$5$l$k$N$G!"(B
--geometry $B%*%W%7%g%s$rM-8z$K$9$k$K$O(B
-glutInitWindowPosition() $B$H(B glutInitWindowSize() $B$r(B 
-glutInit() $B$h$jA0$KCV$-!"L58z$K$9$k$K$O8e$KCV$-$^$9!#(B</p>
+<p>X Window の場合、
+-geometry オプションによって
+コマンドラインからウィンドウを開く位置やサイズを指定できます。
+これは glutInit() によって処理されるので、
+-geometry オプションを有効にするには
+glutInitWindowPosition() と glutInitWindowSize() を 
+glutInit() より前に置き、無効にするには後に置きます。</p>
 
-<h2><a class="label" name="7">$B#7!%%^%&%9$H%-!<%\!<%I(B</a></h2>
+<h2><a class="label" name="7">７．マウスとキーボード</a></h2>
 
-<h3><a class="label" name="7.1">$B#7!%#1(B $B%^%&%9%\%?%s$r%/%j%C%/$9$k(B</a></h3>
+<h3><a class="label" name="7.1">７．１ マウスボタンをクリックする</a></h3>
 
-<p>$B%^%&%9$N%\%?%s$r2!$7$?$3$H$rCN$k$K$O!"(B
-glutMouseFunc() $B$H$$$&4X?t$G(B
-$B%^%&%9$N%\%?%s$rA`:n$7$?$H$-$K8F$S=P$94X?t$r;XDj$7$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>マウスのボタンを押したことを知るには、
+glutMouseFunc() という関数で
+マウスのボタンを操作したときに呼び出す関数を指定します。
+prog1.c を以下のように変更してください。</p>
 
 <pre class="source"><em>#include &lt;stdio.h&gt;</em>
 #include &lt;GL/glut.h&gt;
@@ -1278,19 +1278,19 @@ prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
 void display(void)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  <em>/* $BESCf:o=|(B */</em>
+  <em>/* 途中削除 */</em>
   glFlush();
 }
 
 void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BJQ499TNs$N=i4|2=(B */
+  /* 変換行列の初期化 */
   glLoadIdentity();
 
-  <em>/* $B0J2<:o=|(B */</em>
+  <em>/* 以下削除 */</em>
 }
 
 <em>void mouse(int button, int state, int x, int y)
@@ -1327,7 +1327,7 @@ void resize(int w, int h)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1349,50 +1349,50 @@ int main(int argc, char *argv[])
 
 <dt><code><a class="label" name="glutmousefunc">glutMouseFunc(void (*func)(int button, int state, int x, int y))</a></code></dt>
 
-<dd>$B0z?t(B func $B$K$O!"(B
-$B%^%&%9$N%\%?%s$,2!$5$l$?$H$-$K<B9T$9$k4X?t$N%]%$%s%?$rM?$($^$9!#(B
-$B$3$N4X?t$N0z?t(B button $B$K$O2!$5$l$?%\%?%s(B
-(GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, GLUT_RIGHT_BUTTON)$B!"(B
-state $B$K$O!V2!$7$?(B (GLUT_DOWN)$B!W$N$+!VN%$7$?(B (GLUT_UP)$B!W$N$+!"(B
-x $B$H(B y $B$K$O$=$N0LCV$,EO$5$l$^$9!#(B</dd>
+<dd>引数 func には、
+マウスのボタンが押されたときに実行する関数のポインタを与えます。
+この関数の引数 button には押されたボタン
+(GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, GLUT_RIGHT_BUTTON)、
+state には「押した (GLUT_DOWN)」のか「離した (GLUT_UP)」のか、
+x と y にはその位置が渡されます。</dd>
 
 </dl>
 
-<p>$B%W%m%0%i%`$,JQ99$G$-$?$i!"%3%s%Q%$%k$7$F%W%m%0%i%`$r<B9T$7$F$_$F$/$@$5$$!#(B
-$B3+$$$?%&%#%s%I%&$N>e$G%^%&%9$N%\%?%s$r%/%j%C%/$7$F$_$F$/$@$5$$!#(Bx $B$H(B y
-$B$KEO$5$l$k:BI8$O!"%&%#%s%I%&$N(B<strong>$B:8>e6y$r86E@(B (0, 0)</strong>
-$B$H$7$?2hLL>e$N2hAG$N0LCV$K$J$j$^$9!#(B
-<strong>$B%G%P%$%9:BI87O$H$O>e2<$,H?E>$7$F$$$k(B</strong>
-$B$N$G5$$r$D$1$F$/$@$5$$!#(B</p>
+<p>プログラムが変更できたら、コンパイルしてプログラムを実行してみてください。
+開いたウィンドウの上でマウスのボタンをクリックしてみてください。x と y
+に渡される座標は、ウィンドウの<strong>左上隅を原点 (0, 0)</strong>
+とした画面上の画素の位置になります。
+<strong>デバイス座標系とは上下が反転している</strong>
+ので気をつけてください。</p>
 
 <div class="figure"><img src="libglut8.gif" width="256" height="256"
-alt="$B%o!<%k%I:BI87O$r%^%&%9$N:BI87O$H0lCW$5$;$kJ}K!(B"></div>
+alt="ワールド座標系をマウスの座標系と一致させる方法"></div>
 
-<p>$B%^%&%9$N0LCV$r$b$H$K?^7A$rIA$/>l9g$O!"(B
-$B%^%&%9$N0LCV$+$i%&%#%s%I%&>e$N:BI8CM$r5a$a$J$1$l$P$J$j$^$;$s!#(B
-$B$3$3$G$O$A$g$C$H<j$rH4$$$F!"(B
-$B%o!<%k%I:BI87O$,$3$N%^%&%9$N:BI87O$K0lCW$9$k$h$&(B
-glOrtho() $B$r@_Dj$7$^$9!J>e?^!K!#(B
-$B$^$?%&%#%s%I%&$N>e2<$bH?E>$7$^$9!J(Bprog1.c $B$N2<@~It!K!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>マウスの位置をもとに図形を描く場合は、
+マウスの位置からウィンドウ上の座標値を求めなければなりません。
+ここではちょっと手を抜いて、
+ワールド座標系がこのマウスの座標系に一致するよう
+glOrtho() を設定します（上図）。
+またウィンドウの上下も反転します（prog1.c の下線部）。
+prog1.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;stdio.h&gt;
 #include &lt;GL/glut.h&gt;
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BJQ499TNs$N=i4|2=(B */
+  /* 変換行列の初期化 */
   glLoadIdentity();
 
-  <em>/* $B%9%/%j!<%s>e$N:BI87O$r%^%&%9$N:BI87O$K0lCW$5$;$k(B */</em>
+  <em>/* スクリーン上の座標系をマウスの座標系に一致させる */</em>
   <em>glOrtho(-0.5, (GLdouble)w - 0.5, <span style="text-decoration: underline;">(GLdouble)h - 0.5, -0.5,</span> -1.0, 1.0);</em>
 }
 
@@ -1403,7 +1403,7 @@ void mouse(int button, int state, int x, int y)
   switch (button) {
   case GLUT_LEFT_BUTTON:
 <em>    if (state == GLUT_UP) {
-      /* $B%\%?%s$r2!$7$?0LCV$+$iN%$7$?0LCV$^$G@~$r0z$/(B */
+      /* ボタンを押した位置から離した位置まで線を引く */
       glColor3d(0.0, 0.0, 0.0);
       glBegin(GL_LINES);
       glVertex2i(x0, y0);
@@ -1412,61 +1412,61 @@ void mouse(int button, int state, int x, int y)
       glFlush();
     }
     else {
-      /* $B%\%?%s$r2!$7$?0LCV$r3P$($k(B */
+      /* ボタンを押した位置を覚える */
       x0 = x;
       y0 = y;
     }</em>
     break;
   case GLUT_MIDDLE_BUTTON:
-    <em>/* $B:o=|(B */</em>
+    <em>/* 削除 */</em>
     break;
   case GLUT_RIGHT_BUTTON:
-    <em>/* $B:o=|(B */</em>
+    <em>/* 削除 */</em>
     break;
   default:
     break;
   }
 
-  <em>/* $B0J2<:o=|(B */</em>
+  <em>/* 以下削除 */</em>
 }
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code><a class="label" name="glVertex2i">glVertex2i(GLint, GLint)</a></code></dt>
 
-<dd>$B$3$N4X?t$O(B <a href="#glVertex2d">glVertex2d()</a>
-$B$HF1MM$K#2<!85$N:BI8CM$r@_Dj$7$^$9$,!"(B
-$B0z?t$N7?$,(B GLint $B7?!J(Bint $B7?$HEy2A!K$G$9!#(B</dd>
+<dd>この関数は <a href="#glVertex2d">glVertex2d()</a>
+と同様に２次元の座標値を設定しますが、
+引数の型が GLint 型（int 型と等価）です。</dd>
 
 </dl>
 
-<p>$BA0$N%W%m%0%i%`$G$O!"(B
-$B%&%#%s%I%&$N%5%$%:$rJQ$($?$j(B
-$B%&%$%s%I%&$,B>$N%&%#%s%I%&$K1#$5$l$?$"$H:F$SI=<($5$l$kEY$K!"(B
-$B%&%#%s%I%&$NCf?H$,>C$($F$7$^$$$^$9!#(B
-$B$d$O$j!"$3$N>l9g$b$A$c$s$H=q$-D>$7$F$d$kI,MW$,$"$k$o$1$G$9$,!"(B
-$B$=$N$?$a$K$O$=$l$^$G$KI=<($7$?FbMF$r5-21$7$F$*$+$J$1$l$P$J$j$^$;$s!#(B</p>
+<p>前のプログラムでは、
+ウィンドウのサイズを変えたり
+ウインドウが他のウィンドウに隠されたあと再び表示される度に、
+ウィンドウの中身が消えてしまいます。
+やはり、この場合もちゃんと書き直してやる必要があるわけですが、
+そのためにはそれまでに表示した内容を記憶しておかなければなりません。</p>
 
-<p>mouse() $B$,<B9T$5$l$?$H$-$K!"(B
-$BG[Ns$K8=:_$N0LCV$r5-21$7$F$*$-!"(B
-display() $B$,<B9T$5$l$?$H$-$K!"$=$l$r$^$H$a$FIA2h$9$k$h$&$K$7$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>mouse() が実行されたときに、
+配列に現在の位置を記憶しておき、
+display() が実行されたときに、それをまとめて描画するようにします。
+prog1.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;stdio.h&gt;
 #include &lt;GL/glut.h&gt;
 <em>#define MAXPOINTS 100
-GLint point[MAXPOINTS][2]; /* $B:BI8$r5-21$9$kG[Ns(B */
-int pointnum = 0;          /* $B5-21$7$?:BI8$N?t!!(B */</em>
+GLint point[MAXPOINTS][2]; /* 座標を記憶する配列 */
+int pointnum = 0;          /* 記憶した座標の数　 */</em>
 
 void display(void)
 {
@@ -1474,7 +1474,7 @@ void display(void)
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  <em>/* $B5-O?$7$?%G!<%?$G@~$rIA$/(B */
+  <em>/* 記録したデータで線を描く */
   if (pointnum &gt; 1) {
     glColor3d(0.0, 0.0, 0.0);
     glBegin(GL_LINES);
@@ -1489,29 +1489,29 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  <em>/* $B:o=|(B */</em>
+  <em>/* 削除 */</em>
 
   switch (button) {
   case GLUT_LEFT_BUTTON:
-    <em>/* $B%\%?%s$rA`:n$7$?0LCV$r5-O?$9$k(B */
+    <em>/* ボタンを操作した位置を記録する */
     point[pointnum][0] = x;
     point[pointnum][1] = y;</em>
     if (state == GLUT_UP) {
-      /* $B%\%?%s$r2!$7$?0LCV$+$iN%$7$?0LCV$^$G@~$r0z$/(B */
+      /* ボタンを押した位置から離した位置まで線を引く */
       glColor3d(0.0, 0.0, 0.0);
       glBegin(GL_LINES);
-      <em>glVertex2iv(point[pointnum - 1]); /* $B0l$DA0$O2!$7$?0LCV!!(B */</em>
-      <em>glVertex2iv(point[pointnum]);     /* $B:#$N0LCV$ON%$7$?0LCV(B */</em>
+      <em>glVertex2iv(point[pointnum - 1]); /* 一つ前は押した位置　 */</em>
+      <em>glVertex2iv(point[pointnum]);     /* 今の位置は離した位置 */</em>
       glEnd();
       glFlush();
     }    
     else {
-      <em>/* $B:o=|(B */</em>
+      <em>/* 削除 */</em>
     }
     <em>if (pointnum &lt; MAXPOINTS - 1) pointnum++;</em>
     break;
@@ -1526,80 +1526,80 @@ void mouse(int button, int state, int x, int y)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code>glVertex2iv(const GLint *v)</code></dt>
 
-<dd>$B$3$N4X?t$O(B <a href="#glVertex2i">glVertex2i()</a>
-$B$HF1MM$K#2<!85$N:BI8CM$r@_Dj$7$^$9$,!"(B
-$B0z?t(B v $B$K$O#28D$NMWAG$r$b$D(B
-GLint $B7?!J(Bint $B$HEy2A!K$NG[Ns$r;XDj$7$^$9!#(B
-v[0] $B$K$O(B x $B:BI8CM!"(Bv[1] $B$K$O(B y $B:BI8CM$r3JG<$7$^$9!#(B
-$B$3$NNc$N$h$&$K!"J#?t$NE@$N:BI8$r;XDj$9$k>l9g$KJXMx$G$9!#(B</dd>
+<dd>この関数は <a href="#glVertex2i">glVertex2i()</a>
+と同様に２次元の座標値を設定しますが、
+引数 v には２個の要素をもつ
+GLint 型（int と等価）の配列を指定します。
+v[0] には x 座標値、v[1] には y 座標値を格納します。
+この例のように、複数の点の座標を指定する場合に便利です。</dd>
 
 </dl>
 
-<h3><a class="label" name="7.2">$B#7!%#2(B $B%^%&%9$r%I%i%C%0$9$k(B</a></h3>
+<h3><a class="label" name="7.2">７．２ マウスをドラッグする</a></h3>
 
-<p>$B%^%&%9$N%\%?%s$r2!$7$J$,$i%^%&%9$rF0$+$9A`:n$r!"(B
-<em>$B%I%i%C%0(B</em>$B$H8@$$$^$9!#(B
-$B%I%i%C%0Cf$O%^%&%9$N0LCV$r7QB3E*$K<hF@$9$kI,MW$,$"$j$^$9$,!"(B
-glutMouseFunc() $B$G;XDj$9$k%O%s%I%i$O%\%?%s$r2!$7$?$H$-$K$7$+<B9T$5$l$J$$$N$G!"(B
-$B$3$NL\E*$K$O;HMQ$G$-$^$;$s!#(B</p>
+<p>マウスのボタンを押しながらマウスを動かす操作を、
+<em>ドラッグ</em>と言います。
+ドラッグ中はマウスの位置を継続的に取得する必要がありますが、
+glutMouseFunc() で指定するハンドラはボタンを押したときにしか実行されないので、
+この目的には使用できません。</p>
 
-<p>$B%^%&%9$rF0$+$7$?$H$-$K<B9T$9$k4X?t$r;XDj$9$k$K$O!"(B
-glutMotionfunc() $B$^$?$O(B glutPassiveMotionFunc() $B$r;HMQ$7$^$9!#(B
-glutMotionfunc() $B$G;XDj$7$?4X?t$O!"(B
-$B%^%&%9$N%\%?%s$r2!$7$J$,$i%^%&%9$rF0$+$7$?$H$-$K<B9T$5$l$^$9!#(B
-glutPassiveMotionFunc() $B$G;XDj$7$?4X?t$O!"(B
-$B%^%&%9$N%\%?%s$r2!$5$:$K%^%&%9$rF0$+$7$?$H$-$K<B9T$5$l$^$9!#(B</p>
+<p>マウスを動かしたときに実行する関数を指定するには、
+glutMotionfunc() または glutPassiveMotionFunc() を使用します。
+glutMotionfunc() で指定した関数は、
+マウスのボタンを押しながらマウスを動かしたときに実行されます。
+glutPassiveMotionFunc() で指定した関数は、
+マウスのボタンを押さずにマウスを動かしたときに実行されます。</p>
 
-<p>$BA0$N%W%m%0%i%`$G$O!"(B
-$B%^%&%9$N:8%\%?%s$r2!$7$F$+$iN%$9$^$G%&%#%s%I%&$K$O2?$bI=<($5$l$^$;$s$G$7$?!#(B
-$B$3$l$r!"%^%&%9$N%I%i%C%0Cf$O@~J,$r%^%&%9$KDI=>$7$FIA$/$h$&$K$7$^$9!#(B
-$B$3$N$h$&$J8z2L$r(B<em>$B%i%P!<%P%s%I(B</em>$B!JNX%4%`!K(B
-$B$H8@$$$^$9!#$3$N$?$a$K(B glutMotionFunc() $B$r;H$C$F!"(B
-$B%^%&%9$N%I%i%C%0Cf$K%i%P!<%P%s%I$rI=<($9$k$h$&$K$7$^$9(B
-$B!JBg@nMM$"$j$,$H$&$4$6$$$^$7$?!K!#(B</p>
+<p>前のプログラムでは、
+マウスの左ボタンを押してから離すまでウィンドウには何も表示されませんでした。
+これを、マウスのドラッグ中は線分をマウスに追従して描くようにします。
+このような効果を<em>ラバーバンド</em>（輪ゴム）
+と言います。このために glutMotionFunc() を使って、
+マウスのドラッグ中にラバーバンドを表示するようにします
+（大川様ありがとうございました）。</p>
 
 <pre class="source">#include &lt;stdio.h&gt;
 #include &lt;GL/glut.h&gt;
 #define MAXPOINTS 100
-GLint point[MAXPOINTS][2]; /* $B:BI8$r5-21$9$kG[Ns(B */
-int pointnum = 0;          /* $B5-21$7$?:BI8$N?t!!(B */
-<em>int rubberband = 0;        /* $B%i%P!<%P%s%I$N>C5n(B */</em>
+GLint point[MAXPOINTS][2]; /* 座標を記憶する配列 */
+int pointnum = 0;          /* 記憶した座標の数　 */
+<em>int rubberband = 0;        /* ラバーバンドの消去 */</em>
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
   switch (button) {
   case GLUT_LEFT_BUTTON:
-    /* $B%\%?%s$rA`:n$7$?0LCV$r5-O?$9$k(B */
+    /* ボタンを操作した位置を記録する */
     point[pointnum][0] = x;
     point[pointnum][1] = y;
     if (state == GLUT_UP) {
-      /* $B%\%?%s$r2!$7$?0LCV$+$iN%$7$?0LCV$^$G@~$r0z$/(B */
+      /* ボタンを押した位置から離した位置まで線を引く */
       glColor3d(0.0, 0.0, 0.0);
       glBegin(GL_LINES);
-      glVertex2iv(point[pointnum - 1]); /* $B0l$DA0$O2!$7$?0LCV!!(B */
-      glVertex2iv(point[pointnum]);     /* $B:#$N0LCV$ON%$7$?0LCV(B */
+      glVertex2iv(point[pointnum - 1]); /* 一つ前は押した位置　 */
+      glVertex2iv(point[pointnum]);     /* 今の位置は離した位置 */
       glEnd();
       glFlush();
       <em>rubberband = 0;</em>
@@ -1619,30 +1619,30 @@ void mouse(int button, int state, int x, int y)
 
 <em>void motion(int x, int y)
 {
-  static GLint savepoint[2]; /* $B0JA0$N%i%P!<%P%s%I$NC<E@(B */
+  static GLint savepoint[2]; /* 以前のラバーバンドの端点 */
 
-  /* $BO@M}1i;;5!G=(B ON */
+  /* 論理演算機能 ON */
   glEnable(GL_COLOR_LOGIC_OP);
   glLogicOp(GL_INVERT);
 
   glBegin(GL_LINES);
   if (rubberband) {
-    /* $B0JA0$N%i%P!<%P%s%I$r>C$9(B */
+    /* 以前のラバーバンドを消す */
     glVertex2iv(point[pointnum - 1]);
     glVertex2iv(savepoint);
   }
-  /* $B?7$7$$%i%P!<%P%s%I$rIA$/(B */
+  /* 新しいラバーバンドを描く */
   glVertex2iv(point[pointnum - 1]);
   glVertex2i(x, y);
   glEnd();
 
   glFlush();
 
-  /* $BO@M}1i;;5!G=(B OFF */
+  /* 論理演算機能 OFF */
   glLogicOp(GL_COPY);
   glDisable(GL_COLOR_LOGIC_OP);
 
-  /* $B:#IA$$$?%i%P!<%P%s%I$NC<E@$rJ]B8(B */
+  /* 今描いたラバーバンドの端点を保存 */
   savepoint[0] = x;
   savepoint[1] = y;
   rubberband = 1;
@@ -1650,7 +1650,7 @@ void mouse(int button, int state, int x, int y)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1673,108 +1673,108 @@ int main(int argc, char *argv[])
 
 <dt><code>glEnable(GLenum cap)</code></dt>
 
-<dd>$B0z?t(B cap $B$K;XDj$7$?5!G=$r;HMQ2DG=$K$7$^$9!#(B
-GL_LOGIC_OP $B$b$7$/$O(B GL_COLOR_LOGIC_OP
-$B$O!"?^7A$NIA2h$N:]$K%&%#%s%I%&$K4{$KIA$+$l$F$$$kFbMF$H!"(B
-$B$3$l$+$iIA$3$&$H$9$kFbMF$N4V$GO@M}1i;;$r9T$&$3$H$,$G$-$k$h$&$K$7$^$9!#(B
+<dd>引数 cap に指定した機能を使用可能にします。
+GL_LOGIC_OP もしくは GL_COLOR_LOGIC_OP
+は、図形の描画の際にウィンドウに既に描かれている内容と、
+これから描こうとする内容の間で論理演算を行うことができるようにします。
 </dd>
 
 <dt><code>glDisable(GLenum cap)</code></dt>
 
-<dd>$B0z?t(B cap $B$K;XDj$7$?5!G=$r;HMQIT2D$K$7$^$9!#(B</dd>
+<dd>引数 cap に指定した機能を使用不可にします。</dd>
 
 <dt><code>glLogicOp(GLenum opcode)</code></dt>
 
-<dd>$B0z?t(B opcode $B$K$O%&%#%s%I%&$KIA$+$l$F$$$kFbMF$H!"(B
-$B$3$l$+$iIA$3$&$H$9$kFbMF$H$N4V$G9T$&O@M}1i;;$N%?%$%W$r;XDj$7$^$9!#(B
-GL_COPY $B$O$3$l$+$iIA$3$&$H$9$kFbMF$r$=$N$^$^%&%#%s%I%&Fb$KIA$-$^$9!#(B
-GL_INVERT $B$O%&%#%s%I%&$KIA$+$l$F$$$kFbMF$N!"(B
-$B$3$l$+$iIA$3$&$H$9$k?^7A$NNN0h$rH?E>$7$^$9!#(B
-$B>\$7$/$O(B man glLogicOp $B$r;2>H$7$F$/$@$5$$!#(B</dd>
+<dd>引数 opcode にはウィンドウに描かれている内容と、
+これから描こうとする内容との間で行う論理演算のタイプを指定します。
+GL_COPY はこれから描こうとする内容をそのままウィンドウ内に描きます。
+GL_INVERT はウィンドウに描かれている内容の、
+これから描こうとする図形の領域を反転します。
+詳しくは man glLogicOp を参照してください。</dd>
 
 <dt><code><a class="label" name="glutmotionfunc">glutMotionFunc(void (*func)(int x, int y))</a></code></dt>
 
-<dd>$B0z?t(B func $B$K$O!"(B
-$B%^%&%9$N$$$:$l$+$N%\%?%s$r2!$7$J$,$i%^%&%9$rF0$+$7$?$H$-$K(B
-$B<B9T$9$k4X?t$N%]%$%s%?$rM?$($^$9!#(B
-$B$3$N4X?t$N0z?t(B x $B$H(B y $B$K$O!"8=:_$N%^%&%9$N0LCV$,EO$5$l$^$9!#(B
-$B$3$N@_Dj$r2r=|$9$k$K$O!"0z?t$K(B 0$B!J%L%k%]%$%s%?!K$r;XDj$7$^$9(B
-$B!J(Bstdio.h $BEy$NCf$GDj5A$5$l$F$$$k5-9fDj?t(B NULL $B$r;HMQ$7$F$bNI$$!K!#(B</dd>
+<dd>引数 func には、
+マウスのいずれかのボタンを押しながらマウスを動かしたときに
+実行する関数のポインタを与えます。
+この関数の引数 x と y には、現在のマウスの位置が渡されます。
+この設定を解除するには、引数に 0（ヌルポインタ）を指定します
+（stdio.h 等の中で定義されている記号定数 NULL を使用しても良い）。</dd>
 
 </dl>
 
-<p>$B%i%P!<%P%s%I$r<B8=$9$k>l9g!"(B
-$B%^%&%9$rF0$+$7$?$H$-$KD>A0$KIA$$$?%i%P!<%P%s%I$r>C$9I,MW$,$"$j$^$9!#(B
-$B$^$?!"%i%P!<%P%s%I$rIA$$$?$3$H$K$h$C$F(B
-$B%&%#%s%I%&$K4{$KIA$+$l$F$$$?FbMF$,2u$5$l$F$7$^$&$N$G!"(B
-$B$=$NItJ,$r$b$&0lEYIA$-D>$9I,MW$,$"$j$^$9!#(B
-$B$7$+$7!"$=$N$?$a$K2hLLA4BN$r=q$-49$($k$N$O!"(B
-$B$A$g$C$H$b$C$?$$$J$$5$$,$7$^$9!#(B</p>
+<p>ラバーバンドを実現する場合、
+マウスを動かしたときに直前に描いたラバーバンドを消す必要があります。
+また、ラバーバンドを描いたことによって
+ウィンドウに既に描かれていた内容が壊されてしまうので、
+その部分をもう一度描き直す必要があります。
+しかし、そのために画面全体を書き換えるのは、
+ちょっともったいない気がします。</p>
 
-<p>$B$=$3$G%i%P!<%P%s%I$rIA$/:]$K$O!"(B
-$B@~$rGX7J$H$O0[$J$k?'$GIA$/Be$o$j$K!"(B
-$BIA$3$&$H$9$k@~>e$N2hAG$N?'$rH?E>$9$k$h$&$K$7$^$9!#(B
-$B$3$&$9$l$P$b$&0lEYF1$8@~>e$N2hAG$N?'$rH?E>$9$k$3$H$G!"(B
-$B$=$3$KIA$+$l$F$$$?0JA0$N@~$,>C$($F%&%#%s%I%&$KIA$+$l$??^7A$,85$KLa$j$^$9!#(B
-$B$3$N$?$a$K(B glLogicOp() $B$r;HMQ$7$^$9!#(B
-glLogicOp() $B$G;XDj$7$?O@M}1i;;$O!"(B
-glEnable(GL_LOGIC_OP)$B!cGr9u$N>l9g!d$"$k$$$O(B
-glEnable(GL_COLOR_LOGIC_OP)$B!c%+%i!<$N>l9g!d$GM-8z$K$J$j$^$9(B
-$B!JDD@h@8$4;XE&$"$j$,$H$&!K!#(B</p>
+<p>そこでラバーバンドを描く際には、
+線を背景とは異なる色で描く代わりに、
+描こうとする線上の画素の色を反転するようにします。
+こうすればもう一度同じ線上の画素の色を反転することで、
+そこに描かれていた以前の線が消えてウィンドウに描かれた図形が元に戻ります。
+このために glLogicOp() を使用します。
+glLogicOp() で指定した論理演算は、
+glEnable(GL_LOGIC_OP)＜白黒の場合＞あるいは
+glEnable(GL_COLOR_LOGIC_OP)＜カラーの場合＞で有効になります
+（陳先生ご指摘ありがとう）。</p>
 
-<p>$B$?$@$7!"%^%&%9$N%\%?%s$r2!$7$?D>8e$O$^$@%i%P!<%P%s%I$OIA$+$l$F$$$^$;$s$+$i!"(B
-$B$=$N$H$-$@$1%i%P!<%P%s%I$N>C5n$O9T$o$J$$$h$&$K$7$J$1$l$P$J$j$^$;$s!#(B
-$B$3$N$?$a(B rubberband
-$B$J$s$F$$$&JQ?t$r;H$C$?$A$g$C$HE%=-$$%W%m%0%i%`$K$J$C$F$$$^$9$,!"(B
-$B2fK}$7$F$/$@$5$$!J$b$C$H%(%l%,%s%H$JJ}K!$b$"$j$^$9$1$I!D!K!#(B</p>
+<p>ただし、マウスのボタンを押した直後はまだラバーバンドは描かれていませんから、
+そのときだけラバーバンドの消去は行わないようにしなければなりません。
+このため rubberband
+なんていう変数を使ったちょっと泥臭いプログラムになっていますが、
+我慢してください（もっとエレガントな方法もありますけど…）。</p>
 
-<p>glutMotionFunc(), glutPassiveMotionFunc() $B$G;XDj$7$?4X?t$O!"(B
-$B%^%&%9$N0\F0$K$H$b$J$C$FIQHK$K<B9T$5$l$k$N$G!"(B
-$B$3$N4X?t$NCf$G;~4V$N$+$+$k=hM}$r9T$&$H!"(B
-$B%^%&%9$N1~Ez$,0-$/$J$C$F$7$^$$$^$9!#(B
-$B$3$l$rHr$1$kJ}K!$O(B<a href="#9">$B#9@a(B</a>$B0J9_$G2r@b$7$^$9!#(B</p>
+<p>glutMotionFunc(), glutPassiveMotionFunc() で指定した関数は、
+マウスの移動にともなって頻繁に実行されるので、
+この関数の中で時間のかかる処理を行うと、
+マウスの応答が悪くなってしまいます。
+これを避ける方法は<a href="#9">９節</a>以降で解説します。</p>
 
-<h3><a class="label" name="7.3">$B#7!%#3(B $B%-!<%\!<%I$+$iFI$_9~$`(B</a></h3>
+<h3><a class="label" name="7.3">７．３ キーボードから読み込む</a></h3>
 
-<p>OpenGL $B$N%"%W%j%1!<%7%g%s%W%m%0%i%`$,3+$$$?%&%#%s%I%&$K$O!"(B
-$B%?!<%_%J%k%&%#%s%I%&$N$h$&$K%-!<%\!<%IF~NO$r9T$&$3$H$,$G$-$^$;$s!#(B
-$B$=$N$+$o$j%^%&%9$N%\%?%sF1MM!"(B
-$B%-!<$r%?%$%W$9$k$4$H$K<B9T$9$k4X?t$r;XDj$G$-$^$9!#(B
-$B$=$l$K$O(B glutKeyboardFunc() $B$r;H$$$^$9!#(B</p>
+<p>OpenGL のアプリケーションプログラムが開いたウィンドウには、
+ターミナルウィンドウのようにキーボード入力を行うことができません。
+そのかわりマウスのボタン同様、
+キーをタイプするごとに実行する関数を指定できます。
+それには glutKeyboardFunc() を使います。</p>
 
-<p>$B$3$l$^$G:n$C$?%W%m%0%i%`$O!"(B
-$B%W%m%0%i%`$r=*N;$9$kJ}K!$rAH$_9~$s$G$$$^$;$s$G$7$?!#(B
-$B$=$3$G(B q $B$N%-!<$d(B ESC $B%-!<$r%?%$%W$7$?$H$-$K(B exit()
-$B$r8F$S=P$7$F!"%W%m%0%i%`$,=*N;$9$k$h$&$K$7$^$9!#(B
-$B$^$?(B exit() $B$r;H$&$?$a$K(B stdlib.h $B$b(B include $B$7$^$9!#(B
-prog1.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>これまで作ったプログラムは、
+プログラムを終了する方法を組み込んでいませんでした。
+そこで q のキーや ESC キーをタイプしたときに exit()
+を呼び出して、プログラムが終了するようにします。
+また exit() を使うために stdlib.h も include します。
+prog1.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;stdio.h&gt;
 <em>#include &lt;stdlib.h&gt;</em>
 #include &lt;GL/glut.h&gt;
 #define MAXPOINTS 100
-GLint point[MAXPOINTS][2]; /* $B:BI8$r5-21$9$kG[Ns(B */
-int pointnum = 0;          /* $B5-21$7$?:BI8$N?t!!(B */
-int rubberband = 0;        /* $B%i%P!<%P%s%I$N>C5n(B */
+GLint point[MAXPOINTS][2]; /* 座標を記憶する配列 */
+int pointnum = 0;          /* 記憶した座標の数　 */
+int rubberband = 0;        /* ラバーバンドの消去 */
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void motion(int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 <em>void keyboard(unsigned char key, int x, int y)
@@ -1783,7 +1783,7 @@ void motion(int x, int y)
   case 'q':
   case 'Q':
   case '\033':
-    exit(0);  /* '\033' $B$O(B ESC $B$N(B ASCII $B%3!<%I(B */
+    exit(0);  /* '\033' は ESC の ASCII コード */
   default:
     break;
   }
@@ -1791,7 +1791,7 @@ void motion(int x, int y)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1815,30 +1815,30 @@ int main(int argc, char *argv[])
 
 <dt><code>glutKeyboardFunc(void (*func)(unsigned char key, int x, int y))</code></dt>
 
-<dd>$B0z?t(B func $B$K$O!"(B
-$B%-!<$,%?%$%W$5$l$?$H$-$K<B9T$9$k4X?t$N%]%$%s%?$rM?$($^$9!#(B
-$B$3$N4X?t$N0z?t(B key $B$K$O%?%$%W$5$l$?%-!<$N(B ASCII $B%3!<%I$,EO$5$l$^$9!#(B
-$B$^$?(B x $B$H(B y $B$K$O%-!<$,%?%$%W$5$l$?$H$-$N%^%&%9$N0LCV$,EO$5$l$^$9!#(B</dd>
+<dd>引数 func には、
+キーがタイプされたときに実行する関数のポインタを与えます。
+この関数の引数 key にはタイプされたキーの ASCII コードが渡されます。
+また x と y にはキーがタイプされたときのマウスの位置が渡されます。</dd>
 
 </dl>
 
-<p>$B%U%!%s%/%7%g%s%-!<$N$h$&$JJ8;z%-!<0J30$N%?%$%W$r8!=P$9$k$H$-$O(B
-glutSpecialFunc()$B!"(BShift $B$d(B Ctrl
-$B$N$h$&$J%b%G%#%U%!%$%"!J=$>~!K%-!<$r8!=P$9$k$K$O(B
-glutGetModifiers() $B$r;H$$$^$9!#(B
-$B;H$$J}$O$$$:$l$b(B man $B%3%^%s%I$GD4$Y$F$/$@$5$$!#(B</p>
+<p>ファンクションキーのような文字キー以外のタイプを検出するときは
+glutSpecialFunc()、Shift や Ctrl
+のようなモディファイア（修飾）キーを検出するには
+glutGetModifiers() を使います。
+使い方はいずれも man コマンドで調べてください。</p>
 
-<h2><a class="label" name="8">$B#8!%#3<!85?^7A$rIA$/(B</a></h2>
+<h2><a class="label" name="8">８．３次元図形を描く</a></h2>
 
-<h3><a class="label" name="8.1">$B#8!%#1(B $B#2<!85$H#3<!85(B</a></h3>
+<h3><a class="label" name="8.1">８．１ ２次元と３次元</a></h3>
 
-<p>$B$3$l$^$G$O#2<!85$N?^7A$NI=<($r9T$C$F$-$^$7$?$,!"(B
-OpenGL $B$NFbIt$G$O<B:]$K$O#3<!85$N=hM}$r9T$C$F$$$^$9!#(B
-$B$9$J$o$A2hLLI=<($KBP$7$F?bD>$K(B Z $B<4$,?-$S$F$*$j!"(B
-$B$3$l$^$G$O$=$N#3<!856u4V$N(B XY $BJ?LL$X$NJ?9TEj1FA|$rI=<($7$F$$$^$7$?!#(B</p>
+<p>これまでは２次元の図形の表示を行ってきましたが、
+OpenGL の内部では実際には３次元の処理を行っています。
+すなわち画面表示に対して垂直に Z 軸が伸びており、
+これまではその３次元空間の XY 平面への平行投影像を表示していました。</p>
 
-<p>$B;n$7$K(B<a href="#5.4">$B#5!%#4@a(B</a>$B$G:n@.$7$?%W%m%0%i%`(B (prog2.c) $B$K$*$$$F!"(B
-$B?^7A$r(B Y $B<4Cf?4$K(B 25 $BEY2sE>$7$F$_$^$7$g$&!#(B</p>
+<p>試しに<a href="#5.4">５．４節</a>で作成したプログラム (prog2.c) において、
+図形を Y 軸中心に 25 度回転してみましょう。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -1848,13 +1848,13 @@ void display(void)
   glColor3d(1.0, 0.0, 0.0);
   <em>glRotated(25.0, 0.0, 1.0, 0.0);</em>
   glBegin(GL_POLYGON);
-  glColor3d(1.0, 0.0, 0.0); /* $B@V(B */
+  glColor3d(1.0, 0.0, 0.0); /* 赤 */
   glVertex2d(-0.9, -0.9);
-  glColor3d(0.0, 1.0, 0.0); /* $BNP(B */
+  glColor3d(0.0, 1.0, 0.0); /* 緑 */
   glVertex2d(0.9, -0.9);
-  glColor3d(0.0, 0.0, 1.0); /* $B@D(B */
+  glColor3d(0.0, 0.0, 1.0); /* 青 */
   glVertex2d(0.9, 0.9);
-  glColor3d(1.0, 1.0, 0.0); /* $B2+(B */
+  glColor3d(1.0, 1.0, 0.0); /* 黄 */
   glVertex2d(-0.9, 0.9);
   glEnd();
   glFlush();
@@ -1862,7 +1862,7 @@ void display(void)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -1880,39 +1880,39 @@ int main(int argc, char *argv[])
 
 <dt><a class="label" name="glRotated"><code>glRotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)</code></a></dt>
 
-<dd>$BJQ499TNs$K2sE>$N9TNs$r>h$8$^$9!#(B
-$B0z?t$O$$$:$l$b(B GLdouble $B7?!J(Bdouble $B$HEy2A!K$G!"#1$DL\$N0z?t(B angle $B$O2sE>3Q!"(B
-$B;D$j$N#3$D$N0z?t(B x, y, z $B$O2sE><4$NJ}8~%Y%/%H%k$G$9!#(B
-$B0z?t$,(B float $B7?$J$i(B glRotatef() $B$r;H$$$^$9!#(B
-$B86E@$rDL$i$J$$<4$G2sE>$5$;$?$$>l9g$O!"(B
+<dd>変換行列に回転の行列を乗じます。
+引数はいずれも GLdouble 型（double と等価）で、１つ目の引数 angle は回転角、
+残りの３つの引数 x, y, z は回転軸の方向ベクトルです。
+引数が float 型なら glRotatef() を使います。
+原点を通らない軸で回転させたい場合は、
 <a href="#glTranslated">glTranslated()</a>
-$B$r;H$C$F0lC6<4$,86E@$rDL$k$h$&$K?^7A$r0\F0$7!"(B
-$B2sE>8e$K85$N0LCV$KLa$7$^$9!#(B</dd>
+を使って一旦軸が原点を通るように図形を移動し、
+回転後に元の位置に戻します。</dd>
 
 </dl>
 
-<p>$B%3%s%Q%$%k$7$?%W%m%0%i%`$r<B9T$7$F!"IA$+$l$k?^7A$r8+$F$/$@$5$$!#(B
-Y $B<4Cf?4$K2sE>$7$F$$$k$?$a!"(B
-$B0JA0$KHf$Y$F>/$7=DD9$K$J$C$F$$$k$H;W$$$^$9!#(B</p>
+<p>コンパイルしたプログラムを実行して、描かれる図形を見てください。
+Y 軸中心に回転しているため、
+以前に比べて少し縦長になっていると思います。</p>
 
-<p>$B$3$N%&%#%s%I%&$r:G>.2=$7$?$jB>$N%&%#%s%I%&$r=E$M$?$j$7$F!"(B
-$B:FIA2h$r$5$;$F$_$^$7$g$&!#:FIA2h$9$kEY$K?^7A$N7A$,JQ$o$k$H;W$$$^$9!#(B
-$B$3$l$OJQ499TNs$K(B glRotated() $B$K$h$k2sE>$N9TNs$,@Q;;$5$l$k$+$i$G$9!#(B
-$B$3$l$rKI$0$K$OIA2h$NEY$KJQ49%^%H%j%/%9$r(B glLoadIdentity() $B$G=i4|2=$9$k$+!"(B
-$B8e$G=R$Y$k(B glPushMatrix() / glPopMatrix() $B$r;H$C$FJQ499TNs$rJ]B8$7$^$9!#(B</p>
+<p>このウィンドウを最小化したり他のウィンドウを重ねたりして、
+再描画をさせてみましょう。再描画する度に図形の形が変わると思います。
+これは変換行列に glRotated() による回転の行列が積算されるからです。
+これを防ぐには描画の度に変換マトリクスを glLoadIdentity() で初期化するか、
+後で述べる glPushMatrix() / glPopMatrix() を使って変換行列を保存します。</p>
 
-<h3><a class="label" name="8.2">$B#8!%#2(B $B@~2h$rI=<($9$k(B</a></h3>
+<h3><a class="label" name="8.2">８．２ 線画を表示する</a></h3>
 
-<p>$B$=$l$G$O!"$3$s$I$O0J2<$N$h$&$J#3<!85$NN)J}BN$r@~2h$GIA$$$F$_$^$7$g$&!#(B
-glut $B$K$O(B glutWireCube() $B$J$I!"(B
-$B$$$/$D$+4pK\E*$JN)BN$rIA$/4X?t$,$"$k$N$G$9$,!"(B
-$B$3$3$G$O<+J,$G7A>u$rDj5A$7$F$_$?$$$H;W$$$^$9!#(B</p>
+<p>それでは、こんどは以下のような３次元の立方体を線画で描いてみましょう。
+glut には glutWireCube() など、
+いくつか基本的な立体を描く関数があるのですが、
+ここでは自分で形状を定義してみたいと思います。</p>
 
 <div class="figure"><img src="libglut5.gif" width="400" height="337"
-alt="$BN)J}BN$N9=B$(B"></div>
+alt="立方体の構造"></div>
 
-<p>$B$3$N?^7A$O#88D$NE@$r#1#2K\$N@~J,$G7k$S$^$9!#(B
-$BE@$N0LCV!J4v2?>pJs!K$H@~J,!J0LAj>pJs!K$rJL!9$K%G!<%?$K$7$^$9!#(B</p>
+<p>この図形は８個の点を１２本の線分で結びます。
+点の位置（幾何情報）と線分（位相情報）を別々にデータにします。</p>
 
 <pre class="source">GLdouble vertex[][3] = {
   { 0.0, 0.0, 0.0 }, /* A */
@@ -1926,36 +1926,36 @@ alt="$BN)J}BN$N9=B$(B"></div>
 };
 
 int edge[][2] = {
-  { 0, 1 }, /* $B%"(B (A-B) */
-  { 1, 2 }, /* $B%$(B (B-C) */
-  { 2, 3 }, /* $B%&(B (C-D) */
-  { 3, 0 }, /* $B%((B (D-A) */
-  { 4, 5 }, /* $B%*(B (E-F) */
-  { 5, 6 }, /* $B%+(B (F-G) */
-  { 6, 7 }, /* $B%-(B (G-H) */
-  { 7, 4 }, /* $B%/(B (H-E) */
-  { 0, 4 }, /* $B%1(B (A-E) */
-  { 1, 5 }, /* $B%3(B (B-F) */
-  { 2, 6 }, /* $B%5(B (C-G) */
-  { 3, 7 }  /* $B%7(B (D-H) */
+  { 0, 1 }, /* ア (A-B) */
+  { 1, 2 }, /* イ (B-C) */
+  { 2, 3 }, /* ウ (C-D) */
+  { 3, 0 }, /* エ (D-A) */
+  { 4, 5 }, /* オ (E-F) */
+  { 5, 6 }, /* カ (F-G) */
+  { 6, 7 }, /* キ (G-H) */
+  { 7, 4 }, /* ク (H-E) */
+  { 0, 4 }, /* ケ (A-E) */
+  { 1, 5 }, /* コ (B-F) */
+  { 2, 6 }, /* サ (C-G) */
+  { 3, 7 }  /* シ (D-H) */
 };</pre>
 
-<p>$B$3$N>l9g!"Nc$($P!HE@(B C$B!I(B(1,1,0) $B$H!HE@(B D$B!I(B(0,1,0)
-$B$r7k$V@~J,!H%&!I$O!"0J2<$N$h$&$K$7$FIA2h$G$-$^$9!#(B
-glVertex3dv() $B$O!"(B
-$B0z?t$K#3$D$NMWAG$r;}$D(B
-GLdouble $B7?!J(Bdouble $B$HEy2A!K$NG[Ns$N%]%$%s%?$rM?$($F!"(B
-$BD:E@$r;XDj$7$^$9!#(B</p>
+<p>この場合、例えば“点 C”(1,1,0) と“点 D”(0,1,0)
+を結ぶ線分“ウ”は、以下のようにして描画できます。
+glVertex3dv() は、
+引数に３つの要素を持つ
+GLdouble 型（double と等価）の配列のポインタを与えて、
+頂点を指定します。</p>
 
 <pre class="source">glBegin(GL_LINES);
-glVertex3dv(vertex[edge[2][0]]); /* $B@~J,!H%&!I$N0l$DL\$NC<E@!H(BC$B!I(B*/
-glVertex3dv(vertex[edge[2][1]]); /* $B@~J,!H%&!I$NFs$DL\$NC<E@!H(BD$B!I(B*/
+glVertex3dv(vertex[edge[2][0]]); /* 線分“ウ”の一つ目の端点“C”*/
+glVertex3dv(vertex[edge[2][1]]); /* 線分“ウ”の二つ目の端点“D”*/
 glEnd();</pre>
 
-<p>$B=>$C$FN)J}BNA4It$rIA$/%W%m%0%i%`$O0J2<$N$h$&$K$J$j$^$9!#(B
-$B$J$*!"N)J}BN$,%&%#%s%I%&$+$i$O$_=P$J$$$h$&$K!"(B
-glOrtho() $B$GI=<($9$k:BI87O$r(B (-2,-2)$B!A(B(2,2) $B$K$7$F$$$^$9!#(B
-prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>従って立方体全部を描くプログラムは以下のようになります。
+なお、立方体がウィンドウからはみ出ないように、
+glOrtho() で表示する座標系を (-2,-2)〜(2,2) にしています。
+prog2.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
@@ -1991,7 +1991,7 @@ void display(void)
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-<em>  /* $B?^7A$NIA2h(B */
+<em>  /* 図形の描画 */
   glColor3d(0.0, 0.0, 0.0);
   glBegin(GL_LINES);
   for (i = 0; i &lt; 12; i++) {
@@ -2013,7 +2013,7 @@ void display(void)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -2032,40 +2032,40 @@ int main(int argc, char *argv[])
 
 <dt><code>glVertex3dv(const GLdouble *v)</code></dt>
 
-<dd>glVertex3dv() $B$O#3<!85$N:BI8CM$r;XDj$9$k$N$K;H$$$^$9!#(B
-$B0z?t(B v $B$O#38D$NMWAG$r;}$D(B GLdouble $B7?!J(Bdouble $B$HEy2A!KG[Ns$r;XDj$7$^$9!#(B
-v[0] $B$K$O(B x $B:BI8CM!"(Bv[1] $B$K$O(B y $B:BI8CM!"(Bv[2] $B$K$O(B z $B:BI8CM$r3JG<$7$^$9!#(B</dd>
+<dd>glVertex3dv() は３次元の座標値を指定するのに使います。
+引数 v は３個の要素を持つ GLdouble 型（double と等価）配列を指定します。
+v[0] には x 座標値、v[1] には y 座標値、v[2] には z 座標値を格納します。</dd>
 
 </dl>
 
-<h3><a class="label" name="8.3">$B#8!%#3(B $BF);kEj1F$9$k(B</a></h3>
+<h3><a class="label" name="8.3">８．３ 透視投影する</a></h3>
 
-<p>$BA0$N%W%m%0%i%`$G$O!"N)J}BN$,2hLL$KJ?9TEj1F$5$l$k$?$a!"(B
-$B@5J}7A$7$+IA$+$J$$$H;W$$$^$9!#(B
-$B$=$3$G8=<B$N%+%a%i$N$h$&$KF);kEj1F$r$7$F$_$^$9!#(B
-$B$3$l$K$O(B glOrtho() $B$NBe$o$j$K(B gluPerspective() $B$r;H$$$^$9!#(B</p>
+<p>前のプログラムでは、立方体が画面に平行投影されるため、
+正方形しか描かないと思います。
+そこで現実のカメラのように透視投影をしてみます。
+これには glOrtho() の代わりに gluPerspective() を使います。</p>
 
-<p>gluPerspective() $B$O:BI8<4$NBe$o$j$K!"(B
-$B%+%a%i$N2h3Q$d%9%/%j!<%s$N%"%9%Z%/%HHf!J=D2#Hf!K$rMQ$$$FI=<(NN0h$r;XDj$7$^$9!#(B
-$B$^$?(B glOrtho() $BF1MM!"A0J}LL$d8eJ}LL$N0LCV$N;XDj$b9T$$$^$9!#(B</p>
+<p>gluPerspective() は座標軸の代わりに、
+カメラの画角やスクリーンのアスペクト比（縦横比）を用いて表示領域を指定します。
+また glOrtho() 同様、前方面や後方面の位置の指定も行います。</p>
 
-<p>$B;kE@$N0LCV$N=i4|CM$O86E@$J$N$G!"(B
-$B$3$N$^$^$G$ON)J}BN$,;kE@$K=E$J$C$F$7$^$$$^$9!#(B
-$B$=$3$G(B glTranslated() $B$r;H$C$FN)J}BN$N0LCV$r>/$71|$K$:$i$7$F$*$-$^$9!#(B</p>
+<p>視点の位置の初期値は原点なので、
+このままでは立方体が視点に重なってしまいます。
+そこで glTranslated() を使って立方体の位置を少し奥にずらしておきます。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int edge[][2] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
@@ -2079,74 +2079,74 @@ void resize(int w, int h)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code><a class="label" name="gluPerspective">gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar)</a></code></dt>
 
-<dd>$BJQ499TNs$KF);kJQ49$N9TNs$r>h$8$^$9!#(B
-$B:G=i$N0z?t(B fovy $B$O%+%a%i$N2h3Q$G$"$j!"EY$GI=$7$^$9!#(B
-$B$3$l$,Bg$-$$$[$I%o%$%I%l%s%:!JF);k$,6/$/$J$j!"3($,>.$5$/$J$j$^$9!K$K$J$j!"(B
-$B>.$5$$$[$IK>1s%l%s%:$K$J$j$^$9!#(B
-$B#2$DL\$N0z?t(B aspect $B$O2hLL$N%"%9%Z%/%HHf!J=D2#Hf!K$G$"$j!"(B
-1 $B$G$"$l$P%S%e!<%]!<%H$KI=<($5$l$k?^7A$N(B
-X $BJ}8~$H(B Y $BJ}8~$N%9%1!<%k$,Ey$7$/$J$j$^$9!#(B
-$B#3$DL\$N0z?t(B zNear $B$H#4$DL\$N0z?t(B zFar $B$OI=<($r9T$&1|9T$-J}8~$NHO0O$G!"(B
-zNear $B$O<jA0!JA0J}LL!K!"(BzFar $B$O8eJ}!J8eJ}LL!K$N0LCV$r<($7$^$9!#(B
-$B$3$N4V$K$"$k?^7A$,IA2h$5$l$^$9!#(B
+<dd>変換行列に透視変換の行列を乗じます。
+最初の引数 fovy はカメラの画角であり、度で表します。
+これが大きいほどワイドレンズ（透視が強くなり、絵が小さくなります）になり、
+小さいほど望遠レンズになります。
+２つ目の引数 aspect は画面のアスペクト比（縦横比）であり、
+1 であればビューポートに表示される図形の
+X 方向と Y 方向のスケールが等しくなります。
+３つ目の引数 zNear と４つ目の引数 zFar は表示を行う奥行き方向の範囲で、
+zNear は手前（前方面）、zFar は後方（後方面）の位置を示します。
+この間にある図形が描画されます。
 <div class="figure"><img src="perspective.gif" width="513" height="161"
-alt="$BF);kJQ49$N;kLn(B"></div>
+alt="透視変換の視野"></div>
 </dd>
 
 <dt><code><a class="label" name="glTranslated">glTranslated(GLdouble x, GLdouble y, GLdouble z)</a></code></dt>
 
-<dd>$BJQ499TNs$KJ?9T0\F0$N9TNs$r>h$8$^$9!#(B
-$B0z?t$O$$$:$l$b(B GLdouble $B7?(B (double $B$HEy2A!K$G!"(B
-$B#3$D$N0z?t(B x, y, z $B$K$O8=:_$N0LCV$+$i$NAjBPE*$J0\F0NL$r;XDj$7$^$9!#(B
-$B0z?t$,(B float $B7?$J$i(B glTranslatef() $B$r;H$$$^$9!#(B</dd>
+<dd>変換行列に平行移動の行列を乗じます。
+引数はいずれも GLdouble 型 (double と等価）で、
+３つの引数 x, y, z には現在の位置からの相対的な移動量を指定します。
+引数が float 型なら glTranslatef() を使います。</dd>
 
 </dl>
 
-<p>$B%&%#%s%I%&$r%j%5%$%:$7$?$H$-$KI=<(?^7A$,$f$,$^$J$$$h$&$K$9$k$?$a$K$O!"(B
-gluPerspective() $B$G@_Dj$9$k%"%9%Z%/%HHf(B aspect $B$r!"(B
+<p>ウィンドウをリサイズしたときに表示図形がゆがまないようにするためには、
+gluPerspective() で設定するアスペクト比 aspect を、
 <a href="#glViewport">glViewport()</a>
-$B$G;XDj$7$?%S%e!<%]!<%H$N=D2#Hf(B (w/h)
-$B$H0lCW$5$;$^$9!#(B</p>
+で指定したビューポートの縦横比 (w/h)
+と一致させます。</p>
 
-<p>$B>e$N%W%m%0%i%`$N$h$&$K!"(B
-$B%j%5%$%:8e$N%&%#%s%I%&$N%5%$%:$r$=$N$^$^%S%e!<%]!<%H$K@_Dj$7$F$$$k>l9g!"(B
-$B2>$K(B aspect $B$,Dj?t$G$"$l$P!"(B
-$B%&%#%s%I%&$N%j%5%$%:$KH<$C$FI=<(?^7A$,?-=L$9$k$h$&$K$J$j$^$9!#$7$?$,$C$F!"(B
-$B%&%#%s%I%&$r%j%5%$%:$7$F$bI=<(?^7A$N=D2#Hf$,JQ$o$i$J$$$h$&$K$9$k$?$a$K!"(B
-$B$3$3$G$O(B aspect $B$r%S%e!<%]!<%H$N=D2#Hf$K@_Dj$7$F$$$^$9!#(B</p>
+<p>上のプログラムのように、
+リサイズ後のウィンドウのサイズをそのままビューポートに設定している場合、
+仮に aspect が定数であれば、
+ウィンドウのリサイズに伴って表示図形が伸縮するようになります。したがって、
+ウィンドウをリサイズしても表示図形の縦横比が変わらないようにするために、
+ここでは aspect をビューポートの縦横比に設定しています。</p>
 
-<h3><a class="label" name="8.4">$B#8!%#4(B $B;kE@$N0LCV$rJQ99$9$k(B</a></h3>
+<h3><a class="label" name="8.4">８．４ 視点の位置を変更する</a></h3>
 
-<p>$BA0$N%W%m%0%i%`$N$h$&$K!"(B
-$B;kE@$N0LCV$r0\F0$9$k$K$O!"?^7A$NJ}$r(B
-glTranslated() $B$d(B glRotated() $B$rMQ$$$F5UJ}8~$K0\F0$9$k$3$H$G<B8=$G$-$^$9!#(B
-$B$7$+$7!";kE@$rG$0U$N0LCV$K;XDj$7$?$$$H$-$K$O(B gluLookAt() $B$r;H$&$HJXMx$G$9!#(B</p>
+<p>前のプログラムのように、
+視点の位置を移動するには、図形の方を
+glTranslated() や glRotated() を用いて逆方向に移動することで実現できます。
+しかし、視点を任意の位置に指定したいときには gluLookAt() を使うと便利です。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int edge[][2] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 void display(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void resize(int w, int h)
@@ -2160,116 +2160,116 @@ void resize(int w, int h)
 
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code>void gluLookAt(GLdouble ex, GLdouble ey, GLdouble ez, GLdouble cx, GLdouble cy, GLdouble cz, GLdouble ux, GLdouble uy, GLdouble uz)</code></dt>
 
-<dd>$B$3$N:G=i$N#3$D$N0z?t(B ex, ey, ez $B$O;kE@$N0LCV!"(B
-$B<!$N#3$D$N0z?t(B cx, cy, cz $B$OL\I8$N0LCV!"(B
-$B:G8e$N#3$D$N0z?t(B ux, uy, uz $B$O!"(B
-$B%&%#%s%I%&$KI=<($5$l$k2hA|$N!V>e!W$NJ}8~$r<($9%Y%/%H%k$G$9!#(B</dd>
+<dd>この最初の３つの引数 ex, ey, ez は視点の位置、
+次の３つの引数 cx, cy, cz は目標の位置、
+最後の３つの引数 ux, uy, uz は、
+ウィンドウに表示される画像の「上」の方向を示すベクトルです。</dd>
 
 </dl>
 
-<p>$B$3$NNc$G$O(B (3,4,5) $B$N0LCV$+$i86E@(B (0,0,0) $B$rD/$a$^$9$+$i!"(B
-$BN)J}BN$N(B A (0,0,0) $B$ND:E@$,%&%#%s%I%&$NCf?4$KMh$k$H;W$$$^$9!#(B</p>
+<p>この例では (3,4,5) の位置から原点 (0,0,0) を眺めますから、
+立方体の A (0,0,0) の頂点がウィンドウの中心に来ると思います。</p>
 
-<p>$B$J$*!"(BgluPerspective(), gluLookAt() $BEy!"(B
-glu*() $B$G;O$^$k4X?t$O(B GL Utility $B%i%$%V%i%j(B (-lGLU) $B$N4X?t$G$9!#(B</p>
+<p>なお、gluPerspective(), gluLookAt() 等、
+glu*() で始まる関数は GL Utility ライブラリ (-lGLU) の関数です。</p>
 
-<h2><a class="label" name="9">$B#9!%%"%K%a!<%7%g%s(B</a></h2>
+<h2><a class="label" name="9">９．アニメーション</a></h2>
 
-<h3><a class="label" name="9.1">$B#9!%#1(B $B?^7A$rF0$+$9(B</a></h3>
+<h3><a class="label" name="9.1">９．１ 図形を動かす</a></h3>
 
-<p>$B$3$3$^$G$G$-$?$i!":#EY$O$3$NN)J}BN$r2s$7$F$_$^$7$g$&!#(B
-$B$=$l$K$O$A$g$C$H9)IW$,I,MW$G$9!#%"%K%a!<%7%g%s$r9T$&$K$O!"(B
-$BIQHK$K2hLL$N=q$-49$($r9T$&I,MW$,$"$j$^$9!#(B
-$B$7$+$7(B glutMailLoop() $B$OL58B%k!<%W$G$"$j!"(B
-glutDisplayFunc() $B$G;XDj$5$l$?4X?t$O!"(B
-$B%&%#%s%I%&$r:FIA2h$9$k%$%Y%s%H$,H/@8$7$?$H$-$K$7$+8F$S=P$5$l$^$;$s!#(B</p>
+<p>ここまでできたら、今度はこの立方体を回してみましょう。
+それにはちょっと工夫が必要です。アニメーションを行うには、
+頻繁に画面の書き換えを行う必要があります。
+しかし glutMailLoop() は無限ループであり、
+glutDisplayFunc() で指定された関数は、
+ウィンドウを再描画するイベントが発生したときにしか呼び出されません。</p>
 
-<p>$B$7$?$,$C$F%"%K%a!<%7%g%s$r<B8=$9$k$K$O!"(B
-$B$3$N%&%#%s%I%&$N:FIA2h%$%Y%s%H$rO"B3E*$KH/@8$5$;$kI,MW$,$"$j$^$9!#(B
-$B%W%m%0%i%`Cf$G%&%#%s%I%&$N:FIA2h%$%Y%s%H$rH/@8$5$;$k$K$O!"(B
-glutPostRedisplay() $B4X?t$rMQ$$$^$9!#(B
-$B$3$l$r%W%m%0%i%`$,!V2K$J$H$-!W$K7+$jJV$78F$S=P$9$3$H$G!"(B
-$B%"%K%a!<%7%g%s$,<B8=$G$-$^$9!#(B
-$B%W%m%0%i%`$,2K$K$J$C$?$H$-$K<B9T$9$k4X?t$O!"(B
-glutIdleFunc() $B$G;XDj$7$^$9!#(B</p>
+<p>したがってアニメーションを実現するには、
+このウィンドウの再描画イベントを連続的に発生させる必要があります。
+プログラム中でウィンドウの再描画イベントを発生させるには、
+glutPostRedisplay() 関数を用います。
+これをプログラムが「暇なとき」に繰り返し呼び出すことで、
+アニメーションが実現できます。
+プログラムが暇になったときに実行する関数は、
+glutIdleFunc() で指定します。</p>
 
-<p><a class="label" name="viewpipe">$B0l$DCm0U$7$J$1$l$P$$$1$J$$$3$H$,$"$j$^$9!#(B</a>
-$B7+$jJV$7IA2h$r9T$&$K$O!"(B
-$BIA2h$NEY$K:BI8JQ49$N9TNs$r@_Dj$9$kI,MW$,$"$j$^$9!#(B</p>
+<p><a class="label" name="viewpipe">一つ注意しなければいけないことがあります。</a>
+繰り返し描画を行うには、
+描画の度に座標変換の行列を設定する必要があります。</p>
 
-<p>$B$H$3$m$G:BI8JQ49$N%W%m%;%9$O!"(B</p>
+<p>ところで座標変換のプロセスは、</p>
 
 <ol>
-<li>$B?^7A$N6u4VCf$G$N0LCV$r7h$a$k!V%b%G%j%s%0JQ49!W(B</li>
-<li>$B$=$N6u4V$r;kE@$+$i8+$?6u4V$KD>$9!V%S%e!<%$%s%0!J;kLn!KJQ49!W(B</li>
-<li>$B$=$N6u4V$r%3%s%T%e!<%?Fb$N6u4V$K$"$k%9%/%j!<%s$KEj1F$9$k!VF);kJQ49!W(B</li>
-<li>$B%9%/%j!<%s>e$N?^7A$r%G%#%9%W%l%$>e$NI=<(NN0h$K@Z$j=P$9!V%S%e!<%]!<%HJQ49!W(B</li>
+<li>図形の空間中での位置を決める「モデリング変換」</li>
+<li>その空間を視点から見た空間に直す「ビューイング（視野）変換」</li>
+<li>その空間をコンピュータ内の空間にあるスクリーンに投影する「透視変換」</li>
+<li>スクリーン上の図形をディスプレイ上の表示領域に切り出す「ビューポート変換」</li>
 </ol>
 
-<p>$B$H$$$&#4$D$N%9%F%C%W$G9T$o$l$^$9!#(B
-$B:#9T$*$&$H$7$F$$$k?^7A$r2s$9$H$$$&JQ49$O!"(B
-$B!V%b%G%j%s%0JQ49!W$KAjEv$7$^$9!#(B</p>
+<p>という４つのステップで行われます。
+今行おうとしている図形を回すという変換は、
+「モデリング変換」に相当します。</p>
 
-<p>$B$3$l$^$G$O$3$l$i$r6hJL(B $B$;$:$K<h$j07$C$F$-$^$7$?!#(B
-$B$9$J$o$A!"$3$l$i$NEj1F$r9T$&9TNs<0$r3]$19g$o$;$k$3$H$G!"(B
-$BC10l$N9TNs<0$H$7$F<h$j07$C$F$-$?$N$G$9!#(B</p>
+<p>これまではこれらを区別 せずに取り扱ってきました。
+すなわち、これらの投影を行う行列式を掛け合わせることで、
+単一の行列式として取り扱ってきたのです。</p>
 
-<p>$B$7$+$7?^7A$@$1$rF0$+$9>l9g$O!"(B
-$B%b%G%j%s%0JQ49$N9TNs$@$1$rJQ99$9$l$P$$$$$3$H$K$J$j$^$9!#(B
-$B$^$?!"8e$G=R$Y$k(B<a href="#11">$B1"1FIU$1(B</a>$B$O!"(B
-$BF);kJQ49$r9T$&A0$N:BI87O$G7W;;$9$kI,MW$,$"$j$^$9!#(B</p>
+<p>しかし図形だけを動かす場合は、
+モデリング変換の行列だけを変更すればいいことになります。
+また、後で述べる<a href="#11">陰影付け</a>は、
+透視変換を行う前の座標系で計算する必要があります。</p>
 
-<p>$B$=$3$G(B OpenGL $B$G$O!"(B
-$B!V%b%G%j%s%0JQ49!]%S%e!<%$%s%0JQ49!W$NJQ499TNs!J%b%G%k%S%e!<JQ499TNs!K$H!"(B
-$B!VF);kJQ49!W$NJQ499TNs$rFHN)$7$F<h$j07$&<jCJ$,Ds6!$5$l$F$$$^$9!#(B
-$B%b%G%k%S%e!<JQ499TNs$r@_Dj$9$k>l9g$O(B
- glMatrixMode(GL_MODELVIEW)$B!"(B
-$BF);kJQ499TNs$r@_Dj$9$k>l9g$O(B glMatrixMode(GL_PROJECTION) $B$r<B9T$7$^$9!#(B</p>
+<p>そこで OpenGL では、
+「モデリング変換−ビューイング変換」の変換行列（モデルビュー変換行列）と、
+「透視変換」の変換行列を独立して取り扱う手段が提供されています。
+モデルビュー変換行列を設定する場合は
+ glMatrixMode(GL_MODELVIEW)、
+透視変換行列を設定する場合は glMatrixMode(GL_PROJECTION) を実行します。</p>
 
-<p>$B%+%a%i$N2h3Q$J$I$N%Q%i%a!<%?$rJQ99$7$J$1$l$P!"(B
-$BF);kJQ499TNs$r@_Dj$7$J$1$l$P$J$i$J$$$N$O%&%#%s%I%&$r3+$$$?$H$-$@$1$J$N$G!"(B
-$B$3$l$O(B resize() $B$G@_Dj$9$l$P$h$$$G$7$g$&!#(B
-$B$"$H$OA4$F%b%G%j%s%0!]%S%e!<%$%s%0JQ499TNs$KBP$9$kA`:n$J$N$G!"(B
-$BD>8e$K(B glMatrixMode(GL_MODELVIEW) $B$r<B9T$7$^$9!#(B</p>
+<p>カメラの画角などのパラメータを変更しなければ、
+透視変換行列を設定しなければならないのはウィンドウを開いたときだけなので、
+これは resize() で設定すればよいでしょう。
+あとは全てモデリング−ビューイング変換行列に対する操作なので、
+直後に glMatrixMode(GL_MODELVIEW) を実行します。</p>
 
-<p>$B%+%a%i!J;kE@!K$N0LCV$rF0$+$9%"%K%a!<%7%g%s$r9T$&>l9g$O!"(B
-$BIA2h$N$?$S$K(B gluLookAt() $B$K$h$k%+%a%i$N0LCV$dJ}8~$N@_Dj(B
-$B!J%S%e!<%$%s%0JQ499TNs$N@_Dj!K(B
-$B$r9T$&I,MW$,$"$j$^$9!#(B
-$BF1MM$KJ*BN$,0\F0$7$?$j2sE>$7$?$j$9$k%"%K%a!<%7%g%s$r9T$&>l9g$b!"(B
-$BIA2h$N$?$S$KJ*BN$N0LCV$d2sE>3Q$N@_Dj!J%b%G%j%s%0JQ499TNs$N@_Dj!K$r(B
-$B9T$&I,MW$,$"$j$^$9!#(B
-$B$7$?$,$C$F!"$3$l$i$O(B display() $B$NCf$G@_Dj$7$^$9!#(B</p>
+<p>カメラ（視点）の位置を動かすアニメーションを行う場合は、
+描画のたびに gluLookAt() によるカメラの位置や方向の設定
+（ビューイング変換行列の設定）
+を行う必要があります。
+同様に物体が移動したり回転したりするアニメーションを行う場合も、
+描画のたびに物体の位置や回転角の設定（モデリング変換行列の設定）を
+行う必要があります。
+したがって、これらは display() の中で設定します。</p>
 
-<p>$B%^%&%9$N:8%\%?%s$r%/%j%C%/$9$kEY$K!"(B
-$BN)J}BN$,#12sE>$9$k$h$&$K$7$^$9!#(B
-$B$D$$$G$KCf1{%\%?%s$r%/%j%C%/$9$k$HN)J}BN$,#1%9%F%C%W$@$12sE>$7(B
-$B!J(B<a href="http://www.d4.dion.ne.jp/~sekiya_z/">$B4XC+@h@8(B</a>
-$B$"$j$,$H$&$4$6$$$^$7$?!K!"(B
-$B1&%\%?%s$r%/%j%C%/$9$k$H%W%m%0%i%`$,=*N;$9$k$h$&$K$7$^$9!#(B
-prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>マウスの左ボタンをクリックする度に、
+立方体が１回転するようにします。
+ついでに中央ボタンをクリックすると立方体が１ステップだけ回転し
+（<a href="http://www.d4.dion.ne.jp/~sekiya_z/">関谷先生</a>
+ありがとうございました）、
+右ボタンをクリックするとプログラムが終了するようにします。
+prog2.c を以下のように変更してください。</p>
 
 <pre class="source"><em>#include &lt;stdlib.h&gt;</em>
 #include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int edge[][2] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 <em>void idle(void)
@@ -2280,19 +2280,19 @@ int edge[][2] = {
 void display(void)
 {
   int i;
-  <em>static int r = 0; /* $B2sE>3Q(B */</em>
+  <em>static int r = 0; /* 回転角 */</em>
 
   glClear(GL_COLOR_BUFFER_BIT);
 
   <em>glLoadIdentity();</em>
 
-  <em>/* $B;kE@0LCV$H;k@~J}8~(B */</em>
+  <em>/* 視点位置と視線方向 */</em>
   <em>gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);</em>
 
-  <em>/* $B?^7A$N2sE>(B */</em>
+  <em>/* 図形の回転 */</em>
   <em>glRotated((double)r, 0.0, 1.0, 0.0);</em>
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glColor3d(0.0, 0.0, 0.0);
   glBegin(GL_LINES);
   for (i = 0; i &lt; 12; i++) {
@@ -2303,11 +2303,11 @@ void display(void)
 
   glFlush();
 
-<em>  /* $B2sE>$N@)8f(B */
+<em>  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2318,12 +2318,12 @@ void resize(int w, int h)
 {
   glViewport(0, 0, w, h);
 
-  <em>/* $BF);kJQ499TNs$N@_Dj(B */</em>
+  <em>/* 透視変換行列の設定 */</em>
   <em>glMatrixMode(GL_PROJECTION);</em>
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  <em>/* $B%b%G%k%S%e!<JQ499TNs$N@_Dj(B */</em>
+  <em>/* モデルビュー変換行列の設定 */</em>
   <em>glMatrixMode(GL_MODELVIEW);</em>
 }
 
@@ -2331,20 +2331,20 @@ void resize(int w, int h)
 {
   switch (button) {
   case GLUT_LEFT_BUTTON:
-    /* $B%"%K%a!<%7%g%s3+;O(B */
+    /* アニメーション開始 */
     if (state == GLUT_UP) glutIdleFunc(idle);
     break;
   case GLUT_MIDDLE_BUTTON:
-    /* $B%3%^Aw$j(B */
+    /* コマ送り */
     if (state == GLUT_UP) {
-        /* $BI=<(%$%Y%s%H$NL58B%k!<%W$r;_$a$k(B */
+        /* 表示イベントの無限ループを止める */
         glutIdleFunc(0);
-        /* $B#1%9%F%C%W$@$1?J$a$k(B */
+        /* １ステップだけ進める */
         glutPostRedisplay();
     }
     break;
   case GLUT_RIGHT_BUTTON:
-    /* $B%W%m%0%i%`=*N;(B */
+    /* プログラム終了 */
     if (state == GLUT_UP) exit(0);
     break;
   default:
@@ -2354,7 +2354,7 @@ void resize(int w, int h)
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -2374,95 +2374,95 @@ int main(int argc, char *argv[])
 
 <dt><code>int glutLayerGet(GLenum info)</code></dt>
 
-<dd><a href="#glClear">glClear()</a>$B$N2r@b$G$b=R$Y$^$7$?$,!"(B
-$B0l$D$N%&%#%s%I%&$O4v$D$+$N%a%b%j$,AX!J%l%$%d!K>u$K=E$J$C$F9=@.$5$l$F$$$^$9!#(B
-$B$3$N4X?t$O=hM}BP>]$N%&%#%s%I%&$N4X78$9$k%l%$%d$N>uBV$rD4$Y$^$9!#(B
-$B0z?t(B info $B$K(B GLUT_NORMAL_DAMAGED $B$r;XDj$9$k$H!"(B
-$B$=$N%&%#%s%I%&$NI=<($,2u$5$l$F$$$k(B
-$B!JB>$N%&%#%s%I%&$K1#$5$l$?$"$H:FI=<($5$l$?$J$I!K>l9g$K!"(B
-$BLa$jCM$,??!JHs#0!K$K$J$j$^$9!#(B
-display() $B$,<B9T$5$l$?$H$-$N:FI=<(%$%Y%s%H$K$O!"(B
+<dd><a href="#glClear">glClear()</a>の解説でも述べましたが、
+一つのウィンドウは幾つかのメモリが層（レイヤ）状に重なって構成されています。
+この関数は処理対象のウィンドウの関係するレイヤの状態を調べます。
+引数 info に GLUT_NORMAL_DAMAGED を指定すると、
+そのウィンドウの表示が壊されている
+（他のウィンドウに隠されたあと再表示されたなど）場合に、
+戻り値が真（非０）になります。
+display() が実行されたときの再表示イベントには、
 glutPostRedisplay()
-$B$K$h$k$b$N$H%&%#%s%I%&%^%M!<%8%c$+$i$NK\Ev$N:FI=<(%$%Y%s%H$,$"$j$^$9$+$i!"(B
-$B$3$l$i$r6hJL$9$k$?$a$K$3$N4X?t$r;HMQ$7$F$$$^$9!#(B</dd>
+によるものとウィンドウマネージャからの本当の再表示イベントがありますから、
+これらを区別するためにこの関数を使用しています。</dd>
 
 <dt><code>void glutPostRedisplay(void)</code></dt>
 
-<dd>$B:FIA2h%$%Y%s%H$rH/@8$5$;$^$9!#(B
-$B$3$N%$%Y%s%H$NH/@8$,H/@8$9$k$H!"(B
+<dd>再描画イベントを発生させます。
+このイベントの発生が発生すると、
 glutDisplayFunc()
-$B$G;XDj$5$l$F$$$kIA2h4X?t$,<B9T$5$l$^$9!#(B
-$B$J$*!":FIA2h$,3+;O$5$l$k$^$G$N4V$K$3$N%$%Y%s%H$,J#?t2sH/@8$7$F$b!"(B
-$B$3$NIA2h4X?t$O#1EY$@$1<B9T$5$l$^$9!#(B
-$B$^$?!"$3$N4X?t$K$h$C$FH/@8$7$?:FIA2h%$%Y%s%H$G$O!"(B
-glutLayerGet(GLUT_NORMAL_DAMAGED) $B$O??$K$J$j$^$;$s!#(B</dd>
+で指定されている描画関数が実行されます。
+なお、再描画が開始されるまでの間にこのイベントが複数回発生しても、
+この描画関数は１度だけ実行されます。
+また、この関数によって発生した再描画イベントでは、
+glutLayerGet(GLUT_NORMAL_DAMAGED) は真になりません。</dd>
 
 <dt><code>void glutIdleFunc(void (*func)(void))</code></dt>
 
-<dd>$B0z?t(B func $B$K$O!"(B
-$B%W%m%0%i%`$,!V2?$b$9$k$3$H$,$J$$!W$H$-$K<B9T$9$k4X?t$N%]%$%s%?$r;XDj$7$^$9!#(B
-$B0z?t$N4X?t$O%W%m%0%i%`$,!V2K$J$H$-!W$K7+$jJV$7<B9T$5$l$^$9!#(B
-$B$3$N4X?t$r;XDj$9$k$H!"(B
-$B%W%m%0%i%`$,;_$^$C$F$$$k$h$&$K8+$($F$b%3%s%T%e!<%?$NIi2Y$OA}Bg$7$^$9!#(B
-$B$7$?$,$C$F(B glutIdleFunc() $B$K$h$k4X?t$N;XDj$OI,MW$K$J$C$?;~E@$G9T$$!"(B
-$BITMW$K$J$l$P(B glutIdleFunc() $B$N0z?t$K(B 0 $B$^$?$O(B NULL
-$B$r;XDj$7$F4X?t$N;XDj$r2r=|$7$F$d$kI,MW$,$"$j$^$9!#(B</dd>
+<dd>引数 func には、
+プログラムが「何もすることがない」ときに実行する関数のポインタを指定します。
+引数の関数はプログラムが「暇なとき」に繰り返し実行されます。
+この関数を指定すると、
+プログラムが止まっているように見えてもコンピュータの負荷は増大します。
+したがって glutIdleFunc() による関数の指定は必要になった時点で行い、
+不要になれば glutIdleFunc() の引数に 0 または NULL
+を指定して関数の指定を解除してやる必要があります。</dd>
 
 <dt><code>void glMatrixMode(GLenum mode)</code></dt>
 
-<dd>$B@_Dj$9$kJQ499TNs$r;XDj$7$^$9!#(B
-$B0z?t(B mode $B$,(B GL_MODELVIEW $B$J$i%b%G%k%S%e!<JQ499TNs!"(B
-GL_PROJECTION $B$J$iF);kJQ499TNs$r;XDj$7$^$9!#(B</dd>
+<dd>設定する変換行列を指定します。
+引数 mode が GL_MODELVIEW ならモデルビュー変換行列、
+GL_PROJECTION なら透視変換行列を指定します。</dd>
 
 </dl>
 
-<h3><a class="label" name="9.2">$B#9!%#2(B $B%@%V%k%P%C%U%!%j%s%0(B</a></h3>
+<h3><a class="label" name="9.2">９．２ ダブルバッファリング</a></h3>
 
-<p>$BA0$N%W%m%0%i%`$G$OKh2s2hLL$rA4ItIA$-49$($F$$$k$?$a!"(B
-$BI=<($,$A$i$D$$$F$7$^$$$^$9!#(B
-$B$3$l$rKI$0$?$a$K$O!"%@%V%k%P%C%U%!%j%s%0$H$$$&J}K!$rMQ$$$^$9!#(B
-$B$3$l$O2hLL$r#2$D$KJ,$1!"(B
-$B0lJ}$rI=<($7$F$$$k4V$K!J8+$($J$$$H$3$m$G!K$b$&0lJ}$K?^7A$rIA$-!"(B
-$B$=$l$,40N;$7$?$i$3$N#2$D$N2hLL$rF~$l49$($kJ}K!$G$9!#(B</p>
+<p>前のプログラムでは毎回画面を全部描き換えているため、
+表示がちらついてしまいます。
+これを防ぐためには、ダブルバッファリングという方法を用います。
+これは画面を２つに分け、
+一方を表示している間に（見えないところで）もう一方に図形を描き、
+それが完了したらこの２つの画面を入れ換える方法です。</p>
 
-<p>GLUT $B$G%@%V%k%P%C%U%!%j%s%0$r;H$&$K$O!"(B
-glutInitDisplayMode() $B$K(B GLUT_DOUBLE $B$N;XDj$rDI2C$7$^$9!#(B
-$B$^$?!"?^7A$NIA2h8e(B glFlush() $B$NBe$o$j$K(B glutSwapBuffers()
-$B$r8F$S=P$7$F!"#2$D$N2hLL$NF~$l49$($r9T$$$^$9!#(B</p>
+<p>GLUT でダブルバッファリングを使うには、
+glutInitDisplayMode() に GLUT_DOUBLE の指定を追加します。
+また、図形の描画後 glFlush() の代わりに glutSwapBuffers()
+を呼び出して、２つの画面の入れ換えを行います。</p>
 
-<p>$B$=$l$G$O!"(Bprog2.c $B$G%@%V%k%P%C%U%!%j%s%0$r9T$&$h$&$K$7$F$_$^$7$g$&!#(B</p>
+<p>それでは、prog2.c でダブルバッファリングを行うようにしてみましょう。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int edge[][2] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glColor3d(0.0, 0.0, 0.0);
   glBegin(GL_LINES);
   for (i = 0; i &lt; 12; i++) {
@@ -2473,11 +2473,11 @@ void display(void)
 
   <em>glutSwapBuffers();</em>
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2486,17 +2486,17 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
@@ -2516,41 +2516,41 @@ int main(int argc, char *argv[])
 
 <dt><code>int glutSwapBuffers(void)</code></dt>
 
-<dd>$B%@%V%k%P%C%U%!%j%s%0$N#2$D$N%P%C%U%!$r8r49$7$^$9!#(B
-glFlush() $B$O<+F0E*$K<B9T$5$l$^$9!#(B
-$B$3$N%W%m%0%i%`$G$3$l$r;H$&$H$:$$$V$sCY$/$J$k$h$&$K8+$($^$9$,!"(B
-$B$3$l$O%G%#%9%W%l%$$N%P%C%U%!$N8r49$N;~$N$A$i$D$-$rKI$0$?$a$K!"(B
-$B%G%#%9%W%l%$$NI=<(%?%$%_%s%0!J5"@~>C5n4|4V!K$rBT$C$F$$$k$?$a$G$9!#(B
-$B%G%#%9%W%l%$$N%j%U%l%C%7%e%l!<%H$,(B 60Hz $B$G$"$l$P!"(B
-$B%P%C%U%!$N8r49$O(B 1/60 $BIC$4$H$K9T$o$l$^$9!#(B
-$B$3$N%W%m%0%i%`$O0l<~$G(B 360 $B2s:FI=<($r9T$$$^$9$+$i!"(B
-$B$3$N>l9g0l<~$9$k$N$K:GC;$G$b(B 6 $BIC$+$+$k$3$H$K$J$j$^$9!#(B</dd>
+<dd>ダブルバッファリングの２つのバッファを交換します。
+glFlush() は自動的に実行されます。
+このプログラムでこれを使うとずいぶん遅くなるように見えますが、
+これはディスプレイのバッファの交換の時のちらつきを防ぐために、
+ディスプレイの表示タイミング（帰線消去期間）を待っているためです。
+ディスプレイのリフレッシュレートが 60Hz であれば、
+バッファの交換は 1/60 秒ごとに行われます。
+このプログラムは一周で 360 回再表示を行いますから、
+この場合一周するのに最短でも 6 秒かかることになります。</dd>
 
 </dl>
 
-<h2><a class="label" name="10">$B#1#0!%1#LL>C5n(B</a></h2>
+<h2><a class="label" name="10">１０．隠面消去</a></h2>
 
-<h3><a class="label" name="10.1">$B#1#0!%#1(B $BB?LLBN$r$L$j$D$V$9(B</a></h3>
+<h3><a class="label" name="10.1">１０．１ 多面体をぬりつぶす</a></h3>
 
-<p>$B$=$l$G$O!"<!$KN)J}BN$NLL$rEI$j$D$V$7$F$_$^$7$g$&!#(B
-$BLL$N%G!<%?$O!"NG@~$H$OJL$K0J2<$N$h$&$KMQ0U$7$^$9!#(B</p>
+<p>それでは、次に立方体の面を塗りつぶしてみましょう。
+面のデータは、稜線とは別に以下のように用意します。</p>
 
 <pre class="source">int face[][4] = {
-  { 0, 1, 2, 3 }, /* A-B-C-D $B$r7k$VLL(B */
-  { 1, 5, 6, 2 }, /* B-F-G-C $B$r7k$VLL(B */
-  { 5, 4, 7, 6 }, /* F-E-H-G $B$r7k$VLL(B */
-  { 4, 0, 3, 7 }, /* E-A-D-H $B$r7k$VLL(B */
-  { 4, 5, 1, 0 }, /* E-F-B-A $B$r7k$VLL(B */
-  { 3, 2, 6, 7 }  /* D-C-G-H $B$r7k$VLL(B */
+  { 0, 1, 2, 3 }, /* A-B-C-D を結ぶ面 */
+  { 1, 5, 6, 2 }, /* B-F-G-C を結ぶ面 */
+  { 5, 4, 7, 6 }, /* F-E-H-G を結ぶ面 */
+  { 4, 0, 3, 7 }, /* E-A-D-H を結ぶ面 */
+  { 4, 5, 1, 0 }, /* E-F-B-A を結ぶ面 */
+  { 3, 2, 6, 7 }  /* D-C-G-H を結ぶ面 */
 };</pre>
 
-<p>$B$3$N%G!<%?$r;H$C$F!"@~$r0z$/Be$o$j$K#6Kg$N#43Q7A$rIA$-$^$9!#(B
-prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>このデータを使って、線を引く代わりに６枚の４角形を描きます。
+prog2.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 <em>int face[][4] = {
@@ -2564,26 +2564,26 @@ GLdouble vertex[][3] = {
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   <em>int j;</em>
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glColor3d(0.0, 0.0, 0.0);
   <em>glBegin(GL_QUADS);</em>
   <em>for (j = 0; j &lt; 6; j++) {</em>
@@ -2595,11 +2595,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2608,47 +2608,47 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$B$G$b$3$l$@$H??$C9u$G2?$b$o$+$i$J$$$N$G!"(B
-$BLL$4$H$K?'$rJQ$($F$_$^$7$g$&!#(B
-$B?'$N%G!<%?$O0J2<$N$h$&$K:n$C$F$_$^$9!#(B</p>
+<p>でもこれだと真っ黒で何もわからないので、
+面ごとに色を変えてみましょう。
+色のデータは以下のように作ってみます。</p>
 
 <pre class="source">GLdouble color[][3] = {
-  { 1.0, 0.0, 0.0 }, /* $B@V(B */
-  { 0.0, 1.0, 0.0 }, /* $BNP(B */
-  { 0.0, 0.0, 1.0 }, /* $B@D(B */
-  { 1.0, 1.0, 0.0 }, /* $B2+(B */
-  { 1.0, 0.0, 1.0 }, /* $B%^%<%s%?(B */
-  { 0.0, 1.0, 1.0 }  /* $B%7%"%s(B $B!!(B*/
+  { 1.0, 0.0, 0.0 }, /* 赤 */
+  { 0.0, 1.0, 0.0 }, /* 緑 */
+  { 0.0, 0.0, 1.0 }, /* 青 */
+  { 1.0, 1.0, 0.0 }, /* 黄 */
+  { 1.0, 0.0, 1.0 }, /* マゼンタ */
+  { 0.0, 1.0, 1.0 }  /* シアン 　*/
 };</pre>
 
-<p>$B0l$D$NLL$rIA$/EY$K!"$3$N?'$r@_Dj$7$F$d$j$^$9!#(B</p>
+<p>一つの面を描く度に、この色を設定してやります。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 <em>GLdouble color[][3] = {
@@ -2662,26 +2662,26 @@ int face[][4] = {
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     <em>glColor3dv(color[j]);</em>
@@ -2693,11 +2693,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2706,92 +2706,92 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code><a class="label" name="glColor3dv">void glColor3dv(const GLdouble *v)</a></code></dt>
 
-<dd>glColor3dv() $B$O(B <a href="#glColor3d">glColor3d()</a>
-$B$HF1MM$K$3$l$+$iIA2h$9$k$b$N$N?'$r;XDj$7$^$9!#(B
-$B0z?t(B v $B$O#3$D$NMWAG$r;}$C$?(B GLdouble $B7?!J(Bdouble $B$HEy2A!K$NG[Ns$G!"(B
-v[0] $B$K$O@V(B (R)$B!"(Bv[1] $B$K$ONP(B (G)$B!"(Bv[2] $B$K$O@D(B (B) $B$N6/$5$r!"(B
-0$B!A(B1 $B$NHO0O$G;XDj$7$^$9!#(B</dd>
+<dd>glColor3dv() は <a href="#glColor3d">glColor3d()</a>
+と同様にこれから描画するものの色を指定します。
+引数 v は３つの要素を持った GLdouble 型（double と等価）の配列で、
+v[0] には赤 (R)、v[1] には緑 (G)、v[2] には青 (B) の強さを、
+0〜1 の範囲で指定します。</dd>
 
 </dl>
 
-<p>$B$G$b$3$l$@$H$J$s$+JQ$JI=<($K$J$k$+$b$7$l$^$;$s!#(B
-$BA0$N%W%m%0%i%`$G$O%G!<%?$N=gHV$GLL$rIA$$$F$$$^$9$+$i!"(B
-$B@h$KIA$$$?$b$N$,8e$KIA$$$?$b$N$GEI$j$D$V$5$l$F$7$^$$$^$9!#(B
-$B$A$c$s$H$7$?N)BN$rIA$/$K$O1#LL>C5n$r9T$&I,MW$,$"$j$^$9!#(B</p>
+<p>でもこれだとなんか変な表示になるかもしれません。
+前のプログラムではデータの順番で面を描いていますから、
+先に描いたものが後に描いたもので塗りつぶされてしまいます。
+ちゃんとした立体を描くには隠面消去を行う必要があります。</p>
 
-<h3><a class="label" name="10.2">$B#1#0!%#2(B $B%G%W%9%P%C%U%!$r;HMQ$9$k(B</a></h3>
+<h3><a class="label" name="10.2">１０．２ デプスバッファを使用する</a></h3>
 
-<p>$B1#LL>C5n$r9T$J$&$K$O(B
-glutInitDisplayMode() $B$G(B GLUT_DEPTH $B$r;XDj$7$F$*$-!"(B
-glEnable(GL_DEPTH_TEST) $B$r<B9T$7$^$9!#(B</p>
+<p>隠面消去を行なうには
+glutInitDisplayMode() で GLUT_DEPTH を指定しておき、
+glEnable(GL_DEPTH_TEST) を実行します。</p>
 
-<p>$B$3$&$9$k$H!"IA2h$N$H$-$K(B Z $B%P%C%U%!!J%G%W%9%P%C%U%!!K$r;H$&$h$&$K$J$j$^$9!#(B
-$B$7$?$,$C$F!"2hLL$r>C5n$9$k$H$-$O(B Z $B%P%C%U%!$b>C5n$9$kI,MW$,$"$j$^$9!#(B
-$B$=$l$K$O(B glClear() $B$G(B GL_DEPTH_BUFFER_BIT $B$r;XDj$7$^$9!#(B</p>
+<p>こうすると、描画のときに Z バッファ（デプスバッファ）を使うようになります。
+したがって、画面を消去するときは Z バッファも消去する必要があります。
+それには glClear() で GL_DEPTH_BUFFER_BIT を指定します。</p>
 
-<p>Z $B%P%C%U%!$r;H$&$H!";H$o$J$$$H$-$h$j=hM}B.EY$,Dc2<$7$^$9!#(B
-$B$=$3$G!"I,MW$J$H$-$@$1(B Z $B%P%C%U%!$r;H$&$h$&$K$7$^$9!#(B
-Z $B%P%C%U%!$r;H$&=hM}$NA0$G(B glEnable(GL_DEPTH_TEST) $B$r<B9T$7!"(B
-$B;H$$=*$o$C$?$i(B glDisable(GL_DEPTH_TEST) $B$r<B9T$7$^$9!#(B</p>
+<p>Z バッファを使うと、使わないときより処理速度が低下します。
+そこで、必要なときだけ Z バッファを使うようにします。
+Z バッファを使う処理の前で glEnable(GL_DEPTH_TEST) を実行し、
+使い終わったら glDisable(GL_DEPTH_TEST) を実行します。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble color[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT <em>| GL_DEPTH_BUFFER_BIT</em>);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     glColor3dv(color[j]);
@@ -2803,11 +2803,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2816,12 +2816,12 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
@@ -2844,65 +2844,65 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p><a class="label" name="depthtest">$B>e$N%W%m%0%i%`$G$O>o$K(B Z</a>
-$B%P%C%U%!$r;H$&$N$G!"(Binit() $B$NCf$G(B glEnable(GL_DEPTH_TEST)
-$B$r0lEY$@$1<B9T$7!"(BglDisable(GL_DEPTH_TEST)
-$B$N<B9T$r>JN,$7$F$$$^$9!#(B</p>
+<p><a class="label" name="depthtest">上のプログラムでは常に Z</a>
+バッファを使うので、init() の中で glEnable(GL_DEPTH_TEST)
+を一度だけ実行し、glDisable(GL_DEPTH_TEST)
+の実行を省略しています。</p>
 
-<h3><a class="label" name="10.3">$B#1#0!%#3(B $B%+%j%s%0(B</a></h3>
+<h3><a class="label" name="10.3">１０．３ カリング</a></h3>
 
-<p>$BN)J}BN$N$h$&$KJD$8$?N)BN$N>l9g!"N"B&$K$"$kLL!"(B
-$B$9$J$o$A;kE@$KBP$7$FN"$r8~$$$F$$$kLL$O8+$k$3$H$O$G$-$^$;$s!#(B
-$B$=$&$$$&LL$r$"$i$+$8$a<h$j=|$$$F$*$/$3$H$G!"(B
-$B1#LL>C5n=hM}$N8zN($r>e$2$k$3$H$,$G$-$^$9!#(B</p>
+<p>立方体のように閉じた立体の場合、裏側にある面、
+すなわち視点に対して裏を向いている面は見ることはできません。
+そういう面をあらかじめ取り除いておくことで、
+隠面消去処理の効率を上げることができます。</p>
 
-<p>$B;kE@$KBP$7$FN"$r8~$$$F$$$kLL$rI=<($7$J$$$h$&$K$9$k$K$O(B
-glCullFace(GL_BACK)$B!"(B
-$BI=$r8~$$$F$$$kLL$rI=<($7$J$$$h$&$K$9$k$K$O(B
-glCullFace(GL_FRONT)$B!"(B
-$BN>J}$H$bI=<($7$J$$$h$&$K$9$k$K$O(B
+<p>視点に対して裏を向いている面を表示しないようにするには
+glCullFace(GL_BACK)、
+表を向いている面を表示しないようにするには
+glCullFace(GL_FRONT)、
+両方とも表示しないようにするには
 glCullFace(GL_FRONT_AND_BACK)
-$B$r<B9T$7$^$9!#$?$@$7!"$3$N>uBV$G$bE@$d@~$J$I$OIA2h$5$l$^$9!#(B</p>
+を実行します。ただし、この状態でも点や線などは描画されます。</p>
 
-<p>$B$^$?!"(BglCullFace() $B$rM-8z$K$9$k$K$O(B glEnable(GL_CULL_FACE)$B!"(B
-$BL58z$K$9$k$K$O(B glDisable(GL_CULL_FACE) $B$r<B9T$7$^$9!#(B</p>
+<p>また、glCullFace() を有効にするには glEnable(GL_CULL_FACE)、
+無効にするには glDisable(GL_CULL_FACE) を実行します。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble color[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     glColor3dv(color[j]);
@@ -2914,11 +2914,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -2927,12 +2927,12 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
@@ -2947,39 +2947,39 @@ void init(void)
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$B$3$N%W%m%0%i%`$b!"(B
-$BB?J,L/$JI=<($K$J$j$^$9!#(B
-$BN"B&$NLL$rI=<($7$J$$$O$:$J$N$K!"(B
-$B<B:]$OI=B&$NLL$,:o=|$5$l$F$$$^$9!#(B
-$B<B$O!"LL$NI=N"$OD:E@$r$?$I$k=gHV$G7hDj$7$F$$$^$9!#(B
-$BG[Ns(B face[] $B$G$O$3$l$r1&2s$j!J;~7W2s$j!K$G7k$s$G$$$^$9!#(B
-$B$H$3$m$,(B OpenGL $B$G$O!"(B
-$BI8=`$G$O;kE@$+$i8+$FD:E@$,:82s$j$K$J$C$F$$$k$H$-!"(B
-$B$=$NLL$rI=$H$7$F07$$$^$9!#(B
-$B;n$7$K(B glCullFace(GL_FRONT) $B$H$7$F$_$F$/$@$5$$!#(B
-$B$"$k$$$O!"(Bface[] $B$K$*$$$FD:E@$r1&2s$j$K$?$I$k$h$&$K$7$F$_$F$/$@$5$$!#(B</p>
+<p>このプログラムも、
+多分妙な表示になります。
+裏側の面を表示しないはずなのに、
+実際は表側の面が削除されています。
+実は、面の表裏は頂点をたどる順番で決定しています。
+配列 face[] ではこれを右回り（時計回り）で結んでいます。
+ところが OpenGL では、
+標準では視点から見て頂点が左回りになっているとき、
+その面を表として扱います。
+試しに glCullFace(GL_FRONT) としてみてください。
+あるいは、face[] において頂点を右回りにたどるようにしてみてください。</p>
 
-<p>$B$J$*!"D:E@$,1&2s$j$K$J$C$F$$$k$H$-$rI=$H$7$F07$$$?$$$H$-$O!"(B
-glFrontFace(GL_CW) $B$r<B9T$7$^$9!#(B
-$B:82s$j$KLa$9$K$O(B glFrontFace(GL_CCW) $B$r<B9T$7$^$9!#(B</p>
+<p>なお、頂点が右回りになっているときを表として扱いたいときは、
+glFrontFace(GL_CW) を実行します。
+左回りに戻すには glFrontFace(GL_CCW) を実行します。</p>
 
-<p>$B0lHL$K%+%j%s%0$O%/%j%C%T%s%0$d1#LL>C5n$N8zN($r>e$2$k$?$a$K!"(B
-$B;kLn30$K$"$k?^7A$J$I8+$($J$$$3$H$,J,$+$C$F$$$k$b$N$r;vA0$K<h$j=|$$$F$*$$$F!"(B
-$B1#LL>C5n!J2D;kH=Dj!K$NBP>]$+$i30$7$F$*$/$3$H$r8@$$$^$9!#(B
-$B$3$l$K$OMM!9$JJ}K!$,9M$($i$l$^$9$,!"(BglCullFace()
-$B$K$h$kJ}K!$O$=$N$b$C$H$b4pK\E*$J$b$N$G$9!#(B</p>
+<p>一般にカリングはクリッピングや隠面消去の効率を上げるために、
+視野外にある図形など見えないことが分かっているものを事前に取り除いておいて、
+隠面消去（可視判定）の対象から外しておくことを言います。
+これには様々な方法が考えられますが、glCullFace()
+による方法はそのもっとも基本的なものです。</p>
 
-<h2><a class="label" name="11">$B#1#1!%1"1FIU$1(B</a></h2>
+<h2><a class="label" name="11">１１．陰影付け</a></h2>
 
-<h3><a class="label" name="11.1">$B#1#1!%#1(B $B8w$rEv$F$F$_$k(B</a></h3>
+<h3><a class="label" name="11.1">１１．１ 光を当ててみる</a></h3>
 
-<p>$B<!$OLL$4$H$K?'$rIU$1$k$+$o$j$K!"8w$rEv$F$F$_$^$7$g$&!#(B
-$B1"1FIU$1!J8w8;$N=hM}!K$N7W;;$r9T$&$?$a$K$O!"(B
-$BLL$4$H$N?'$NBe$o$j$KK!@~%Y%/%H%k$rM?$($^$9!#(B
-glColor3dv() $B$N$+$o$j$K(B glNormal3dv() $B$r;H$$$^$9!#(B</p>
+<p>次は面ごとに色を付けるかわりに、光を当ててみましょう。
+陰影付け（光源の処理）の計算を行うためには、
+面ごとの色の代わりに法線ベクトルを与えます。
+glColor3dv() のかわりに glNormal3dv() を使います。</p>
 
 <pre class="source">GLdouble normal[][3] = {
   { 0.0, 0.0,-1.0 },
@@ -2990,25 +2990,25 @@ glColor3dv() $B$N$+$o$j$K(B glNormal3dv() $B$r;H$$$^$9!#(B</p>
   { 0.0, 1.0, 0.0 }
 };</pre>
 
-<p>$B8w$rEv$F$k$?$a$K$O!"$b$A$m$s8w8;$b@_Dj$9$kI,MW$,$"$j$^$9!#(B
-OpenGL $B$K$O!":G=i$+$i$$$/$D$+$N8w8;$,MQ0U$5$l$F$$$^$9!#(B
-$B$$$/$D$N8w8;$,MQ0U$5$l$F$$$k$+$O%7%9%F%`$K$h$C$F0[$J$j$^$9!#(B
-$B#0HVL\$N8w8;!J(BGL_LIGHT0 - $BI,$:MQ0U$5$l$F$$$k!K$rM-8z$K$9$k(B
-$B!JE@Et$9$k!K$K$O(B glEnable(GL_LIGHT0)$B!"(B
-$BL58z$K$9$k!J>CEt$9$k!K$K$O(B glDisable(GL_LIGHT0) $B$r<B9T$7$^$9!#(B</p>
+<p>光を当てるためには、もちろん光源も設定する必要があります。
+OpenGL には、最初からいくつかの光源が用意されています。
+いくつの光源が用意されているかはシステムによって異なります。
+０番目の光源（GL_LIGHT0 - 必ず用意されている）を有効にする
+（点灯する）には glEnable(GL_LIGHT0)、
+無効にする（消灯する）には glDisable(GL_LIGHT0) を実行します。</p>
 
-<p>$B1"1FIU$1$r9T$&$H!"1"1FIU$1$r9T$o$J$$$h$j=hM}B.EY$ODc2<$7$^$9!#(B
-$B1"1FIU$1$rM-8z$K$9$k$K$O(B glEnable(GL_LIGHTING)$B!"(B
-$BL58z$K$9$k$K$O(B glDisable(GL_LIGHTING) $B$r<B9T$7$^$9!#(B</p>
+<p>陰影付けを行うと、陰影付けを行わないより処理速度は低下します。
+陰影付けを有効にするには glEnable(GL_LIGHTING)、
+無効にするには glDisable(GL_LIGHTING) を実行します。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 <em>GLdouble normal[][3] = {
@@ -3022,26 +3022,26 @@ int face[][4] = {
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     <em>glNormal3dv(normal[j]);</em>
@@ -3053,11 +3053,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3066,12 +3066,12 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
@@ -3089,51 +3089,51 @@ void init(void)
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p><a class="label" name="lighting">$B$J$*!"1"1FIU$1$,M-8z$K$J$C$F$$$k$H$-$O!"(B</a>
-glColor3d() $B$J$I$K$h$k?';XDj$OL5;k$5$l$^$9!#(B
-glColor3d() $B$J$I$G?'$rIU$1$?$$$H$-$O!"0lC6(B
+<p><a class="label" name="lighting">なお、陰影付けが有効になっているときは、</a>
+glColor3d() などによる色指定は無視されます。
+glColor3d() などで色を付けたいときは、一旦
 glDisable(GL_LIGHTING)
-$B$r<B9T$7$F1"1FIU$1$r9T$o$J$$$h$&$K$9$kI,MW$,$"$j$^$9!#(B
-$B0lJ}!">e$N%W%m%0%i%`$N$h$&$K>o$K1"1FIU$1$r9T$&>l9g$d!"(B
-$B8w8;$rE@Et$7$?$^$^$K$7$F$*$/>l9g$O!"(B
+を実行して陰影付けを行わないようにする必要があります。
+一方、上のプログラムのように常に陰影付けを行う場合や、
+光源を点灯したままにしておく場合は、
 <a href="#depthtest">glEnable(GL_DEPTH_TEST)</a>
-$BF1MM(B glEnalbe(GL_LIGHTING) $B$d(B glEnable(GL_LIGHT<i>n</i>)
-$B$r(B init() $B$NCf$G0lEY<B9T$9$k$@$1$G==J,$G$9!#(B
-$B$^$?!"$3$N$H$-$O(B glDisable(GL_LIGHTING) $B$d(B glDisable(GL_LIGHT<i>n</i>)
-$B$r<B9T$9$kI,MW$O$"$j$^$;$s!#(B</p>
+同様 glEnalbe(GL_LIGHTING) や glEnable(GL_LIGHT<i>n</i>)
+を init() の中で一度実行するだけで十分です。
+また、このときは glDisable(GL_LIGHTING) や glDisable(GL_LIGHT<i>n</i>)
+を実行する必要はありません。</p>
 
-<h3><a class="label" name="11.2">$B#1#1!%#2(B $B8w8;$r@_Dj$9$k(B</a></h3>
+<h3><a class="label" name="11.2">１１．２ 光源を設定する</a></h3>
 
-<p>$B$=$l$G$O8w8;$r#2$D$K$7$F!"(B
-$B$=$l$>$l$N0LCV$H?'$rJQ$($F$_$^$7$g$&!#(B
-$B:G=i$N8w8;(B (GL_LIGHT0) $B$N0LCV$r(B Z $B<4J}8~$N<P$a>e(B
-(0, 3, 5) $B$K!"#2$DL\$N8w8;(B (GL_LIGHT1) $B$r(B X $B<4J}8~$N<P$a>e(B
-(5, 3, 0) $B$KCV$-!"#2$DL\$N8w8;$N?'$rNP(B (0, 1, 0) $B$K$7$^$9!#(B
-$B$3$l$i$N%G!<%?$O$$$:$l$b#4$D$NMWAG$r;}$D(B GLfloat $B7?$NG[Ns$K3JG<$7$^$9!#(B
-$B#4$DL\$NMWAG$O(B 1 $B$K$7$F$*$$$F$/$@$5$$!#(B</p>
+<p>それでは光源を２つにして、
+それぞれの位置と色を変えてみましょう。
+最初の光源 (GL_LIGHT0) の位置を Z 軸方向の斜め上
+(0, 3, 5) に、２つ目の光源 (GL_LIGHT1) を X 軸方向の斜め上
+(5, 3, 0) に置き、２つ目の光源の色を緑 (0, 1, 0) にします。
+これらのデータはいずれも４つの要素を持つ GLfloat 型の配列に格納します。
+４つ目の要素は 1 にしておいてください。</p>
 
 <pre class="source">GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
 GLfloat light1pos[] = { 5.0, 3.0, 0.0, 1.0 };
 GLfloat green[] = { 0.0, 1.0, 0.0, 1.0 };</pre>
 
-<p>$B$3$l$i$r(B glLightfv() $B$r;H$C$F$=$l$>$l$N8w8;$K@_Dj$7$^$9!#(B
-prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>これらを glLightfv() を使ってそれぞれの光源に設定します。
+prog2.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 <em>GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };</em>
@@ -3143,30 +3143,30 @@ GLdouble normal[][3] = {
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  <em>/* $B8w8;$N0LCV@_Dj(B */</em>
+  <em>/* 光源の位置設定 */</em>
   <em>glLightfv(GL_LIGHT0, GL_POSITION, light0pos);</em>
   <em>glLightfv(GL_LIGHT1, GL_POSITION, light1pos);</em>
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     glNormal3dv(normal[j]);
@@ -3178,11 +3178,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3191,12 +3191,12 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
@@ -3217,90 +3217,90 @@ void init(void)
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code>void glLightfv(GLenum light, GLenum pname, const GLfloat *params)</code></dt>
 
-<dd>$B8w8;$N%Q%i%a!<%?$r@_Dj$7$^$9!#:G=i$N0z?t(B light $B$K$O@_Dj$9$k8w8;$NHV9f(B
-$B!J(BGL_LIGHT0$B!A(BGL_LIGHT<i>n</i>$B!"(B<i>n</i> $B$O%7%9%F%`$K$h$C$F0[$J$j$^$9!K$G$9!#(B
-$B#2$DL\$N0z?t(B pname $B$O@_Dj$9$k%Q%i%a!<%?$N<oN`$G$9!#(B
-$B$3$3$K(B GL_POSITION $B$r;XDj$9$k$H8w8;$N0LCV$r@_Dj$7$^$9!#(B
-$B$^$?(B GL_DIFFUSE $B$r;XDj$9$k$H8w8;$N3H;6H?<M8w6/EY!J?'!K$r@_Dj$7$^$9!#(B
-$B:G8e$N0z?t(B params $B$O!"(Bpname $B$K;XDj$7$?%Q%i%a!<%?$N<oN`$K@_Dj$9$kCM$G$9!#(B
-pname $B$,(B GL_POSITION $B$"$k$$$O(B  GL_DIFFUSE $B$N$H$-$O!"(B
-params $B$O#4$D$NMWAG$r;}$D(B GLfloat $B7?$NG[Ns$G!"(B
-$B$=$l$>$l8w8;$N0LCV$*$h$S3H;6H?<M8w6/EY$r;XDj$7$^$9!#(B
-$B8w8;$,(B (x, y, z) $B$N0LCV$K$"$k$H$-!"(B
-params $B$N3FMWAG$K$O(B (x/w, y/w, z/w, w) $B$r@_Dj$7$^$9!#(B
-$BDL>o(B w = 1 $B$H$7$FE@8w8;$N0LCV$r@_Dj$7$^$9$,!"(Bw = 0 $B$G$"$l$P(B
-(x, y, z) $BJ}8~$NJ?9T8w@~$N@_Dj$K$J$j$^$9!#(B
-$B$^$?8w8;$N3H;6H?<M8w6/EY$,(B (R, G, B) $B$J$i(B
-params $B$N3FMWAG$K$O(B (R, G, B, 1) $B$r@_Dj$7$^$9!#(B
-$B$J$*!"$3$N=i4|CM$O(B (1 1 1 1) $B$G$9$,!"(BRGB $B$K$O(B 1 $B$r1[$($?CM$r@_Dj$G$-$^$9!#(B</dd>
+<dd>光源のパラメータを設定します。最初の引数 light には設定する光源の番号
+（GL_LIGHT0〜GL_LIGHT<i>n</i>、<i>n</i> はシステムによって異なります）です。
+２つ目の引数 pname は設定するパラメータの種類です。
+ここに GL_POSITION を指定すると光源の位置を設定します。
+また GL_DIFFUSE を指定すると光源の拡散反射光強度（色）を設定します。
+最後の引数 params は、pname に指定したパラメータの種類に設定する値です。
+pname が GL_POSITION あるいは  GL_DIFFUSE のときは、
+params は４つの要素を持つ GLfloat 型の配列で、
+それぞれ光源の位置および拡散反射光強度を指定します。
+光源が (x, y, z) の位置にあるとき、
+params の各要素には (x/w, y/w, z/w, w) を設定します。
+通常 w = 1 として点光源の位置を設定しますが、w = 0 であれば
+(x, y, z) 方向の平行光線の設定になります。
+また光源の拡散反射光強度が (R, G, B) なら
+params の各要素には (R, G, B, 1) を設定します。
+なお、この初期値は (1 1 1 1) ですが、RGB には 1 を越えた値を設定できます。</dd>
 </dl>
 
-<p>$B1"1FIU$1$N7W;;$O;kE@:BI87O$G9T$o$l$k$N$G!"(B
-glLightfv() $B$K$h$k8w8;$N0LCV(B (GL_POSITION) $B$N@_Dj$O!"(B
-<strong>$B;kE@$N0LCV$r@_Dj$7$?8e$K9T$&(B</strong>$BI,MW$,$"$j$^$9!#(B
-$B$^$?!">e$N%W%m%0%i%`$N(B glRotate3d() $B$h$j8e$G$3$l$r@_Dj$9$k$H!"(B
-$B8w8;$b$$$C$7$g$K2sE>$7$F$7$^$$$^$9!#(B</p>
+<p>陰影付けの計算は視点座標系で行われるので、
+glLightfv() による光源の位置 (GL_POSITION) の設定は、
+<strong>視点の位置を設定した後に行う</strong>必要があります。
+また、上のプログラムの glRotate3d() より後でこれを設定すると、
+光源もいっしょに回転してしまいます。</p>
 
 <ul>
-<li><a href="libglut3.html#viewpipe">$B:BI8JQ49$N%W%m%;%9(B</a>$B$O(B $B!H%b%G%j%s%0JQ49"*%S%e!<%$%s%0JQ49"*F);kJQ49"*!D!I(B $B$H$$$&=g$K9T$o$l$k$H=q$-$^$7$?$,!$%W%m%0%i%`$N%3!<%G%#%s%0>e$O!$$3$l$i$N@_Dj$,(B <strong>$B5U=g$K$J$k(B</strong> $B$3$H$KCm0U$7$F$/$@$5$$!%(B
+<li><a href="libglut3.html#viewpipe">座標変換のプロセス</a>は “モデリング変換→ビューイング変換→透視変換→…” という順に行われると書きましたが，プログラムのコーディング上は，これらの設定が <strong>逆順になる</strong> ことに注意してください．
 <ol>
-<li>glLoadIdentity() $B$G%b%G%k%S%e!<JQ499TNs$r=i4|2=(B</li>
-<li>gluLookAt() $BEy$G%S%e!<%$%s%0JQ49$r@_Dj(B</li>
-<li>glTranslated() $B$d(B glRotated() $BEy$G%b%G%j%s%0JQ49$r@_Dj(B</li>
-<li>glBegin()$B!A(BglEnd() $BEy$K$h$kIA2h(B</li>
+<li>glLoadIdentity() でモデルビュー変換行列を初期化</li>
+<li>gluLookAt() 等でビューイング変換を設定</li>
+<li>glTranslated() や glRotated() 等でモデリング変換を設定</li>
+<li>glBegin()〜glEnd() 等による描画</li>
 </ol></li>
-<li>1-2 $B$N4V$G8w8;$N0LCV$r@_Dj$7$?>l9g$O!$8w8;$O;kE@$H0l=o$K0\F0$7$^$9!%$3$N$H$-!$8w8;$NJ}8~$r(B (0, 0, -1, 0)$B!$$9$J$o$A(B Z $B<4$NIi$NJ}8~$K@_Dj$9$l$P!$<+F0<V$N%X%C%I%i%$%H$N$h$&$J8z2L$rF@$k$3$H$,$G$-$^$9!%(B</li>
-<li>2-3 $B$N4V$G8w8;$N0LCV$r@_Dj$7$?>l9g$O!$8w8;$N0LCV$O;kE@$d?^7A$N0LCV$K$h$i$:8GDj$K$J$j$^$9!%DL>o$O$3$3$G8w8;$N0LCV$r@_Dj$7$^$9!%(B</li>
-<li>3-4 $B$N4V$G8w8;$N0LCV$r@_Dj$7$?>l9g$O!$8w8;$N0LCV$O?^7A$H0l=o$K0\F0$7$^$9!%(B</li>
+<li>1-2 の間で光源の位置を設定した場合は，光源は視点と一緒に移動します．このとき，光源の方向を (0, 0, -1, 0)，すなわち Z 軸の負の方向に設定すれば，自動車のヘッドライトのような効果を得ることができます．</li>
+<li>2-3 の間で光源の位置を設定した場合は，光源の位置は視点や図形の位置によらず固定になります．通常はここで光源の位置を設定します．</li>
+<li>3-4 の間で光源の位置を設定した場合は，光源の位置は図形と一緒に移動します．</li>
 </ul>
 
-<p>glLightfv() $B$K$h$k8w8;$N?'$N@_Dj(B (GL_DIFFUSE $BEy(B) $B$O!"(B
-$BI,$:$7$b(B display() $BFb$KCV$/I,MW$O$"$j$^$;$s!#(B
-$B%W%m%0%i%`$N<B9TCf$K8w8;$N?'$rJQ99$7$J$$$J$i!"(B
+<p>glLightfv() による光源の色の設定 (GL_DIFFUSE 等) は、
+必ずしも display() 内に置く必要はありません。
+プログラムの実行中に光源の色を変更しないなら、
 <a href="#depthtest">glEnable(GL_DEPTH_TEST)</a>
-$B$d(B <a href="#lighting">glEnable(GL_LIGHTING)</a>
-$BF1MM(B init() $B$NCf$G0lEY<B9T$9$l$P==J,$G$9!#(B</p>
+や <a href="#lighting">glEnable(GL_LIGHTING)</a>
+同様 init() の中で一度実行すれば十分です。</p>
 
-<p>glLightf*() $B$G@_Dj2DG=$J%Q%i%a!<%?$O!"(B
-GL_POSITION $B$d(B GL_DIFFUSE $B0J30$K$b$?$/$5$s$"$j$^$9!#(B
-$B8w8;$rJ}8~$r;}$C$?%9%]%C%H%i%$%H$H$7!"(B
-$B$=$NJ}8~$d9-$,$j!"8:?jN($J$I$b@_Dj$9$k$3$H$b$G$-$^$9!#(B
-$B>\$7$/$O(B man glLightf $B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>glLightf*() で設定可能なパラメータは、
+GL_POSITION や GL_DIFFUSE 以外にもたくさんあります。
+光源を方向を持ったスポットライトとし、
+その方向や広がり、減衰率なども設定することもできます。
+詳しくは man glLightf を参照してください。</p>
 
-<h3><a class="label" name="11.3">$B#1#1!%#3(B $B:`<A$r@_Dj$9$k(B</a></h3>
+<h3><a class="label" name="11.3">１１．３ 材質を設定する</a></h3>
 
-<p>$BA0$NNc$G$O?^7A$K?'$rIU$1$F$$$^$;$s$G$7$?$+$i!"(B
-$BN)J}BN$O%G%U%)%k%H$N?'!JGr!K$GI=<($5$l$?$H;W$$$^$9!#(B
-$B:#EY$O$3$N?'$rJQ$($F$_$^$7$g$&!#(B
-$B$3$N>l9g$b8w8;$N;~$HF1MM$K#4$D$NMWAG$r;}$D(B GLfloat $B7?$NG[Ns$rMQ0U$7!"(B
-$B8D!9$NMWAG$K?'$r(B R$B!"(BG$B!"(BB $B$=$l$K(B A $B$N=g$K3JG<$7$^$9!#(B
-$B#4$DL\$NMWAG(B (A) $B$O!"$3$3$G$O$H$j$"$($:(B 1 $B$K$7$F$*$$$F$/$@$5$$!#(B</p>
+<p>前の例では図形に色を付けていませんでしたから、
+立方体はデフォルトの色（白）で表示されたと思います。
+今度はこの色を変えてみましょう。
+この場合も光源の時と同様に４つの要素を持つ GLfloat 型の配列を用意し、
+個々の要素に色を R、G、B それに A の順に格納します。
+４つ目の要素 (A) は、ここではとりあえず 1 にしておいてください。</p>
 
 <pre class="source">GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };</pre>
 
-<p>glColor*() $B$G?'$rIU$1$k$H$-$HF1MM!"(B
-$B?^7A$rIA$/A0$K(B glMaterialfv() $B$r;H$C$F$3$N?'$r?^7A$N?'$K;XDj$7$^$9!#(B
-prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>glColor*() で色を付けるときと同様、
+図形を描く前に glMaterialfv() を使ってこの色を図形の色に指定します。
+prog2.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
@@ -3311,33 +3311,33 @@ GLfloat green[] = { 0.0, 1.0, 0.0, 1.0 };
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
   int i;
   int j;
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
 
-  /* $B;kE@0LCV$H;k@~J}8~(B */
+  /* 視点位置と視線方向 */
   gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B8w8;$N0LCV@_Dj(B */
+  /* 光源の位置設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
   glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  <em>/* $B?^7A$N?'!J@V!K(B */</em>
+  <em>/* 図形の色（赤） */</em>
   <em>glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);</em>
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   glBegin(GL_QUADS);
   for (j = 0; j &lt; 6; j++) {
     glNormal3dv(normal[j]);
@@ -3349,11 +3349,11 @@ void display(void)
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3362,98 +3362,98 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
 <dl>
 
 <dt><code>void glMaterialfv(GLenum face, GLenum pname, const GLfloat *params)</code></dt>
 
-<dd>glMaterialfv() $B$O?^7A$N:`<A%Q%i%a!<%?$r@_Dj$7$^$9!#(B
-$B0z?t(B face $B$K$O(B GL_FRONT$B!"(BGL_BACK $B$*$h$S(B GL_FRONT_AND_BACK $B$,;XDj$G$-!"(B
-$B$=$l$>$lLL$NI=!"N"!"$"$k$$$ON>LL$K:`<A%Q%i%a!<%?$r@_Dj$7$^$9!#(B
-$B@_Dj$G$-$k:`<A(B pname $B$K$O(B GL_AMBIENT$B!J4D6-8w$KBP$9$kH?<M78?t!K!"(B
-GL_DIFFUSE$B!J3H;6H?<M78?t!K!"(BGL_SPECULAR$B!J6@LLH?<M78?t!K!"(B
-GL_EMISSION$B!JH/8w78?t!K!"(BGL_SHININESS$B!J%O%$%i%$%H$N51$-!K!"(B
-$B$"$k$$$O(B GL_AMBIENT_AND_DIFFUSE$B!J3H;6H?<M78?t$H6@LLH?<M78?t$NN>J}!K(B
-$B$,$"$j$^$9!#B>$K%$%s%G%C%/%9%+%i!<%b!<%I(B (GLUT_INDEX) $B$G$"$l$P(B
-GL_COLOR_INDEXES $B$b;HMQ$G$-$^$9$,!"(B
-$B$3$N;qNA$G$O;HMQ$7$F$$$^$;$s!#(B
-$B0z?t(B params $B$O#1$D$^$?$O#4$D$NMWAG$r;}$D(B GLfloat $B7?!J(Bfloat $B$HEy2A!K$NG[Ns$G!"(B
-$B#4$D$NMWAG$r;}$D>l9g!J(BGL_SHININESS$B!"(BGL_COLOR_INDEXES $B0J30!K$O!"(B
-$B?'$N@.J,(B RGB $B$*$h$S(B A $B$KBP$9$k78?t$r;XDj$7$^$9!#(B
-$B$3$N=i4|CM$O(B (0.8, 0.8, 0.8, 1) $B$G$9$,!"(B
-1 $B$r1[$($kCM$b@_Dj$G$-$^$9!#(B</dd>
+<dd>glMaterialfv() は図形の材質パラメータを設定します。
+引数 face には GL_FRONT、GL_BACK および GL_FRONT_AND_BACK が指定でき、
+それぞれ面の表、裏、あるいは両面に材質パラメータを設定します。
+設定できる材質 pname には GL_AMBIENT（環境光に対する反射係数）、
+GL_DIFFUSE（拡散反射係数）、GL_SPECULAR（鏡面反射係数）、
+GL_EMISSION（発光係数）、GL_SHININESS（ハイライトの輝き）、
+あるいは GL_AMBIENT_AND_DIFFUSE（拡散反射係数と鏡面反射係数の両方）
+があります。他にインデックスカラーモード (GLUT_INDEX) であれば
+GL_COLOR_INDEXES も使用できますが、
+この資料では使用していません。
+引数 params は１つまたは４つの要素を持つ GLfloat 型（float と等価）の配列で、
+４つの要素を持つ場合（GL_SHININESS、GL_COLOR_INDEXES 以外）は、
+色の成分 RGB および A に対する係数を指定します。
+この初期値は (0.8, 0.8, 0.8, 1) ですが、
+1 を越える値も設定できます。</dd>
 
 </dl>
 
-<p>$B?^7A$K?'$rIU$1$k$H$$$&$3$H$O!"(B
-$B?^7A$NJ*M}E*$J:`<A%Q%i%a!<%?$r@_Dj$9$k$3$H$KB>$J$j$^$;$s!#(B
-<strong>GL_DIFFUSE $B$G@_Dj$9$k3H;6H?<MN($,?^7A$N?'(B</strong>$B$KAjEv$7$^$9!#(B
-GL_AMBIENT $B$O4D6-8w!J8w8;0J30$+$i$N8w!K$KBP$9$kH?<MN($G!"(B
-$B8w$NEv$?$i$J$$ItJ,$NL@$k$5$K$J$j$^$9!#(B
-GL_SPECULAR $B$O8w8;$KBP$9$k6@LLH?<MN($G!"(B
-$B?^7AI=LL$N8w8;$N1G$j9~$_!J%O%$%i%$%H!K$N6/$5$G$9!#(B
-GL_SHININESS $B$O$3$N6@LLH?<M$N:Y$5$r<($7!"(B
-$BBg$-$$$[$I%O%$%i%$%H$NItJ,$,>.$5$/$J$j$^$9!#(B
-$B$3$N:`<A%Q%i%a!<%?$NMWAG$O#1$D$@$1$J$N$G!"(B
-glMaterialf() $B$r;H$C$F@_Dj$9$k$3$H$b$G$-$^$9!#(B</p>
+<p>図形に色を付けるということは、
+図形の物理的な材質パラメータを設定することに他なりません。
+<strong>GL_DIFFUSE で設定する拡散反射率が図形の色</strong>に相当します。
+GL_AMBIENT は環境光（光源以外からの光）に対する反射率で、
+光の当たらない部分の明るさになります。
+GL_SPECULAR は光源に対する鏡面反射率で、
+図形表面の光源の映り込み（ハイライト）の強さです。
+GL_SHININESS はこの鏡面反射の細さを示し、
+大きいほどハイライトの部分が小さくなります。
+この材質パラメータの要素は１つだけなので、
+glMaterialf() を使って設定することもできます。</p>
 
-<p>GL_DIFFUSE $B0J30$N%Q%i%a!<%?$r@_Dj$9$k$3$H$K$h$C$F!"(B
-$B?^7A$N<A46$r@)8f$G$-$^$9!#(B
-$B$?$H$($P(B GL_SPECULAR$B!J6@LLH?<M78?t!K$rGr(B (1 1 1 1)
-$B$K@_Dj$7$F(B GL_SHININESS $B$rBg$-$/!J(B10$B!A(B40 $B$H$+!?:GBg(B 128$B!K$9$l$P(B
-$B$D$d$d$+$J%W%i%9%A%C%/$N$h$&$K$J$j$^$9$7!"(B
-GL_SPECULAR$B!J6@LLH?<M78?t!K$r(B GL_DIFFUSE $B$HF1$8$K$7$F(B
-GL_AMBIENT $B$r(B 0 $B$K6a$E$1$l$P6bB0E*$J<A46$K$J$j$^$9!#(B
-$B$?$@$7(B GL_SPECULAR $B$d(B GL_AMBIENT $B$rA`:n$9$k$H$-$O!"(B
-glLightfv() $B$G8w8;$N$3$l$i$N%Q%i%a!<%?$b@_Dj$7$F$d$kI,MW$,$"$j$^$9!#(B</p>
+<p>GL_DIFFUSE 以外のパラメータを設定することによって、
+図形の質感を制御できます。
+たとえば GL_SPECULAR（鏡面反射係数）を白 (1 1 1 1)
+に設定して GL_SHININESS を大きく（10〜40 とか／最大 128）すれば
+つややかなプラスチックのようになりますし、
+GL_SPECULAR（鏡面反射係数）を GL_DIFFUSE と同じにして
+GL_AMBIENT を 0 に近づければ金属的な質感になります。
+ただし GL_SPECULAR や GL_AMBIENT を操作するときは、
+glLightfv() で光源のこれらのパラメータも設定してやる必要があります。</p>
 
-<h2><a class="label" name="12">$B#1#2!%3,AX9=B$(B</a></h2>
+<h2><a class="label" name="12">１２．階層構造</a></h2>
 
-<p>$B<!$K?^7A$N3,AX9=B$$rI=8=$7$F$_$^$9!#(B
-$B$3$l$^$G$N%W%m%0%i%`$G<B:]$KN)J}BN$rIA$$$F$$$kItJ,$r!"(B
-$BFHN)$7$?4X?t(B cube() $B$H$7$FH4$-=P$7$^$9!#(B</p>
+<p>次に図形の階層構造を表現してみます。
+これまでのプログラムで実際に立方体を描いている部分を、
+独立した関数 cube() として抜き出します。</p>
 
-<p>$B$^$?!"(B
-$B;kE@$N0LCV$d2h3Q$J$I$OJQ99$7$J$$$N$G!"(B
-$B$3$l$r%&%#%s%I%&$r3+$$$?$j%5%$%:$,JQ99$5$l$?$H$-$K@_Dj$9$k$h$&$K$7$^$9!#(B
-$B$3$&$9$k$HJQ499TNs$O(B glRotated() $B$GJQ99$5$l$?$"$H85$KLa$5$l$J$$$?$a!"(B
-$B$3$N$^$^$G$O<!$KIA2h$9$k$H$-$K$O$*$+$7$/$J$C$F$7$^$$$^$9!#(B
-$B$=$3$G!"(BglRoatated() $B$r;H$&A0$K!"(B
-$B$=$N$H$-$NJQ499TNs$NFbMF$rJ]B8$7$F$*$-!"(B
-$B$"$H$G$=$NFbMF$rLa$7$^$9!#(B
-$B$3$l$K$O(B glPushMatrix() $B$H(B glPopMatrix() $B$r;H$$$^$9!#(B</p>
+<p>また、
+視点の位置や画角などは変更しないので、
+これをウィンドウを開いたりサイズが変更されたときに設定するようにします。
+こうすると変換行列は glRotated() で変更されたあと元に戻されないため、
+このままでは次に描画するときにはおかしくなってしまいます。
+そこで、glRoatated() を使う前に、
+そのときの変換行列の内容を保存しておき、
+あとでその内容を戻します。
+これには glPushMatrix() と glPopMatrix() を使います。</p>
 
-<p>prog2.c $B$r0J2<$N$h$&$KJQ99$7$F$/$@$5$$!#(B</p>
+<p>prog2.c を以下のように変更してください。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
@@ -3479,41 +3479,41 @@ GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B8w8;$N0LCV@_Dj(B */
+  /* 光源の位置設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
   glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
 
-  <em>/* $B%b%G%k%S%e!<JQ499TNs$NJ]B8(B */</em>
+  <em>/* モデルビュー変換行列の保存 */</em>
   <em>glPushMatrix();</em>
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N?'!J@V!K(B */
+  /* 図形の色（赤） */
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   <em>cube();</em>
 
-  <em>/* $B%b%G%k%S%e!<JQ499TNs$NI|5"(B */</em>
+  <em>/* モデルビュー変換行列の復帰 */</em>
   <em>glPopMatrix();</em>
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3524,12 +3524,12 @@ void resize(int w, int h)
 {
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N@_Dj(B */
+  /* 透視変換行列の設定 */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N@_Dj(B */
+  /* モデルビュー変換行列の設定 */
   glMatrixMode(GL_MODELVIEW);
   <em>glLoadIdentity();</em>
   <em>gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);</em>
@@ -3537,35 +3537,35 @@ void resize(int w, int h)
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$B$3$N?^7A$K!"$b$&0l$DN)J}BN$rDI2C$7$^$9!#(B
-$B#2$DL\$N(B cube() $B$r<B9T$9$kA0$K(B glTranslated() $B$r<B9T$7$F!"(B
-$B:G=i$N(B cube() $B$N0LCV$+$i>/$7$:$i$7$^$9!#(B</p>
+<p>この図形に、もう一つ立方体を追加します。
+２つ目の cube() を実行する前に glTranslated() を実行して、
+最初の cube() の位置から少しずらします。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
@@ -3576,52 +3576,52 @@ GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 
 void cube(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B8w8;$N0LCV@_Dj(B */
+  /* 光源の位置設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
   glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NJ]B8(B */
+  /* モデルビュー変換行列の保存 */
   glPushMatrix();
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N?'!J@V!K(B*/
+  /* 図形の色（赤）*/
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   cube();
 
-  <em>/* $BFs$DL\$N?^7A$NIA2h(B */</em>
+  <em>/* 二つ目の図形の描画 */</em>
   <em>glPushMatrix();</em>
   <em>glTranslated(1.0, 1.0, 1.0);</em>
   <em>cube();</em>
   <em>glPopMatrix();</em>
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NI|5"(B */
+  /* モデルビュー変換行列の復帰 */
   glPopMatrix();
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3630,41 +3630,41 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$BK\Ev$O$3$N#2$DL\$N(B cube() $B$r$O$5$s$G$$$k(B glPushMatrix()$B!"(BglPopMatrix()
-$BL5$/$F$b7k2L$OJQ$o$i$J$$$N$G$9$,!"$3$3$G$O@bL@$N$?$a$KIU$1$F$$$^$9!#(B
-$B$G$O$3$N#2$DL\$N(B cube() $B$r!"#1$DL\$N(B cube()
-$B$NG\$NB.EY$G2sE>$5$;$F$_$^$7$g$&!#(B</p>
+<p>本当はこの２つ目の cube() をはさんでいる glPushMatrix()、glPopMatrix()
+無くても結果は変わらないのですが、ここでは説明のために付けています。
+ではこの２つ目の cube() を、１つ目の cube()
+の倍の速度で回転させてみましょう。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
@@ -3675,53 +3675,53 @@ GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 
 void cube(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B8w8;$N0LCV@_Dj(B */
+  /* 光源の位置設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
   glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NJ]B8(B */
+  /* モデルビュー変換行列の保存 */
   glPushMatrix();
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N?'!J@V!K(B*/
+  /* 図形の色（赤）*/
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   cube();
 
-  /* $BFs$DL\$N?^7A$NIA2h(B */
+  /* 二つ目の図形の描画 */
   glPushMatrix();
   glTranslated(1.0, 1.0, 1.0);
   <em>glRotated((double)(2 * r), 0.0, 1.0, 0.0);</em>
   cube();
   glPopMatrix();
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NI|5"(B */
+  /* モデルビュー変換行列の復帰 */
   glPopMatrix();
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3730,42 +3730,42 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<p>$B$3$NNc$G$O!"#1$DL\$N(B glRotated() $B$K$h$k2sE>$,(B
-$BN>J}$N(B cube() $B$K1F6A$7$F$$$k$N$KBP$7!"(B
-$B#2$DL\$N(B glRotated() $B$O#2$DL\$N(B cube() $B$K$7$+1F6A$7$F$$$^$;$s!#(B
-$B$3$l$K$h$C$F!"?^7A$NF0$-$N3,AX9=B$$rI=8=$G$-$^$9!#(B
-$B$G$O:G8e$K!"$3$N#2$D$NN)J}BN$N?'$rJQ$($F$_$^$7$g$&!#(B</p>
+<p>この例では、１つ目の glRotated() による回転が
+両方の cube() に影響しているのに対し、
+２つ目の glRotated() は２つ目の cube() にしか影響していません。
+これによって、図形の動きの階層構造を表現できます。
+では最後に、この２つの立方体の色を変えてみましょう。</p>
 
 <pre class="source">#include &lt;GL/glut.h&gt;
 
 GLdouble vertex[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 int face[][4] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLdouble normal[][3] = {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 };
 
 GLfloat light0pos[] = { 0.0, 3.0, 5.0, 1.0 };
@@ -3777,37 +3777,37 @@ GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 
 void cube(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void idle(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void display(void)
 {
-  static int r = 0; /* $B2sE>3Q(B */
+  static int r = 0; /* 回転角 */
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B8w8;$N0LCV@_Dj(B */
+  /* 光源の位置設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
   glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NJ]B8(B */
+  /* モデルビュー変換行列の保存 */
   glPushMatrix();
 
-  /* $B?^7A$N2sE>(B */
+  /* 図形の回転 */
   glRotated((double)r, 0.0, 1.0, 0.0);
 
-  /* $B?^7A$N?'!J@V!K(B*/
+  /* 図形の色（赤）*/
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
 
-  /* $B?^7A$NIA2h(B */
+  /* 図形の描画 */
   cube();
 
-  /* $BFs$DL\$N?^7A$NIA2h(B */
+  /* 二つ目の図形の描画 */
   glPushMatrix();
   glTranslated(1.0, 1.0, 1.0);
   glRotated((double)(2 * r), 0.0, 1.0, 0.0);
@@ -3815,16 +3815,16 @@ void display(void)
   cube();
   glPopMatrix();
 
-  /* $B%b%G%k%S%e!<JQ499TNs$NI|5"(B */
+  /* モデルビュー変換行列の復帰 */
   glPopMatrix();
 
   glutSwapBuffers();
 
-  /* $B2sE>$N@)8f(B */
+  /* 回転の制御 */
   if (glutLayerGet(GLUT_NORMAL_DAMAGED) == 0) {
-    /* glutPostRedisplay() $B$K$h$k:FIA2h(B */
+    /* glutPostRedisplay() による再描画 */
     if (++r &gt;= 360) {
-      /* $B0l<~2s$C$?$i%"%K%a!<%7%g%s$r;_$a$k(B */
+      /* 一周回ったらアニメーションを止める */
       r = 0;
       glutIdleFunc(0);
     }
@@ -3833,81 +3833,81 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 void mouse(int button, int state, int x, int y)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
   
 void init(void)
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }
 
 int main(int argc, char *argv[])
 {
-  /* $BJQ99$J$7(B */
+  /* 変更なし */
 }</pre>
 
-<h2><a class="label" name="ex1">$B<B83#1!%4pK\<B83(B</a></h2>
+<h2><a class="label" name="ex1">実験１．基本実験</a></h2>
 
-<p>$B$3$3$+$i$h$&$d$/<B83$NK\Bj$KF~$j$^$9!#(B
-$B0J2<$N%F!<%^$N$&$A!"%0%k!<%W$K3d$jEv$F$i$l$?2]Bj$rA*$s$G<B83$7$F$/$@$5$$!#(B
-$B$3$l$^$G$N$h$&$K%=!<%9%W%m%0%i%`$OL@<($7$^$;$s$+$i!"(B
-$B<+J,$G<BAu$r9M$($F$/$@$5$$!#(B</p>
+<p>ここからようやく実験の本題に入ります。
+以下のテーマのうち、グループに割り当てられた課題を選んで実験してください。
+これまでのようにソースプログラムは明示しませんから、
+自分で実装を考えてください。</p>
 
 <ul>
-<li><a href="ex-a.html">$B%&%)!<%/%9%k!<$N<B83(B</a>$B!J#E%0%k!<%W!K(B</li>
-<li><a href="ex-b.html">$B%m%\%C%H%"!<%`$N<B83(B</a>$B!J#F%0%k!<%W!K(B</li>
-<li><a href="ex-c.html">$B%T%C%A%s%0%^%7!<%s$N<B83(B</a>$B!J#A%0%k!<%W!K(B</li>
-<li><a href="ex-d.html">$B%i%8%3%s%F%#!<%]%C%H$N<B83(B</a>$B!J#B%0%k!<%W!K(B</li>
-<li><a href="ex-e.html">$BJb9T%m%\%C%H$N<B83(B</a>$B!J#C%0%k!<%W!K(B</li>
-<li><a href="ex-f.html">$B%(%"%[%C%1!<$N<B83(B</a>$B!J#D%0%k!<%W!K(B</li>
+<li><a href="ex-a.html">ウォークスルーの実験</a>（Ｅグループ）</li>
+<li><a href="ex-b.html">ロボットアームの実験</a>（Ｆグループ）</li>
+<li><a href="ex-c.html">ピッチングマシーンの実験</a>（Ａグループ）</li>
+<li><a href="ex-d.html">ラジコンティーポットの実験</a>（Ｂグループ）</li>
+<li><a href="ex-e.html">歩行ロボットの実験</a>（Ｃグループ）</li>
+<li><a href="ex-f.html">エアホッケーの実験</a>（Ｄグループ）</li>
 </ul>
 
-<h2><a class="label" name="ex2">$B<B83#2!%N)BN;k$N<B83(B</a></h2>
+<h2><a class="label" name="ex2">実験２．立体視の実験</a></h2>
 
-<p>$B<B83#1$G:n@.$7$?%W%m%0%i%`$r$b$H$K$7$F!"(B
-$BN>4c;k:9$K$h$kN)BN;k!J%9%F%l%*I=<(!K$r9T$&%W%m%0%i%`$r:n@.$7$F$/$@$5$$!#(B
-$BN>4c;k:9$K$h$kN)BN;k$O!"(B
-$B1&4cMQ$H:84cMQ$N2hA|$rJL!9$K@8@.$9$k$3$H$G<B8=$G$-$^$9!#(B
-$B0l$D$N%G%#%9%W%l%$$G$3$N#2$D$N2hA|$r8+$k$3$H$,$G$-$k$h$&$K!"(B
-$B1i=,<A$N0lIt$N%Q%=%3%s$K$O1U>=%7%c%C%?4c6@$,MQ0U$5$l$F$$$^$9!#(B</p>
+<p>実験１で作成したプログラムをもとにして、
+両眼視差による立体視（ステレオ表示）を行うプログラムを作成してください。
+両眼視差による立体視は、
+右眼用と左眼用の画像を別々に生成することで実現できます。
+一つのディスプレイでこの２つの画像を見ることができるように、
+演習質の一部のパソコンには液晶シャッタ眼鏡が用意されています。</p>
 
-<p>$B%G%#%9%W%l%$$NI=<($,#1IC4V$K2?2s$b=q$-BX$($i$l$F$$$k$3$H$O!"(B
-$B$_$J$5$sNI$/$4B8$8$N$3$H$H;W$$$^$9!J%F%l%S$NA0$G<j$r?6$C$?$3$H$J$$$G$9$+!)!K!#(B
-$B%F%l%S$N>l9g!"$3$N=q$-49$($O#1IC4V$KLs#6#02s!"(B
-$B%Q%=%3%s$N%G%#%9%W%l%$$GBgBN#6#02s$+$i#1#0#02s$/$i$$9T$o$l$F$$$^$9(B
-$B!J$b$C$H2s?t$,B?$$>l9g$b$"$j$^$9!K!#$3$N=q$-49$(IQEY$N$3$H$r!"(B
-<em>$B%j%U%l%C%7%e%l!<%H(B</em>$B$H8F$S$^$9!#(B</p>
+<p>ディスプレイの表示が１秒間に何回も書き替えられていることは、
+みなさん良くご存じのことと思います（テレビの前で手を振ったことないですか？）。
+テレビの場合、この書き換えは１秒間に約６０回、
+パソコンのディスプレイで大体６０回から１００回くらい行われています
+（もっと回数が多い場合もあります）。この書き換え頻度のことを、
+<em>リフレッシュレート</em>と呼びます。</p>
 
-<p>$B$=$3$G!"$3$N=q$-49$($N;~$K1&4cMQ$N2hA|$H:84cMQ$N2hA|$r8r8_$KI=<($7$F!"(B
-$B1U>=%7%c%C%?4c6@$G1&4cMQ$N2hA|$,I=<($5$l$F$$$k$H$-$O:8L\$rJD$8!"(B
-$B:84cMQ$N2hA|$,I=<($5$l$F$$$k$H$-$O1&L\$rJD$8$F$7$^$$$^$9!#(B
-$B$3$&$7$F0l$D$N%G%#%9%W%l%$$G1&L\$H:8L\$KJL!9$N3($r8+$;$k$3$H$,$G$-$^$9!#(B
-$B$3$l$O(B<em>$B;~J,3dJ}<0(B</em>$B$K$h$k%9%F%l%*I=<($H8F$P$l$^$9!#(B</p>
+<p>そこで、この書き換えの時に右眼用の画像と左眼用の画像を交互に表示して、
+液晶シャッタ眼鏡で右眼用の画像が表示されているときは左目を閉じ、
+左眼用の画像が表示されているときは右目を閉じてしまいます。
+こうして一つのディスプレイで右目と左目に別々の絵を見せることができます。
+これは<em>時分割方式</em>によるステレオ表示と呼ばれます。</p>
 
-<p>$B$3$N<jK!$G$O1&4cMQ$N2hLL$H:84cMQ$N2hLL$rJL!9$KMQ0U$9$kI,MW$,$"$j$^$9!#(B
-$B$3$N%a%+%K%:%`$r(B<em>$B%9%F%l%*%P%C%U%!(B</em>$B$H8F$S$^$9!#(B
-$B0lJ}!"%"%K%a!<%7%g%s;~$N$A$i$D$-$rM^@)$9$k$?$a$K(B
-<a href="#9.2">$B%@%V%k%P%C%U%!%j%s%0(B</a>
-$B$r9T$C$F$$$k>l9g$K$b#2$D$N2hLL$,I,MW$K$J$j$^$9!#(B
-$B$7$?$,$C$F!"%@%V%k%P%C%U%!%j%s%0$r9T$$$J$,$iN)BN;k$r9T$&$K$O!"(B
-$BA4It$G#2!_#2!a#4$D$N2hLL$,I,MW$K$J$j$^$9!#(B
-$B$=$3$G$3$NJ}<0$r(B
-<em>$B%/%o%C%I%P%C%U%!%9%F%l%*(B</em>
-$B$H8F$S$^$9!#$J$+$J$+lTBt$J<jK!$J$N$G!"(B
-$B$A$g$C$HA0$^$G$3$l$,<B8=$G$-$k$N$O9b2A$J%O!<%I%&%'%"$K8B$i$l$F$$$^$7$?$,!"(B
-$B:G6a$G$O%Q%=%3%sMQ$N%S%G%*%+!<%I$G$b2DG=$K$J$C$F$-$F$$$^$9!#(B</p>
+<p>この手法では右眼用の画面と左眼用の画面を別々に用意する必要があります。
+このメカニズムを<em>ステレオバッファ</em>と呼びます。
+一方、アニメーション時のちらつきを抑制するために
+<a href="#9.2">ダブルバッファリング</a>
+を行っている場合にも２つの画面が必要になります。
+したがって、ダブルバッファリングを行いながら立体視を行うには、
+全部で２×２＝４つの画面が必要になります。
+そこでこの方式を
+<em>クワッドバッファステレオ</em>
+と呼びます。なかなか贅沢な手法なので、
+ちょっと前までこれが実現できるのは高価なハードウェアに限られていましたが、
+最近ではパソコン用のビデオカードでも可能になってきています。</p>
 
-<p>GLUT $B$G$O!"(BglutInitDisplayMode() $B$N0z?t$K(B GLUT_DOUBLE $B$H(B
-GLUT_STEREO $B$rDI2C$9$k$3$H$K$h$j!"(B
-$B%/%o%C%I%P%C%U%!%9%F%l%*$N%b!<%I$K@Z$jBX$($k$3$H$,$G$-$^$9!#(B
-$B$?$@$7!"%S%G%*%+!<%I!J$"$k$$$O$=$N%I%i%$%P!K$,(B
-$B%/%o%C%I%P%C%U%!%9%F%l%*$r%5%]!<%H$7$F$$$J$1$l$P!"(B
-$B<B9T;~$K%(%i!<$H$J$C$F%W%m%0%i%`$,=*N;$7$^$9!#(B</p>
+<p>GLUT では、glutInitDisplayMode() の引数に GLUT_DOUBLE と
+GLUT_STEREO を追加することにより、
+クワッドバッファステレオのモードに切り替えることができます。
+ただし、ビデオカード（あるいはそのドライバ）が
+クワッドバッファステレオをサポートしていなければ、
+実行時にエラーとなってプログラムが終了します。</p>
 
 <pre class="source">#include &lt;stdlib.h&gt;
 
@@ -3923,99 +3923,99 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p>$B$3$&$7$FIA2h;~$K2hLL!J%P%C%U%!!K$r$K@Z$jBX$($J$,$i!"(B
-$B$=$l$>$l$K1&4cMQ$N2hA|$H:84cMQ$N2hA|$rI=<($7$^$9!#(B
-$B2hLL$N@Z$jBX$($K$O(B glDrawBuffer() $B$r;H$$$^$9!#(B
-$B%@%V%k%P%C%U%!$J$N$G!"(B
-$BN>J}$H$bGX8e$N2hLL!JI=<($7$F$$$J$$B&$N2hLL!K$KIA$-$^$9!#(B</p>
+<p>こうして描画時に画面（バッファ）をに切り替えながら、
+それぞれに右眼用の画像と左眼用の画像を表示します。
+画面の切り替えには glDrawBuffer() を使います。
+ダブルバッファなので、
+両方とも背後の画面（表示していない側の画面）に描きます。</p>
 
 <pre class="source">  ...
 
-  <em>/* $B1&4cMQ$N%P%C%U%!$N;XDj(B */</em>
+  <em>/* 右眼用のバッファの指定 */</em>
   <em>glDrawBuffer(GL_BACK_RIGHT);</em>
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  <em>/* $B1&4c$N0LCV$HJ}8~(B */</em>
-  <em>gluLookAt(</em>/* $B$3$3$O<+J,$G9M$($F$/$@$5$$(B */<em>);</em>
+  <em>/* 右眼の位置と方向 */</em>
+  <em>gluLookAt(</em>/* ここは自分で考えてください */<em>);</em>
 
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   ... 
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   ... 
 
 
-  <em>/* $B:84cMQ$N%P%C%U%!$N;XDj(B */</em>
+  <em>/* 左眼用のバッファの指定 */</em>
   <em>glDrawBuffer(GL_BACK_LEFT);</em>
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  <em>/* $B:84c$N0LCV$HJ}8~(B */</em>
-  <em>gluLookAt(</em>/* $B$3$3$O<+J,$G9M$($F$/$@$5$$(B */<em>);</em>
+  <em>/* 左眼の位置と方向 */</em>
+  <em>gluLookAt(</em>/* ここは自分で考えてください */<em>);</em>
 
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   ... 
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   ...</pre>
 
-<p>$BFs$D$N;kE@$N4V3V$H$=$l$>$l$N0LCV!&J}8~!"(B
-$B$*$h$S(B fovy$B!J<B83#1$N%5%s%W%k$G$O(B 30 $B$K@_Dj$5$l$F$$$^$9!K$O!"(B
-$B%G%#%9%W%l%$$NI=<(LL$N9b$5!"I=<(LL$H$N5wN%!"(B
-$B<+J,$NN>L\$N4V3V$N<BB,CM$+$i3d$j=P$7$F$/$@$5$$!#(B</p>
+<p>二つの視点の間隔とそれぞれの位置・方向、
+および fovy（実験１のサンプルでは 30 に設定されています）は、
+ディスプレイの表示面の高さ、表示面との距離、
+自分の両目の間隔の実測値から割り出してください。</p>
 
 <div class="figure"><img src="stereo1.gif" width="473" height="354"
-alt="$BN>4cN)BN;k$N86M}(B"></div>
+alt="両眼立体視の原理"></div>
 
-<blockquote>$BK\Ev$O(B gluLookAt() $B$r;H$o$:$K!"(B
-<a href="faq.html#Q7">gluPerspective() $B$r(B glFrustum()
-$B$KCV$-49$($F:81&$NL\$N;kLn$r$:$i$7$?$[$&$,87L)(B</a>$B$J$s$G$9$,!"(B
-$B$=$l$@$H%W%m%0%i%`$,>/$7$d$d$3$7$/$J$j$^$9$7!"(B
+<blockquote>本当は gluLookAt() を使わずに、
+<a href="faq.html#Q7">gluPerspective() を glFrustum()
+に置き換えて左右の目の視野をずらしたほうが厳密</a>なんですが、
+それだとプログラムが少しややこしくなりますし、
 glFrustum()
-$B$N@bL@$b$7$J$-$c$$$1$J$/$J$k$N$G<j$rH4$-$^$9!#(B</blockquote>
+の説明もしなきゃいけなくなるので手を抜きます。</blockquote>
 
-<p>$B$J$*!"1i=,<<$N%G%#%9%W%l%$$O%j%U%l%C%7%e%l!<%H$,(B
-80Hz$B!J#1IC4V$K#8#02s=q$-49$(!K$J$N$G!"(B $B%9%F%l%*%b!<%I$K$9$k$HJRL\$"$?$j(B
-40Hz $B$K$J$C$F!"7k9=$A$i$D$-$,L\N)$A$^$9!#(B
-$B%W%m%0%i%`$,40@.$7$F$=$l$i$7$$2hA|$,I=<($5$l$k$3$H$r3N$+$a$?$i!"(B
-$B%G%#%9%W%l%$$N2rA|EY$rMn$H$7$F%j%U%l%C%7%e%l!<%H$r>e$2$F8+$F$/$@$5$$!#(B
-GLUT $B$N(B<em>$B%2!<%`%b!<%I(B</em>$B$r;H$($P!"$3$l$r%W%m%0%i%`Cf$+$i@)8f$9$k$3$H$b$G$-$^$9!#(B
-$B>\$7$/$O(B<a href="refresh.html">$B$3$3(B</a>$B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>なお、演習室のディスプレイはリフレッシュレートが
+80Hz（１秒間に８０回書き換え）なので、 ステレオモードにすると片目あたり
+40Hz になって、結構ちらつきが目立ちます。
+プログラムが完成してそれらしい画像が表示されることを確かめたら、
+ディスプレイの解像度を落としてリフレッシュレートを上げて見てください。
+GLUT の<em>ゲームモード</em>を使えば、これをプログラム中から制御することもできます。
+詳しくは<a href="refresh.html">ここ</a>を参照してください。</p>
 
-<h2><a class="label" name="ex3">$B<B83#3!%2>A[$N$>$-7j$N<B83(B</a></h2>
+<h2><a class="label" name="ex3">実験３．仮想のぞき穴の実験</a></h2>
 
-<p>$B%G%#%9%W%l%$$r$N$>$-7j$K8+N)$F$F!"(B
-$B$=$N8~$3$&B&$K2>A[E*$JIt20$,$"$k$b$N$H$7$F2hA|$r@8@.$7$^$9!#(B
-$B4QB,<T$NF,$K0LCV%;%s%5(B (IsoTrak) $B$r<h$jIU$1!"(B
-$B$=$N>pJs$r85$K2hA|$r@8@.$9$k$3$H$K$h$j!"(B
-$B1?F0;k:9$K$h$k1|9T$-46$r<B8=$7$^$9!#(B
-IsoTrak $B$+$i$N%G!<%?$NFI$_9~$_$K$D$$$F$O!"(B
-<a href="isotrak/">IsoTrak II $B$N;qNA(B</a>$B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>ディスプレイをのぞき穴に見立てて、
+その向こう側に仮想的な部屋があるものとして画像を生成します。
+観測者の頭に位置センサ (IsoTrak) を取り付け、
+その情報を元に画像を生成することにより、
+運動視差による奥行き感を実現します。
+IsoTrak からのデータの読み込みについては、
+<a href="isotrak/">IsoTrak II の資料</a>を参照してください。</p>
 
-<h2><a class="label" name="ex4">$B<B83#4!%2>A[%Q%Z%C%H$N<B83(B</a></h2>
+<h2><a class="label" name="ex4">実験４．仮想パペットの実験</a></h2>
 
-<p>SuperGrove $B$+$iF@$i$l$k%G!<%?$r85$K!"(B
-$B#C#G;X?M7A$rF0$+$7$^$9!#(B
-SuperGrove $B$+$i$N%G!<%?$NFI$_9~$_$K$D$$$F$O!"(B
-<a href="superglovejr/">SupreGlove Jr. $B$N;qNA(B</a>$B$r;2>H$7$F$/$@$5$$!#(B
-$B$J$*!"$3$N<B83$OI=<(7A>u$rJQ2=$5$;$k$3$H$K$J$k$N$G!"(B
-$B%G%#%9%W%l%$%j%9%H$O;H$o$J$$J}$,4JC1$@$H;W$$$^$9!#(B</p>
+<p>SuperGrove から得られるデータを元に、
+ＣＧ指人形を動かします。
+SuperGrove からのデータの読み込みについては、
+<a href="superglovejr/">SupreGlove Jr. の資料</a>を参照してください。
+なお、この実験は表示形状を変化させることになるので、
+ディスプレイリストは使わない方が簡単だと思います。</p>
 
-<h2><a class="label" name="ex5">$B<B83#5!%2>A[%Q%s%A%s%0%\!<%k$N<B83(B</a></h2>
+<h2><a class="label" name="ex5">実験５．仮想パンチングボールの実験</a></h2>
 
-<p>Crystal Eys $B$rAuCe$7!"(BIsoTrak $B$N%;%s%5$r0.$jDy$a$F!"(B
-$B%Q%s%A%s%0%\!<%k$r2%$j$^$9!#(B
-IsoTrak $B$+$i$N%G!<%?$NFI$_9~$_$K$D$$$F$O!"(B
-<a href="isotrak/">IsoTrak II $B$N;qNA(B</a>$B$r;2>H$7$F$/$@$5$$!#(B</p>
+<p>Crystal Eys を装着し、IsoTrak のセンサを握り締めて、
+パンチングボールを殴ります。
+IsoTrak からのデータの読み込みについては、
+<a href="isotrak/">IsoTrak II の資料</a>を参照してください。</p>
 
 </body>
 </html>

@@ -2,34 +2,34 @@
 <html>
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>D. $B%i%8%3%s%F%#!<%]%C%H$N<B83(B</title>
+<title>D. ラジコンティーポットの実験</title>
 </head>
 
 <body>
 
-<h1>$B%i%8%3%s%F%#!<%]%C%H$N<B83(B</h1>
+<h1>ラジコンティーポットの実験</h1>
 
-<p>$BCOLL$N>e$KCV$$$?J*BN$r!$(B
-$B%^%&%9$r;H$C$F%3%s%H%m!<%k$9$k%W%m%0%i%`$r:n$C$F$_$^$7$g$&!%(B
-$B$3$l$^$G$K:n$C$?%W%m%0%i%`$r%Y!<%9$r2~B$$9$k$N$,<j$C<h$jAa$$$H;W$$$^$9$,!$(B
-$B$&$^$/9T$+$J$1$l$P2<$N<j=g$r;29M$K$7$F$/$@$5$$!%(B
-$B%=!<%9%U%!%$%kL>$O(B prog6.c $B$H$7$F$/$@$5$$!%(B</p>
+<p>地面の上に置いた物体を，
+マウスを使ってコントロールするプログラムを作ってみましょう．
+これまでに作ったプログラムをベースを改造するのが手っ取り早いと思いますが，
+うまく行かなければ下の手順を参考にしてください．
+ソースファイル名は prog6.c としてください．</p>
 
-<p>$B2<$N%W%m%0%i%`$OCOLL$N>e$K#18D$N%F%#!<%]%C%H$r@E;_2h$GI=<($7$^$9!%(B
-$B$J$s$G%F%#!<%]%C%H$J$N$+$H$$$&$N$OCV$$$F$*$$$F!$(B
-$B$3$l$r%^%&%9$r;H$C$F!V%i%8%3%s%+!<!W$N$h$&$KA`:n$G$-$k$h$&$K$7$F$/$@$5$$!%(B</p>
+<p>下のプログラムは地面の上に１個のティーポットを静止画で表示します．
+なんでティーポットなのかというのは置いておいて，
+これをマウスを使って「ラジコンカー」のように操作できるようにしてください．</p>
 
 <pre class="source">#include &lt;stdlib.h&gt;
 #include &lt;GL/glut.h&gt;
 
-#define W 6                        /* $BCOLL$NI}$N#2J,$N#1!!(B */
-#define D 9                        /* $BCOLL$ND9$5$N#2J,$N#1(B */
+#define W 6                        /* 地面の幅の２分の１　 */
+#define D 9                        /* 地面の長さの２分の１ */
 
 /*
- * $BCOLL$rIA$/(B
+ * 地面を描く
  */
 static void myGround(double height)
 {
@@ -55,29 +55,29 @@ static void myGround(double height)
 }
 
 /*
- * $B2hLLI=<((B
+ * 画面表示
  */
 static void display(void)
 {
-  const static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* $B8w8;$N0LCV(B */
-  const static GLfloat yellow[] = { 0.8, 0.8, 0.2, 1.0 };   /* $B<V$N?'!!!!(B */
-  static GLdouble px = 0.0, pz = 0.0;                       /* $B<V$N0LCV!!(B */
-  static GLdouble r = 0.0;                                  /* $B<V$NJ}8~!!(B */
+  const static GLfloat lightpos[] = { 3.0, 4.0, 5.0, 1.0 }; /* 光源の位置 */
+  const static GLfloat yellow[] = { 0.8, 0.8, 0.2, 1.0 };   /* 車の色　　 */
+  static GLdouble px = 0.0, pz = 0.0;                       /* 車の位置　 */
+  static GLdouble r = 0.0;                                  /* 車の方向　 */
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-  /* $B;kE@$N0\F0!JJ*BN$NJ}$r1|$K0\$9!K(B*/
+  /* 視点の移動（物体の方を奥に移す）*/
   glTranslated(0.0, 0.0, -25.0);
   glRotated(30.0, 1.0, 0.0, 0.0);
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   myGround(0.0);
   glPushMatrix();
   glTranslated(px, 1.0, pz);
@@ -91,23 +91,23 @@ static void display(void)
 
 static void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
 static void keyboard(unsigned char key, int x, int y)
 {
-  /* ESC $B$+(B q $B$r%?%$%W$7$?$i=*N;(B */
+  /* ESC か q をタイプしたら終了 */
   if (key == '\033' || key == 'q') {
     exit(0);
   }
@@ -115,7 +115,7 @@ static void keyboard(unsigned char key, int x, int y)
 
 static void init(void)
 {
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
@@ -136,96 +136,96 @@ int main(int argc, char *argv[])
   return 0;
 }</pre>
 
-<p>$BA`:n$K$O%^%&%9$r;H$$$^$9$,!$$"$/$^$G%i%8%3%s$J$N$G!$(B
-$B%8%g%$%9%F%#%C%/$K$h$kA`:n$rLOJo$9$k$h$&$K$7$F$/$@$5$$!%(B
-$B%8%g%$%9%F%#%C%/$H$O%i%8%3%sAw?.5!!J%W%m%]!K$J$I$K<h$jIU$1$i$l$F$$$k(B
-$BK@>u$N%3%s%H%m!<%i$G!$Nc$($P$3$NK@$rA0$KE]$9$HA0?J$7!$(B
-$B8e$m$KE]$9$H8eB`$9$k!$$H$$$&$h$&$KA`:n$7$^$9!%(B</p>
+<p>操作にはマウスを使いますが，あくまでラジコンなので，
+ジョイスティックによる操作を模倣するようにしてください．
+ジョイスティックとはラジコン送信機（プロポ）などに取り付けられている
+棒状のコントローラで，例えばこの棒を前に倒すと前進し，
+後ろに倒すと後退する，というように操作します．</p>
 
 <div class="figure">
-<img src="joystick.jpg" alt="$B%8%g%$%9%F%#%C%/(B">
+<img src="joystick.jpg" alt="ジョイスティック">
 </div>
 
-<p>$B%^%&%9$r$3$NBeMQ$K;H$&$J$i!$(B
-<em>$B$?$H$($P(B</em>$B!$%^%&%9$r!J4y$N>e$G!KA0J}$K%I%i%C%0$9$l$PA0?J!$(B
-$B8eJ}$K%I%i%C%0$9$l$P8eB`!$(B
-$B1&$K%I%i%C%0$9$l$P1&@^!$:8$K%I%i%C%0$9$l$P:8@^$9$k$h$&$K$7$^$9!%(B
-$B%^%&%9%+!<%=%k$,%&%#%s%I%&$NCf?4$K$"$k;~$r%8%g%$%9%F%#%C%/$NCfN)E@(B
-$B!J%K%e!<%H%i%k!K$H$7!$$=$3$+$i$N%^%&%9%+!<%=%k$NJQ0L$,Bg$-$/$J$k$[$I!$(B
-$BB.EY$d%O%s%I%k$r@Z$kNL$,A}$9$h$&$K$7$F$_$F$/$@$5$$!%(B
-$B$=$N:]!$<V$NA0It!J$H$$$&$+%F%#!<%]%C%H$NCm$.8}!K$,!$(B
-$B>o$K?J9TJ}8~$K8~$/$h$&$K9)IW$7$^$7$g$&!%(B</p>
+<p>マウスをこの代用に使うなら，
+<em>たとえば</em>，マウスを（机の上で）前方にドラッグすれば前進，
+後方にドラッグすれば後退，
+右にドラッグすれば右折，左にドラッグすれば左折するようにします．
+マウスカーソルがウィンドウの中心にある時をジョイスティックの中立点
+（ニュートラル）とし，そこからのマウスカーソルの変位が大きくなるほど，
+速度やハンドルを切る量が増すようにしてみてください．
+その際，車の前部（というかティーポットの注ぎ口）が，
+常に進行方向に向くように工夫しましょう．</p>
 
 <div class="figure">
-<img src="walk1.gif" width="595" height="253" alt="$B%^%&%9$K$h$k@)8f(B">
-<img src="teapotmov.gif" width="120" height="120" alt="$B%i%8%3%s%F%#!<%]%C%H(B">
+<img src="walk1.gif" width="595" height="253" alt="マウスによる制御">
+<img src="teapotmov.gif" width="120" height="120" alt="ラジコンティーポット">
 </div>
 
 <ol>
 
-<li>$B<V!J%F%#!<%]%C%H!K$N8=:_0LCV$O(B display() $B$NCf$N(B px $B$*$h$S(B pz
-$B$NFs$D$NJQ?t$G@_Dj$7$F$$$^$9!%$3$NCM$rJQ99$9$l$P!$(B
-$B<V!J%F%#!<%]%C%H!K$N0LCV$rJQ$($k$3$H$,$G$-$^$9!%(B
-$B$^$?!$$=$N0LCV$G$N?J9TJ}8~$O(B r $B$G@_Dj$7$F$$$^$9!%(B</li>
+<li>車（ティーポット）の現在位置は display() の中の px および pz
+の二つの変数で設定しています．この値を変更すれば，
+車（ティーポット）の位置を変えることができます．
+また，その位置での進行方向は r で設定しています．</li>
 
-<li>$B8=:_0LCV$r(B <b>P</b> = (px, pz)
-$B$H$7!$B.EY%Y%/%H%k$r(B <b>V</b> $B$H$9$l$P!$(B
-t $BIC8e$N0LCV(B <b>P</b>' = (px', pz') $B$O<!<0$G5a$a$i$l$^$9!%(B
+<li>現在位置を <b>P</b> = (px, pz)
+とし，速度ベクトルを <b>V</b> とすれば，
+t 秒後の位置 <b>P</b>' = (px', pz') は次式で求められます．
 <div class="expression">
 <b>P</b>' = <b>V</b> t + <b>P</b>
 </div></li>
 
-<li>$B$^$?$=$N0LCV$K$*$1$k?J9TJ}8~(B r' $B$O!$(B
-$B8=:_$N?J9TJ}8~$r(B
-r$B!$?J9TJ}8~$rJQ$($kB.EY!J%O%s%I%k$r@Z$kB.$5!K$r(B
-a $B$H$9$l$P!$<!<0$G5a$a$i$l$^$9!%(B
+<li>またその位置における進行方向 r' は，
+現在の進行方向を
+r，進行方向を変える速度（ハンドルを切る速さ）を
+a とすれば，次式で求められます．
 <div class="expression">
 r' = a t + r
 </div></li>
 
-<li>$B$7$?$,$C$F!$%&%#%s%I%&$NCf?40LCV$H%^%&%9%+!<%=%k$N4X78$+$i!$(B
-$BB.EY%Y%/%H%k$N@dBPCM!J?J9TJ}8~$KBP$9$kB.EY!K(B
-|<b>V</b>| $B$H3QB.EY(B a $B$r5a$a$^$9!%(B
-$B8=:_0LCV$K$*$1$kB.EY%Y%/%H%k(B <b>V</b>$B$O<!<0$G5a$a$i$l$^$9!%(B
+<li>したがって，ウィンドウの中心位置とマウスカーソルの関係から，
+速度ベクトルの絶対値（進行方向に対する速度）
+|<b>V</b>| と角速度 a を求めます．
+現在位置における速度ベクトル <b>V</b>は次式で求められます．
 <div class="expression">
 <b>V</b> = (|<b>V</b>|sin r, |<b>V</b>|cos r)
 </div>
-$B$?$@$7!$(B<a href="libglut.html#glRotated">glRotated()</a>$B$NBh#10z?t(B
-r $B$O:82sE>$,@5$J$N$KBP$7$F%^%&%9$N:BI87O$O1&J}8~$,@5$G$"$k$3$H!$$*$h$S(B r
-$B$NC10L$O(B<em>$BEY(B</em>$B$J$N$KBP$7$F?t3X4X?t(B sin(), cos()
-$B$N0z?t$O(B<em>$B%i%8%"%s(B</em>$B$GM?$($kI,MW$,$"$k$3$H$KCm0U$7$F$/$@$5$$!%(B</li>
+ただし，<a href="libglut.html#glRotated">glRotated()</a>の第１引数
+r は左回転が正なのに対してマウスの座標系は右方向が正であること，および r
+の単位は<em>度</em>なのに対して数学関数 sin(), cos()
+の引数は<em>ラジアン</em>で与える必要があることに注意してください．</li>
 
-<li>$B%&%#%s%I%&$N%5%$%:$O(B resize() $B$N0z?t$GF@$i$l$^$9$+$i!$(B
-$B$=$l$i$+$i%&%#%s%I%&$NCf?40LCV$r5a$a$^$9!%(B
-$BF@$i$l$?0LCV$O!$B>$N4X?t$GMxMQ$G$-$k$h$&$K!$(B
-$BE,Ev$J(B<em>$B30ItJQ?t(B</em>$B$KBeF~$7$F$*$-$^$9!%(B</li>
+<li>ウィンドウのサイズは resize() の引数で得られますから，
+それらからウィンドウの中心位置を求めます．
+得られた位置は，他の関数で利用できるように，
+適当な<em>外部変数</em>に代入しておきます．</li>
 
-<li><a href="libglut.html#7.2">$B%I%i%C%0(B</a>$BCf$N%^%&%9$N0LCV$rF@$k$?$a$K!$(B
-$B$3$N%W%m%0%i%`$K%^%&%9$N%I%i%C%0Cf$K8F$S=P$94X?t$rDI2C$7!$(B
-$B$=$l$r(B <a href="libglut.html#glutmotionfunc">glutMotionFunc()</a>
-$B$N0z?t$K;XDj$7$^$9!%%^%&%9$N0LCV$ODI2C$7$?4X?t$N0z?t$GF@$k$3$H$,$G$-$^$9$+$i!$(B
-$B$=$N0LCV$N%&%#%s%I%&$NCf?4$+$i$NJQ0L$r85$K!$(B
-$B?J9TJ}8~$H$=$NJ}8~$KBP$9$kB.EY$r7hDj$7$^$9!%(B
-$B$3$l$i$bE,Ev$J30ItJQ?t$KBeF~$7$^$9!%(B</li>
+<li><a href="libglut.html#7.2">ドラッグ</a>中のマウスの位置を得るために，
+このプログラムにマウスのドラッグ中に呼び出す関数を追加し，
+それを <a href="libglut.html#glutmotionfunc">glutMotionFunc()</a>
+の引数に指定します．マウスの位置は追加した関数の引数で得ることができますから，
+その位置のウィンドウの中心からの変位を元に，
+進行方向とその方向に対する速度を決定します．
+これらも適当な外部変数に代入します．</li>
 
-<li>$B$3$N?J9TJ}8~$H$=$NJ}8~$KBP$9$kB.EY$r$b$H$K!$(B
-$B%F%#!<%]%C%H$N8=:_0LCV$rJQ99$7$^$9!%$J$*!$;~9o(B t
-$B$O7P2a;~4V$r7WB,$7$F7hDj$9$kI,MW$,$"$j$^$9$,!$(B
-$BLLE]$J$iDj?t$G$b9=$$$^$;$s!%(B
-t = 1 $B$/$i$$$+$i;O$a$FE,Ev$J%9%T!<%I$K$J$k$h$&D4@0$7$F$_$F2<$5$$!%(B</li>
+<li>この進行方向とその方向に対する速度をもとに，
+ティーポットの現在位置を変更します．なお，時刻 t
+は経過時間を計測して決定する必要がありますが，
+面倒なら定数でも構いません．
+t = 1 くらいから始めて適当なスピードになるよう調整してみて下さい．</li>
 
-<li>$B$b$A$m$s!$%F%#!<%]%C%H$N0\F0$O(B<em>$B3j$i$+$K(B</em>$B9T$o$l$k$h$&$K$7$F$/$@$5$$!%(B
-$B$^$?2hLL$N(B<em>$B$A$i$D$-$bM^@)(B</em>$B$9$k$h$&$K$7$F$/$@$5$$!%(B</li>
+<li>もちろん，ティーポットの移動は<em>滑らかに</em>行われるようにしてください．
+また画面の<em>ちらつきも抑制</em>するようにしてください．</li>
 
 </ol>
 
 <div class="figure">
-<img src="walk3.gif" alt="$B0\F0$N;EJ}(B">
+<img src="walk3.gif" alt="移動の仕方">
 </div>
 
-<p>$B$J$*!$$3$l$O$"$/$^$G!V0lNc!W$K2a$.$^$;$s!%(B
-$B<+J,$N;W$&J}K!$G1?E>J}K!$r9M$($F$/$l$l$P7k9=$G$9!%(B
-$B$?$@$7!$$;$a$F!V#8$N;z!W$/$i$$$O$G$-$k$h$&$K$7$F2<$5$$!%(B
-$B%m!<%k$7$?$j%P%s%/!J%P%$%/$@$H;W$($P!K$7$F$$$?$j$7$?$i$b$C$H4r$7$$$+$b!%(B</p>
+<p>なお，これはあくまで「一例」に過ぎません．
+自分の思う方法で運転方法を考えてくれれば結構です．
+ただし，せめて「８の字」くらいはできるようにして下さい．
+ロールしたりバンク（バイクだと思えば）していたりしたらもっと嬉しいかも．</p>
 </body>
 </html>

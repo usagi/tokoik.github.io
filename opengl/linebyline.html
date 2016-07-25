@@ -2,67 +2,67 @@
 <html lang="ja">
 <head>
 <link rev="MADE" href="mailto:tokoi@sys.wakayama-u.ac.jp">
-<META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="Content-Style-Type" content="text/css">
 <LINK rel="stylesheet" type="text/css" href="opengl.css">
-<title>$BJP8w%a%,%M(B ($B%i%$%s%P%$%i%$%sJ}<0(B) $B$rMQ$$$?N)BN;k$N<B8=(B</title>
+<title>偏光メガネ (ラインバイライン方式) を用いた立体視の実現</title>
 </head>
 
 <body>
 
-<h1>$BJP8w%a%,%M(B ($B%i%$%s%P%$%i%$%sJ}<0(B) $B$rMQ$$$?N)BN;k$N<B8=(B</h1>
+<h1>偏光メガネ (ラインバイライン方式) を用いた立体視の実現</h1>
 
-<h2>$BJP8w%a%,%M$rMQ$$$?N)BN;k$N86M}(B</h2>
+<h2>偏光メガネを用いた立体視の原理</h2>
 
-<p>$B8w$N@5BN$OEE<'GH$G$"$j(B, $BEE<'GH$OEE3&$H<'3&$,?J9TJ}8~$KBP$7$F?bD>$K?6F0$7$F$$$kGH(B ($B2#GH(B) $B$G$9(B. $BL\$KF~$C$F$/$k<+A38w$N$[$H$s$I$O$5$^$6$^$JJ}8~$K?6F0$9$k8w$,:.$6$C$?$b$N$G$9$,(B, $B?6F0$,0l$D$NJ}8~$KJP$C$F$$$k8w$b$"$j$^$9(B. $B$3$l$rJP8w$H$$$$$^$9(B. $B$5$^$6$^$JJ}8~$K?6F0$7$F$$$k8w$+$iFCDj$NJ}8~$K$@$1?6F0$7$F$$$kJP8w$r<h$j=P$9$K$OJP8w%U%#%k%?$r;H$$$^$9(B. $BJP8w%U%#%k%?$OFCDj$NJ}8~$K?6F0$9$kJP8w0J30$r5[<}$9$k$N$G(B, $B<+A38w$+$iJP8w$r:n$j=P$9$3$H$,$G$-$^$9(B.</p>
+<p>光の正体は電磁波であり, 電磁波は電界と磁界が進行方向に対して垂直に振動している波 (横波) です. 目に入ってくる自然光のほとんどはさまざまな方向に振動する光が混ざったものですが, 振動が一つの方向に偏っている光もあります. これを偏光といいます. さまざまな方向に振動している光から特定の方向にだけ振動している偏光を取り出すには偏光フィルタを使います. 偏光フィルタは特定の方向に振動する偏光以外を吸収するので, 自然光から偏光を作り出すことができます.</p>
 
 <div class="figure"><img src="polarization.gif" width="512" height="256"
-alt="$BJP8w%U%#%k%?$NAH$_9g$o$;(B"></div>
+alt="偏光フィルタの組み合わせ"></div>
 
-<p>$B$=$3$G(B, $BJP8w%U%#%k%?$r$b$&0l$DAH$_9g$o$;$^$9(B.
-$B0l$DL\$NJP8w%U%#%k%?(B (1) $B$rDL$C$?JP8w$r(B,
-$B$5$i$KFs$DL\$NJP8w%U%#%k%?(B (2) $B$KDL$7$^$9(B.
-$B$3$N$H$-(B, $BFs$D$NJP8w%U%#%k%?$NJ}8~$,J?9T$J$i(B,
-$B8w$OFs$DL\$NJP8w%U%#%k%?(B (2) $B$rDL2a$7$^$9(B.
-$B$7$+$7(B, $BFs$D$NJQ99%U%#%k%?$NJ}8~$,D>8r$7$F$$$l$P(B,
-$B8w$OFs$DL\$N%U%#%k%?(B (2) $B$G$[$H$s$I5[<}$5$l$F$7$^$$$^$9(B
-($B$*$^$1(B: <a href="polarization.cpp">$B>e?^$rIA$/%W%m%0%i%`(B</a>).</p>
-<p>$B$J$*(B, $BJP8w$K$O>e5-$N$h$&$K?6I}$,FCDjJ}8~$KJP$C$?$b$N(B ($BD>@~JP8w(B) $B$NB>$K(B, $B?6I}$NJ}8~$,8w$N?J9TJ}8~$KBP$7$F2sE>$9$k1_JP8w$d(B, $BD>@~JP8w$H1_JP8w$,AH$_9g$o$5$C$?BJ1_JP8w$b$"$j$^$9(B. $B1_JP8w$dBJ1_JP8w$K$O(B, $B?6I}$NJ}8~$N2sE>J}8~$K$h$C$F(B, $B1&1_JP8w!&1&BJ1_JP8w(B, $B:81_JP8w!&:8BJ1_JP8w$,$"$j$^$9(B.</p>
+<p>そこで, 偏光フィルタをもう一つ組み合わせます.
+一つ目の偏光フィルタ (1) を通った偏光を,
+さらに二つ目の偏光フィルタ (2) に通します.
+このとき, 二つの偏光フィルタの方向が平行なら,
+光は二つ目の偏光フィルタ (2) を通過します.
+しかし, 二つの変更フィルタの方向が直交していれば,
+光は二つ目のフィルタ (2) でほとんど吸収されてしまいます
+(おまけ: <a href="polarization.cpp">上図を描くプログラム</a>).</p>
+<p>なお, 偏光には上記のように振幅が特定方向に偏ったもの (直線偏光) の他に, 振幅の方向が光の進行方向に対して回転する円偏光や, 直線偏光と円偏光が組み合わさった楕円偏光もあります. 円偏光や楕円偏光には, 振幅の方向の回転方向によって, 右円偏光・右楕円偏光, 左円偏光・左楕円偏光があります.</p>
 
-<h2>ZALMAN  ZM-M220W ($B$b$7$/$O(B HYUNDAI W220S) $B$N9=B$(B</h2>
+<h2>ZALMAN  ZM-M220W (もしくは HYUNDAI W220S) の構造</h2>
 
-<p>$B<B83$K;HMQ$9$k%G%#%9%W%l%$(B (ZALMAN  ZM-M220W, HYUNDAI W220S $B$bF1MM(B) $B$O(B, $B%G%#%9%W%l%$$N1U>=%Q%M%k$KJP8w%U%#%k%?$,=E$M$i$l$F$$$^$9(B. $B$3$NJP8w%U%#%k%?$O(B, $B1U>=%Q%M%k$NAv::@~$4$H$K(B, $B1&1_JP8w$rDL$9$b$N$H:81_JP8w$rDL$9$b$N$,8r8_$KAH$_9g$o$5$l$F$$$^$9(B. $B$3$l$r1&L\$H:8L\$K1&1_JP8w%U%#%k%?$H:81_JP8w%U%#%k%?$r<h$jIU$1$?JP8w%a%,%M$rDL$7$F8+$k$H(B, $B1&L\$K$O4q?tHVL\$NAv::@~(B, $B:8L\$K$O6v?tHVL\$NAv::@~$@$1$,8+$($^$9(B.</p>
+<p>実験に使用するディスプレイ (ZALMAN  ZM-M220W, HYUNDAI W220S も同様) は, ディスプレイの液晶パネルに偏光フィルタが重ねられています. この偏光フィルタは, 液晶パネルの走査線ごとに, 右円偏光を通すものと左円偏光を通すものが交互に組み合わされています. これを右目と左目に右円偏光フィルタと左円偏光フィルタを取り付けた偏光メガネを通して見ると, 右目には奇数番目の走査線, 左目には偶数番目の走査線だけが見えます.</p>
 
 <div class="figure"><img src="w220s.gif" width="512" height="384"
-alt="$B%i%$%s%P%$%i%$%sJ}<0JP8w%G%#%9%W%l%$(B"></div>
+alt="ラインバイライン方式偏光ディスプレイ"></div>
 
-<p>$B$7$?$,$C$F(B,
-$B$3$NMg4c(B 3D $B%G%#%9%W%l%$$G$O(B,
-$B1GA|$r<!$N$h$&$KJ,$1$F2hLLI=<($9$kI,MW$,$"$j$^$9!%(B</p>
+<p>したがって,
+この裸眼 3D ディスプレイでは,
+映像を次のように分けて画面表示する必要があります．</p>
 
 <ul>
-<li><em>$B1&L\(B</em>$BMQ$N1GA|$r(B<em>$B4q?t(B</em>$BHVL\$NAv::@~$KIA$/!%(B</li>
-<li><em>$B:8L\(B</em>$BMQ$N1GA|$r(B<em>$B6v?t(B</em>$BHVL\$NAv::@~$KIA$/!%(B</li>
+<li><em>右目</em>用の映像を<em>奇数</em>番目の走査線に描く．</li>
+<li><em>左目</em>用の映像を<em>偶数</em>番目の走査線に描く．</li>
 </ul>
-<h2>$B<B83(B</h2>
+<h2>実験</h2>
 
-<p>$BMg4c(B 3D $B%G%#%9%W%l%$$r;HMQ$7$?N)BN;kI=<($r9T$&>l9g(B,
-$B?^7A$r2hLL>e$N6v?tHVL\$NAv::@~$H4q?tHVL\$NAv::@~$KJ,$1$FIA$/I,MW$,$"$j$^$9(B.
-$B$=$N$?$a$K(B,
-$B$3$3$G$O(B OpenGL $B$N(B glPolygonStipple() $B$H$$$&4X?t$r;HMQ$7$^$9(B.
-$B$3$N4X?t$O?^7A$rIA$/:]$K(B,
-$B?^7A$K$+$1$k!V%^%9%/!W$rDj5A$7$^$9(B.
-$B%^%9%/$NBg$-$5$O(B 32$B!_(B32 $B2hAG$G(B,
-$B%^%9%/$NCM$,(B 1 $B$N$H$3$m$@$1?^7A$,IA2h$5$l$^$9(B.
-$B=>$C$F<!$N$h$&$J%^%9%/$rMQ0U$9$l$P(B,
-$B2hLL>e$N6v?tHVL\$N=D$N%i%$%s$d4q?tHVL\$N=D$N%i%$%s$@$1$K?^7A$rIA$/$3$H$,$G$-$^$9(B.</p>
+<p>裸眼 3D ディスプレイを使用した立体視表示を行う場合,
+図形を画面上の偶数番目の走査線と奇数番目の走査線に分けて描く必要があります.
+そのために,
+ここでは OpenGL の glPolygonStipple() という関数を使用します.
+この関数は図形を描く際に,
+図形にかける「マスク」を定義します.
+マスクの大きさは 32×32 画素で,
+マスクの値が 1 のところだけ図形が描画されます.
+従って次のようなマスクを用意すれば,
+画面上の偶数番目の縦のラインや奇数番目の縦のラインだけに図形を描くことができます.</p>
 <div class="figure"><img src="mask-w220s.gif" width="528" height="264"
-alt="$B%^%9%/2hA|(B"></div>
+alt="マスク画像"></div>
 
-<p>$B$^$::G=i$K(B,
-$B=i4|2=$N4X?t(B init() $B$G$3$N%^%9%/$r:n@.$7$^$9(B.
-$B$^$?(B,
-GL_POLYGON_STIPPLE $B$rM-8z$K$7$F$*$-$^$9!%(B</p>
+<p>まず最初に,
+初期化の関数 init() でこのマスクを作成します.
+また,
+GL_POLYGON_STIPPLE を有効にしておきます．</p>
 
 <pre class="source">...
  
@@ -71,10 +71,10 @@ GL_POLYGON_STIPPLE $B$rM-8z$K$7$F$*$-$^$9!%(B</p>
 ...
  
 <em>/*
-** $B%^%9%/MQ$NJQ?t$N@k8@(B
+** マスク用の変数の宣言
 */
-static int emask[32]; /* $B6v?tHVL\$N%i%$%sMQ%^%9%/(B */
-static int omask[32]; /* $B4q?tHVL\$N%i%$%sMQ%^%9%/(B */</em>
+static int emask[32]; /* 偶数番目のライン用マスク */
+static int omask[32]; /* 奇数番目のライン用マスク */</em>
  
 ...
  
@@ -82,112 +82,112 @@ void init(void)
 {
   <em>int i;</em>
   
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   ...
   
-  <em>/* $B%^%9%/$r:n$k(B */</em>
+  <em>/* マスクを作る */</em>
   <em>for (i = 0; i &lt; 32; ++i)</em>
     <em>emask[i] = ~(omask[i] = -(i & 1));</em>
   
-  <em>/* $BIA2h$9$k%]%j%4%s$K%^%9%/$r$+$1$k(B */</em>
+  <em>/* 描画するポリゴンにマスクをかける */</em>
   <em>glEnable(GL_POLYGON_STIPPLE);</em>
 }</pre>
 
-<p>$B$I$&$7$F$3$l$G>e$N$h$&$J%^%9%/$,:n@.$5$l$k$N$+$O(B, $B$3$N=hM}$rFs?J?t$G9M$($k$H$o$+$j$^$9(B. $B$3$&$7$F4q?tHVL\$NAv::@~$K1&L\$+$i$_$?%7!<%s$rI=<($7(B,
-$B6v?tHVL\$NAv::@~$K:8L\$+$i8+$?%7!<%s$rI=<($7$^$9(B.</p>
+<p>どうしてこれで上のようなマスクが作成されるのかは, この処理を二進数で考えるとわかります. こうして奇数番目の走査線に右目からみたシーンを表示し,
+偶数番目の走査線に左目から見たシーンを表示します.</p>
 
-<p>$B$^$?(B,
-$B$3$NJ}K!$G$OF1$8%7!<%s$r(B 2 $B2sIA$/I,MW$,$"$k$N$G(B,
-$B<j4V$r>J$/$?$a$K%G%#%9%W%l%$%j%9%H$H$$$&5!G=$r;HMQ$9$k$3$H$K$7$^$9(B.
-$B%G%#%9%W%l%$%j%9%H$O(B,
-glNewList($BHV9f(B, ...) $B!A(B glEndList() $B$N4V$G<B9T$7$?(B OpenGL $B$NL?Na$r(B,
-glCallList($BHV9f!K$r8F$S=P$9$3$H$K$h$C$F:FEY<B9T$9$k$H$$$&$b$N$G$9(B.
-$B$3$N%G%#%9%W%l%$%j%9%H$NHV9f$O(B,
-glGenLists() $B$r;H$C$F@8@.$7(B,
-glDeleteLists() $B$GGK4~$7$^$9!%(B</p>
+<p>また,
+この方法では同じシーンを 2 回描く必要があるので,
+手間を省くためにディスプレイリストという機能を使用することにします.
+ディスプレイリストは,
+glNewList(番号, ...) 〜 glEndList() の間で実行した OpenGL の命令を,
+glCallList(番号）を呼び出すことによって再度実行するというものです.
+このディスプレイリストの番号は,
+glGenLists() を使って生成し,
+glDeleteLists() で破棄します．</p>
 <pre class="source">/*
- * $B2hLLI=<((B
+ * 画面表示
  */
 void display(void)
 {
   ...
-  <em>GLuint list; /* $B%G%#%9%W%l%$%j%9%H(B */</em>
+  <em>GLuint list; /* ディスプレイリスト */</em>
   
-  <em>/* $B%G%#%9%W%l%$%j%9%H$N:n@.(B */</em>
+  <em>/* ディスプレイリストの作成 */</em>
   <em>list = glGenLists(1);</em>
 
-  /* $B2hLL%/%j%"(B */
+  /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
   
-  <em>/* $B1&L\$N0LCV$HJ}8~(B */</em>
-  <em>gluLookAt(<strong>/* $B$3$3$O<+J,$G9M$($F$/$@$5$$(B */</strong>);</em>
+  <em>/* 右目の位置と方向 */</em>
+  <em>gluLookAt(<strong>/* ここは自分で考えてください */</strong>);</em>
   
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   ...
   
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   ...
   
-  <em>/* $B4q?tHVL\$NAv::@~$@$1$KIA2h$9$k(B */</em>
+  <em>/* 奇数番目の走査線だけに描画する */</em>
   <em>glPolygonStipple((GLubyte *)omask);</em>
   
-  <em>/* $B%G%#%9%W%l%$%j%9%H$X$NEPO?3+;O(B */</em>
+  <em>/* ディスプレイリストへの登録開始 */</em>
   <em>glNewList(list, GL_COMPILE_AND_EXECUTE);</em>
   
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   ...
   
-  <em>/* $B%G%#%9%W%l%$%j%9%H$X$NEPO?=*N;(B */</em>
+  <em>/* ディスプレイリストへの登録終了 */</em>
   <em>glEndList();</em>
   
-  <em>/* $B%G%W%9%P%C%U%!$@$1$r%/%j%"(B */</em>
+  <em>/* デプスバッファだけをクリア */</em>
   <em>glClear(GL_DEPTH_BUFFER_BIT);</em>
   
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
   
-  <em>/* $B:8L\$N0LCV$HJ}8~(B */</em>
-  <em>gluLookAt(<strong>/* $B$3$3$O<+J,$G9M$($F$/$@$5$$(B */</strong>);</em>
+  <em>/* 左目の位置と方向 */</em>
+  <em>gluLookAt(<strong>/* ここは自分で考えてください */</strong>);</em>
   
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   ...
   
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   ...
   
-  <em>/* $B6v?tHVL\$NAv::@~$@$1$KIA2h$9$k(B */</em>
+  <em>/* 偶数番目の走査線だけに描画する */</em>
   <em>glPolygonStipple((GLubyte *)emask);</em>
   
-  <em>/* $B%7!<%s$NIA2h(B */</em>
+  <em>/* シーンの描画 */</em>
   <em>glCallList(list);</em>
   
-  <em>/* $B%G%#%9%W%l%$%j%9%H$rGK4~$9$k(B */</em>
+  <em>/* ディスプレイリストを破棄する */</em>
   <em>glDeleteLists(list, 1);</em>
   
   ...
 }</pre>
 
-<p>$B#2$D$N;kE@$N4V3V$H$=$l$>$l$N0LCV!&J}8~(B,
-$B$*$h$S(B fovy ($B<B83#1$N%5%s%W%k$G$O(B 30 $B$K@_Dj$5$l$F$$$^$9(B) $B$O(B,
-$B%G%#%9%W%l%$$NI=<(LL$N9b$5(B,
-$BI=<(LL$H$N5wN%(B,
-$B<+J,$NN>L\$N4V3V$N<BB,CM$+$i3d$j=P$7$F$/$@$5$$(B.</p>
+<p>２つの視点の間隔とそれぞれの位置・方向,
+および fovy (実験１のサンプルでは 30 に設定されています) は,
+ディスプレイの表示面の高さ,
+表示面との距離,
+自分の両目の間隔の実測値から割り出してください.</p>
 
 <div class="figure"><img src="stereo1.gif" width="473" height="354"
-alt="$BN>4cN)BN;k$N86M}(B"></div>
+alt="両眼立体視の原理"></div>
 
-<blockquote>$BK\Ev$O(B gluLookAt() $B$r;H$o$:$K(B,
-<a href="faq.html#Q7">gluPerspective() $B$r(B glFrustum() $B$KCV$-49$($F:81&$NL\$N;kLn$r$:$i$7$?$[$&$,87L)(B</a>$B$J$s$G$9$,(B,
-$B$=$l$@$H%W%m%0%i%`$,>/$7$d$d$3$7$/$J$j$^$9$7(B,
-glFrustum() $B$N@bL@$b$7$J$-$c$$$1$J$/$J$k$N$G<j$rH4$-$^$9(B.</blockquote>
+<blockquote>本当は gluLookAt() を使わずに,
+<a href="faq.html#Q7">gluPerspective() を glFrustum() に置き換えて左右の目の視野をずらしたほうが厳密</a>なんですが,
+それだとプログラムが少しややこしくなりますし,
+glFrustum() の説明もしなきゃいけなくなるので手を抜きます.</blockquote>
 
-<p>$B:G8e$K(B,
-$BN)BN;kI=<($7$F$$$k%&%#%s%I%&$,>.$5$+$C$?$j(B,
-$B2hLL>e$KM>7W$J$b$N$,1G$C$F$$$?$j$9$k$H$&$^$/N)BN46$,F@$i$l$J$$>l9g$,$"$k$N$G(B,
-$B2hLL$r%U%k%9%/%j!<%sI=<($K$7$^$9(B.</p>
+<p>最後に,
+立体視表示しているウィンドウが小さかったり,
+画面上に余計なものが映っていたりするとうまく立体感が得られない場合があるので,
+画面をフルスクリーン表示にします.</p>
 
 <pre class="source">...
  

@@ -3,45 +3,45 @@
 
 #define BLEND
 
-/* $BFbB&$NJ*BN$N?'(B */
+/* 内側の物体の色 */
 GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
 
-/* $B30B&$NJ*BN$N?'(B */
+/* 外側の物体の色 */
 #ifdef BLEND
 GLfloat blue[] = { 0.2, 0.2, 0.8, 0.5 };
 #else
 GLfloat blue[] = { 0.2, 0.2, 0.8, 1.0 };
 #endif
 
-/* $B8w8;$N0LCV(B */
+/* 光源の位置 */
 GLfloat pos[] = { 1.0, 2.0, 5.0, 1.0 };
 
-/* $B;kE@$N0LCV(B */
+/* 視点の位置 */
 GLdouble ex = 0.0, ey = 0.0, ez = 10.0;
 
-/* $BL\I8E@$N0LCV(B */
+/* 目標点の位置 */
 GLdouble tx = 0.0, ty = 0.0, tz = 0.0;
 
-/* $B2sE><4(B */
+/* 回転軸 */
 GLdouble ax = 0.0, ay = 1.0;
 
-/* $B2sE>3Q(B */
+/* 回転角 */
 GLdouble angle = 0.0;
 
-/* $B%/%j%C%WLL(B */
+/* クリップ面 */
 GLdouble clip[] = { 0.0, 0.0, -1.0, 0.0 };
 
-/* $BI=<(?^7A$N%G%#%9%W%l%$%j%9%HHV9f(B */
+/* 表示図形のディスプレイリスト番号 */
 GLuint cube, dodeca;
 
-/* $B%^%&%90\F0NL$N%9%1!<%k(B */
+/* マウス移動量のスケール */
 double sx, sy;
 #define SCALE 360.0
 
-/* $B%I%i%C%03+;O0LCV(B */
+/* ドラッグ開始位置 */
 int cx, cy;
 
-/* $B%I%i%C%03+;O;~$N2sE>3Q(B */
+/* ドラッグ開始時の回転角 */
 double ca;
 
 void display(void)
@@ -51,34 +51,34 @@ void display(void)
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B%/%j%C%WLL$rL\I8E@$KJ?9T0\F0(B */
+  /* クリップ面を目標点に平行移動 */
   glTranslated(0.0, 0.0, -d);
 
-  /* $B2sE>(B */
+  /* 回転 */
   glRotated(angle, ax, ay, 0.0);
 
-  /* $B%/%j%C%WLL$r@_Dj(B */
+  /* クリップ面を設定 */
   glClipPlane(GL_CLIP_PLANE0, clip);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+  /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
 
-  /* $B;kE@$N0\F0(B */
+  /* 視点の移動 */
   gluLookAt(ex, ey, ez, tx, ty, tz, 0.0, 1.0, 0.0);
 
-  /* $B8w8;$N0LCV$r@_Dj(B */
+  /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-  /* $BFbB&$N%/%j%C%W$5$l$J$$N)J}BN$rIA2h(B */
+  /* 内側のクリップされない立方体を描画 */
 #ifdef BLEND
   glBlendFunc(GL_ONE, GL_ZERO);
 #endif
   glCallList(cube);
 
-  /* $B30B&$N%/%j%C%W$5$l$k#1#2LLBN$rIA2h(B */
+  /* 外側のクリップされる１２面体を描画 */
 #ifdef BLEND
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif
@@ -91,21 +91,21 @@ void display(void)
 
 void resize(int w, int h)
 {
-  /* $B%^%&%9%]%$%s%?0LCV$N%&%#%s%I%&Fb$NAjBPE*0LCV$X$N49;;MQ(B */
+  /* マウスポインタ位置のウィンドウ内の相対的位置への換算用 */
   sx = 1.0 / (double)w;
   sy = 1.0 / (double)h;
 
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$N;XDj(B */
+  /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
 
-  /* $BF);kJQ499TNs$N=i4|2=(B */
+  /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$N;XDj(B */
+  /* モデルビュー変換行列の指定 */
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -120,16 +120,16 @@ void mouse(int button, int state, int x, int y)
   case GLUT_LEFT_BUTTON:
     switch (state) {
     case GLUT_DOWN:
-      /* $B%"%K%a!<%7%g%s3+;O(B */
+      /* アニメーション開始 */
       glutIdleFunc(idle);
-      /* $B%I%i%C%03+;OE@$r5-O?(B */
+      /* ドラッグ開始点を記録 */
       cx = x;
       cy = y;
-      /* $B%I%i%C%03+;O;~$N2sE>3Q$r5-O?(B */
+      /* ドラッグ開始時の回転角を記録 */
       ca = angle;
       break;
     case GLUT_UP:
-      /* $B%"%K%a!<%7%g%s=*N;(B */
+      /* アニメーション終了 */
       glutIdleFunc(0);
       break;
     default:
@@ -145,18 +145,18 @@ void motion(int x, int y)
 {
   double dx, dy, a;
 
-  /* $B%^%&%9%]%$%s%?$N0LCV$N%I%i%C%03+;O0LCV$+$i$NJQ0L(B */
+  /* マウスポインタの位置のドラッグ開始位置からの変位 */
   dx = (x - cx) * sx;
   dy = (y - cy) * sy;
 
-  /* $B%^%&%9%]%$%s%?$N0LCV$N%I%i%C%03+;O0LCV$+$i$N5wN%(B */
+  /* マウスポインタの位置のドラッグ開始位置からの距離 */
   a = sqrt(dx * dx + dy * dy);
 
   if (a != 0.0) {
-    /* $B5wN%$r3QEY$K49;;$7$F%I%i%C%03+;O;~$N2sE>3Q$K2C;;(B */
+    /* 距離を角度に換算してドラッグ開始時の回転角に加算 */
     angle = fmod(ca + SCALE * a, 360.0);
 
-    /* $B%^%&%9$NJQ0L$+$i2sE><4%Y%/%H%k$r5a$a$k(B */
+    /* マウスの変位から回転軸ベクトルを求める */
     ax = dy / a;
     ay = dx / a;
   }
@@ -166,7 +166,7 @@ void keyboard(unsigned char key, int x, int y)
 {
   switch (key) {
   case '\033':
-    /* ESC $B$r%?%$%W$7$?$i=*N;(B */
+    /* ESC をタイプしたら終了 */
     exit(0);
   case 'x':
     ex += 0.5;
@@ -194,7 +194,7 @@ void keyboard(unsigned char key, int x, int y)
 
 void init(void)
 {
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
@@ -203,23 +203,23 @@ void init(void)
   glEnable(GL_BLEND);
 #endif
 
-  /* $B%/%j%C%W$9$k$HN"B&$,8+$($k$N$G!"N"B&$K$b1"1FIU$1(B */
+  /* クリップすると裏側が見えるので、裏側にも陰影付け */
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);
 }
 
 void scene(void)
 {
-  /* $BI=<(?^7A$r%G%#%9%W%l%$%j%9%H$KEPO?(B */
+  /* 表示図形をディスプレイリストに登録 */
   int l = glGenLists(2);
 
-  /* $BFbB&$NN)J}BN(B */
+  /* 内側の立方体 */
   cube = l;
   glNewList(cube, GL_COMPILE);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
   glutSolidCube(2.0);
   glEndList();
 
-  /* $B30B&$N#1#2LLBN(B */
+  /* 外側の１２面体 */
   dodeca = l + 1;
   glNewList(dodeca, GL_COMPILE);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blue);

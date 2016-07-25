@@ -20,14 +20,14 @@ static double lanecolor[DATA_SIZE][3];
 static double torus[TORUS][3],torusp[TORUS][3];
 static int    toruslap[TORUS];
 
-static int rndmd=1;                /* »ëÅÀ°ÌÃÖ¤Î¥é¥ó¥À¥à¥â¡¼¥É¤Î¥¹¥¤¥Ã¥Á */
-static int mainr=0;                /* ¥ª¡¼¥×¥Ë¥ó¥°-¥á¥¤¥ó¤Î¥Õ¥é¥° */
-static int zoom=8;                 /* ¥º¡¼¥à¤Î¥Ñ¥é¥á¡¼¥¿¡¼ */
-static double vht=0.2;             /* »ëÅÀ¤Î¹â¤µ */
-static int torus_num=0;            /* »ëÅÀ¤òÀßÄê¤¹¤ë¥È¡¼¥é¥¹¤ÎÈÖ¹æ */
-static int vall=1;                 /* »ëÅÀ¤ÎÀÚ¤êÂØ¤¨¥¹¥¤¥Ã¥Á */
-static int stop=0;                 /* °ì»şÄä»ß-ºÆ³«¥¹¥¤¥Ã¥Á */
-static int winx,winy;              /* ¥¦¥£¥ó¥É¥¦¤Î¥µ¥¤¥º */
+static int rndmd=1;                /* è¦–ç‚¹ä½ç½®ã®ãƒ©ãƒ³ãƒ€ãƒ ãƒ¢ãƒ¼ãƒ‰ã®ã‚¹ã‚¤ãƒƒãƒ */
+static int mainr=0;                /* ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°-ãƒ¡ã‚¤ãƒ³ã®ãƒ•ãƒ©ã‚° */
+static int zoom=8;                 /* ã‚ºãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ */
+static double vht=0.2;             /* è¦–ç‚¹ã®é«˜ã• */
+static int torus_num=0;            /* è¦–ç‚¹ã‚’è¨­å®šã™ã‚‹ãƒˆãƒ¼ãƒ©ã‚¹ã®ç•ªå· */
+static int vall=1;                 /* è¦–ç‚¹ã®åˆ‡ã‚Šæ›¿ãˆã‚¹ã‚¤ãƒƒãƒ */
+static int stop=0;                 /* ä¸€æ™‚åœæ­¢-å†é–‹ã‚¹ã‚¤ãƒƒãƒ */
+static int winx,winy;              /* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚º */
 
 void quit(void)
 {
@@ -37,10 +37,10 @@ void quit(void)
     exit(0);
 }
 
-void solv_de(u,v) /* LorenzÊıÄø¼°¤Îº¹Ê¬²½ÊıÄø¼°¤Î·«¤êÊÖ¤··×»» */
+void solv_de(u,v) /* Lorenzæ–¹ç¨‹å¼ã®å·®åˆ†åŒ–æ–¹ç¨‹å¼ã®ç¹°ã‚Šè¿”ã—è¨ˆç®— */
 double u[3],v[3];
 {
-    static double dt = 0.005;                /* »ş´Ö´Ö³Ö */
+    static double dt = 0.005;                /* æ™‚é–“é–“éš” */
 
     v[0] = u[0] + dt * (10.0 * (u[1] - u[0]));
     v[1] = u[1] + dt * (28.0 * u[0] - u[1] - u[0] * u[2]);
@@ -120,20 +120,20 @@ void o_display(void)
 }
 
 
-void make_lane(void) /* ²ò¶ÊÀş¤Î¥Ç¡¼¥¿ºîÀ® */
+void make_lane(void) /* è§£æ›²ç·šã®ãƒ‡ãƒ¼ã‚¿ä½œæˆ */
 {
     int  i,j;
     double v1[3],v2[3];
     GLdouble c1,c2,c3;
 
-    v1[0] = 2.0; v1[1] = 2.0; v1[2] = 2.0;             /* ½é´üÃÍ */
+    v1[0] = 2.0; v1[1] = 2.0; v1[2] = 2.0;             /* åˆæœŸå€¤ */
 
-    for(i=0; i<300; i++) {                       /* ½é´ü¤Î¶õ²ó¤· */
+    for(i=0; i<300; i++) {                       /* åˆæœŸã®ç©ºå›ã— */
         solv_de(v1,v2);
         for (j=0; j<3; j++) v1[j] = v2[j];
     }
     
-    for(i=0; i < DATA_SIZE; i++) {       /* ¥Ç¡¼¥¿¤ò·×»»¤·¤ÆÊİÂ¸ */
+    for(i=0; i < DATA_SIZE; i++) {       /* ãƒ‡ãƒ¼ã‚¿ã‚’è¨ˆç®—ã—ã¦ä¿å­˜ */
         solv_de(v1,v2);
         project1(v2,lane[i]);
         for (j=0; j<3; j++) v1[j] = v2[j];
@@ -166,7 +166,7 @@ void move_torus(void)
     }
 }
 
-void init_torus(void)  /* ¥È¡¼¥é¥¹¤Î½é´ü°ÌÃÖ */
+void init_torus(void)  /* ãƒˆãƒ¼ãƒ©ã‚¹ã®åˆæœŸä½ç½® */
 {
     int i;
     double r;
@@ -223,10 +223,10 @@ void set_sight(double offset)
     double u1[3], ur[3], ue[3];
     double rr;
 
-    if (vall == 1) {                        /* »ëÅÀ¤òÀµÌÌ±óÊı¤Ë¸ÇÄê */
+    if (vall == 1) {                        /* è¦–ç‚¹ã‚’æ­£é¢é æ–¹ã«å›ºå®š */
         glLoadIdentity();
         gluLookAt(offset,100.0,30.0, 0.0,0.0,30.0, 0.0,0.0,1.0);
-    } else {                            /* »ëÅÀ¤ò¥È¡¼¥é¥¹¸åÊı¤ËÀßÄê */
+    } else {                            /* è¦–ç‚¹ã‚’ãƒˆãƒ¼ãƒ©ã‚¹å¾Œæ–¹ã«è¨­å®š */
         for(i=0; i<3; i++) {
             u1[i] = torusp[torus_num][i];
             ur[i] = torus[torus_num][i] - u1[i];
@@ -286,7 +286,7 @@ void m_display(void)
 
     set_light();
 
-    /* ²ò¶ÊÀş¤òÉ½¼¨ */
+    /* è§£æ›²ç·šã‚’è¡¨ç¤º */
     glBegin(GL_LINE_STRIP);
     for(i=0; i < DATA_SIZE; i++) {
         glColor3dv(lanecolor[i]);
@@ -296,7 +296,7 @@ void m_display(void)
 
     glEnable(GL_LIGHTING);
 
-    /* ²ò¶ÊÀş¾å¤ÎÅÀ¤ò¥È¡¼¥é¥¹¤ÇÉ½¼¨ */
+    /* è§£æ›²ç·šä¸Šã®ç‚¹ã‚’ãƒˆãƒ¼ãƒ©ã‚¹ã§è¡¨ç¤º */
     for(i=0; i<TORUS; i++) {
         glPushMatrix();
         glTranslated(torus[i][0],torus[i][1],torus[i][2]);
@@ -307,7 +307,7 @@ void m_display(void)
         glPopMatrix();
     }
 
-    /* ÊıÄø¼°¤Î2¸Ä¤ÎÊ¿¹ÕÅÀ¤òµå¤ÇÉ½¼¨ */
+    /* æ–¹ç¨‹å¼ã®2å€‹ã®å¹³è¡¡ç‚¹ã‚’çƒã§è¡¨ç¤º */
     glPushMatrix();
     glTranslated(16.97, 0.0, 27.0);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse1);
@@ -436,87 +436,87 @@ void keyboard(unsigned char key, int x, int y)
 {
     if (mainr > 0) {
         switch(key) {
-            case 27:  /* [ESC] ¥×¥í¥°¥é¥à¤Î½ªÎ» */
+            case 27:  /* [ESC] ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®çµ‚äº† */
             case 'q':
                 quit();
                 break;
-            case 's':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó°ì»şÄä»ß */
+            case 's':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€æ™‚åœæ­¢ */
                 stop = 1;
                 glutIdleFunc(NULL);
                 break;
-            case 'g':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó³«»Ï */
+            case 'g':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹ */
                 stop = 0;
                 glutIdleFunc(idle);
                 break;
-            case ' ':  /* (Ää»ß»ş¤Ë)1¥³¥Ş¿Ê¤á¤ë */
+            case ' ':  /* (åœæ­¢æ™‚ã«)1ã‚³ãƒé€²ã‚ã‚‹ */
                 idle();
                 break;
-            case '0':  /* »ëÅÀ¤ò¾åÊı±óÊı¤Ë¤¹¤ë */
+            case '0':  /* è¦–ç‚¹ã‚’ä¸Šæ–¹é æ–¹ã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 1;
                 glutPostRedisplay();
                 break;
-            case '1':  /* »ëÅÀ¤ò1ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '1':  /* è¦–ç‚¹ã‚’1ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 0;
                 glutPostRedisplay();
                 break;
-            case '2':  /* »ëÅÀ¤ò2ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '2':  /* è¦–ç‚¹ã‚’2ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 1;
                 glutPostRedisplay();
                 break;
-            case '3':  /* »ëÅÀ¤ò3ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '3':  /* è¦–ç‚¹ã‚’3ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 2;
                 glutPostRedisplay();
                 break;
-            case '4':  /* »ëÅÀ¤ò4ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '4':  /* è¦–ç‚¹ã‚’4ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 3;
                 glutPostRedisplay();
                 break;
-            case '5':  /* »ëÅÀ¤ò5ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '5':  /* è¦–ç‚¹ã‚’5ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 4;
                 glutPostRedisplay();
                 break;
-            case '6':  /* »ëÅÀ¤ò6ÈÖ¤Î¼Ö¤Ë¤¹¤ë */
+            case '6':  /* è¦–ç‚¹ã‚’6ç•ªã®è»Šã«ã™ã‚‹ */
                 rndmd = 0;
                 vall = 0;
                 torus_num = 5;
                 glutPostRedisplay();
                 break;
-            case 'u':  /* »ëÅÀ¤ò¾å¤Ë¤º¤é¤¹ */
+            case 'u':  /* è¦–ç‚¹ã‚’ä¸Šã«ãšã‚‰ã™ */
                 if (vall == 0 && rndmd == 0) {
                     vht += 0.1; if(vht > 0.75) vht = 0.8;
                     glutPostRedisplay();
                 }
                 break;
-            case 'd':  /* »ëÅÀ¤ò²¼¤Ë¤º¤é¤¹ */
+            case 'd':  /* è¦–ç‚¹ã‚’ä¸‹ã«ãšã‚‰ã™ */
                 if (vall == 0 && rndmd == 0) {
                     vht -= 0.1; if (vht < -0.75) vht = -0.8;
                     glutPostRedisplay();
                 }
                 break;
-            case '+':  /* ¥º¡¼¥à¥¤¥ó */
+            case '+':  /* ã‚ºãƒ¼ãƒ ã‚¤ãƒ³ */
                 if (vall == 0 && rndmd == 0) {
                     zoom = zoom / 2; if (zoom < 2) zoom = 2;
                     glutPostRedisplay();
                 }
                 break;
-            case '-':  /* ¥º¡¼¥à¥¢¥¦¥È */
+            case '-':  /* ã‚ºãƒ¼ãƒ ã‚¢ã‚¦ãƒˆ */
                 if (vall == 0 && rndmd == 0) {
                     zoom = zoom * 2; if (zoom > 128) zoom = 128;
                     glutPostRedisplay();
                 }
                 break;
-            case 'r':  /* »ëÅÀ¤Î¥é¥ó¥À¥à¥â¡¼¥ÉÀÚÂØ */
+            case 'r':  /* è¦–ç‚¹ã®ãƒ©ãƒ³ãƒ€ãƒ ãƒ¢ãƒ¼ãƒ‰åˆ‡æ›¿ */
                 rndmd = 1;
                 break;
         }

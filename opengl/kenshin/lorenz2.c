@@ -1,5 +1,5 @@
 /*
- *   OpenGL, glut ¤ò»È¤Ã¤¿ LorenzÊıÄø¼°¤Î²ò¶ÊÀş¤òÉÁ²è¤¹¤ë¥×¥í¥°¥é¥à   
+ *   OpenGL, glut ã‚’ä½¿ã£ãŸ Lorenzæ–¹ç¨‹å¼ã®è§£æ›²ç·šã‚’æç”»ã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ    
  */
 
 #include <stdlib.h>
@@ -13,13 +13,13 @@ static double sol[DATA_SIZE][3];
 static double col[DATA_SIZE][3];
 static int time=5;
 
-void solv_de(void) /* LorenzÊıÄø¼°¤Îº¹Ê¬²½ÊıÄø¼°¤Î·«¤êÊÖ¤··×»» */
+void solv_de(void) /* Lorenzæ–¹ç¨‹å¼ã®å·®åˆ†åŒ–æ–¹ç¨‹å¼ã®ç¹°ã‚Šè¿”ã—è¨ˆç®— */
 {
-       static double dt=0.005;          /* »ş´Ö´Ö³Ö */
+       static double dt=0.005;          /* æ™‚é–“é–“éš” */
        double  u[3],v[3];
        int  i;
 
-       /* ¥Ç¡¼¥¿¤ò·×»»¤·¤ÆÊİÂ¸ */
+       /* ãƒ‡ãƒ¼ã‚¿ã‚’è¨ˆç®—ã—ã¦ä¿å­˜ */
        for(i=0 ; i < DATA_SIZE ; i++) {
             u[0] = (sol[i][0]+sol[i][1]*10.0)/2.0;
             u[1] = (sol[i][0]-sol[i][1]*10.0)/2.0;
@@ -110,7 +110,7 @@ void display(void)
 
     glEnable(GL_LIGHTING);
 
-    /* ÊıÄø¼°¤ÎÊ¿¹ÕÅÀ¤òµå¤ÇÉ½¼¨ */
+    /* æ–¹ç¨‹å¼ã®å¹³è¡¡ç‚¹ã‚’çƒã§è¡¨ç¤º */
     glPushMatrix();
     glTranslated(16.97056, 0.0, 27.0);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse2);
@@ -139,16 +139,16 @@ void reshape(int w, int h)
 void keyboard(unsigned char key, int x, int y)
 {
     switch(key) {
-         case 27:  /* [ESC] ¥×¥í¥°¥é¥à¤Î½ªÎ» */
+         case 27:  /* [ESC] ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®çµ‚äº† */
              exit(0);
              break;
-         case 's':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó°ì»şÄä»ß */
+         case 's':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€æ™‚åœæ­¢ */
              glutIdleFunc(NULL);
              break;
-         case 'g':  /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó³«»Ï */
+         case 'g':  /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹ */
              glutIdleFunc(idle);
              break;
-         case ' ':  /* (Ää»ß»ş¤Ë)1¥³¥Ş¿Ê¤á¤ë */
+         case ' ':  /* (åœæ­¢æ™‚ã«)1ã‚³ãƒé€²ã‚ã‚‹ */
              glutPostRedisplay();
              break;
     }

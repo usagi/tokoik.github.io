@@ -3,21 +3,21 @@
 #include <math.h>
 
 #define DATA_SIZE 8000
-#define DELAY 12                  /* 2Âæ¤Î°ÜÆ°ÊªÂÎ¤Îµ÷Î¥: 4°Ê¾å */
+#define DELAY 12                  /* 2å°ã®ç§»å‹•ç‰©ä½“ã®è·é›¢: 4ä»¥ä¸Š */
 
-static double de_sol[DATA_SIZE][3];    /* (²ò)µ°Æ» */
+static double de_sol[DATA_SIZE][3];    /* (è§£)è»Œé“ */
 
-static double pl_p[DELAY][3];     /* °ÜÆ°ÊªÂÎ¤Î°ÌÃÖ */
-static double pl_v[DELAY][3];     /* °ÜÆ°ÊªÂÎ¤Î¿Ê¤àÊı¸ş */
-static double pl_n[DELAY][3];     /* °ÜÆ°ÊªÂÎ¤Îattractive¤ÊÊı¸ş */
-static double pl_e[DELAY][3];     /* °ÜÆ°ÊªÂÎ¤Îexpanding¤ÊÊı¸ş */
+static double pl_p[DELAY][3];     /* ç§»å‹•ç‰©ä½“ã®ä½ç½® */
+static double pl_v[DELAY][3];     /* ç§»å‹•ç‰©ä½“ã®é€²ã‚€æ–¹å‘ */
+static double pl_n[DELAY][3];     /* ç§»å‹•ç‰©ä½“ã®attractiveãªæ–¹å‘ */
+static double pl_e[DELAY][3];     /* ç§»å‹•ç‰©ä½“ã®expandingãªæ–¹å‘ */
 
-static int repeat=1;              /* ¥Ç¥â¤ÎÈ¿Éü(¥¹¥¤¥Ã¥Á) */
-static int sws=0;                 /* »ëÅÀ¤Î°ÌÃÖ(¥¹¥¤¥Ã¥Á) */
-static double vang=0.2;           /* »ëÅÀ¤Î³ÑÅÙ */
-static int zoom=8;                /* ³ÈÂçÎ¨ */
-static int lane=1;                /* µ°Æ»¤ÎÉ½¼¨(¥¹¥¤¥Ã¥Á) */
-static int car=1;                 /* °ÜÆ°ÊªÂÎ¤ÎÉ½¼¨(¥¹¥¤¥Ã¥Á) */
+static int repeat=1;              /* ãƒ‡ãƒ¢ã®åå¾©(ã‚¹ã‚¤ãƒƒãƒ) */
+static int sws=0;                 /* è¦–ç‚¹ã®ä½ç½®(ã‚¹ã‚¤ãƒƒãƒ) */
+static double vang=0.2;           /* è¦–ç‚¹ã®è§’åº¦ */
+static int zoom=8;                /* æ‹¡å¤§ç‡ */
+static int lane=1;                /* è»Œé“ã®è¡¨ç¤º(ã‚¹ã‚¤ãƒƒãƒ) */
+static int car=1;                 /* ç§»å‹•ç‰©ä½“ã®è¡¨ç¤º(ã‚¹ã‚¤ãƒƒãƒ) */
 
 void quit(void)
 {
@@ -50,7 +50,7 @@ void ext_prod(v1,v2,nv)
 void solv_de(u,v)
      double u[3],v[3];
 {
-  double dt = 0.02;		/* »ş´Ö´Ö³Ö */
+  double dt = 0.02;		/* æ™‚é–“é–“éš” */
 
   v[0] = u[0] + dt * (-u[1]-u[2]*20.0);
   v[1] = u[1] + dt * (u[0]+0.2*u[1]);
@@ -62,18 +62,18 @@ void make_lane()
   double  v1[3], v2[3];
   int  h,i;
 
-  v1[0]= 5.0;			/* ½é´üÃÍ */
+  v1[0]= 5.0;			/* åˆæœŸå€¤ */
   v1[1]= 5.0;
   v1[2]= 0.0;
 
-  /* º¹Ê¬ÊıÄø¼°¤Î·«¤êÊÖ¤··×»» */
-  /* ½é´ü¤Î¶õ²ó¤· */
+  /* å·®åˆ†æ–¹ç¨‹å¼ã®ç¹°ã‚Šè¿”ã—è¨ˆç®— */
+  /* åˆæœŸã®ç©ºå›ã— */
   for(i=0; i<100; i++) {
     solv_de(v1,v2);
     for(h=0; h<3; h++) v1[h] = v2[h];
   }
 
-  /* ¥Ç¡¼¥¿¤ò·×»»¤·¤ÆÊİÂ¸ */
+  /* ãƒ‡ãƒ¼ã‚¿ã‚’è¨ˆç®—ã—ã¦ä¿å­˜ */
   for(i=0 ; i < DATA_SIZE ; i++) {
     solv_de(v1,v2);
     for(h=0; h<3; h++) de_sol[i][h] = v1[h] = v2[h];
@@ -171,7 +171,7 @@ void set_sight(double offset)
   int h;
   double u1[3], u2[3], u3[3], ue[3];
 
-  if (sws == 1) {		/* °ÜÆ°ÊªÂÎ¤Î¼Ğ¸åÊı */
+  if (sws == 1) {		/* ç§»å‹•ç‰©ä½“ã®æ–œå¾Œæ–¹ */
     for(h=0; h<3; h++)
       ue[h] = pl_p[DELAY-1][h]
 	- pl_v[DELAY-1][h]*(double)(zoom) * cos(vang)
@@ -181,7 +181,7 @@ void set_sight(double offset)
     gluLookAt(ue[0],ue[1],ue[2],
 	      pl_p[DELAY-1][0], pl_p[DELAY-1][1], pl_p[DELAY-1][2],
 	      pl_n[DELAY-1][0], pl_n[DELAY-1][1], pl_n[DELAY-1][2]);
-  } else if (sws == 2) {	/* °ÜÆ°ÊªÂÎ¤Î¼ĞÁ°Êı */
+  } else if (sws == 2) {	/* ç§»å‹•ç‰©ä½“ã®æ–œå‰æ–¹ */
     for(h=0; h<3; h++)
       ue[h] = pl_p[0][h]
 	+ pl_v[0][h]*(double)(zoom) * cos(vang)
@@ -191,7 +191,7 @@ void set_sight(double offset)
     gluLookAt(ue[0],ue[1],ue[2],
 	      pl_p[0][0], pl_p[0][1], pl_p[0][2],
 	      pl_n[0][0], pl_n[0][1], pl_n[0][2]);
-  } else if (sws == 3) {	/* Ãæ¿´¤«¤é³° */
+  } else if (sws == 3) {	/* ä¸­å¿ƒã‹ã‚‰å¤– */
     glLoadIdentity();
     u1[0]=0.0; u1[1]=0.0; u1[2]=1.0;
     ext_prod (u1,pl_v[2],u2);
@@ -203,7 +203,7 @@ void set_sight(double offset)
     gluLookAt(ue[0], ue[1], ue[2],
 	      pl_p[2][0], pl_p[2][1], pl_p[2][2],
 	      0.0, 0.0, 1.0);
-  } else if (sws == 4) {	/* ³°¤«¤éÃæ¿´ */
+  } else if (sws == 4) {	/* å¤–ã‹ã‚‰ä¸­å¿ƒ */
     glLoadIdentity();
     u1[0]=0.0; u1[1]=0.0; u1[2]=1.0;
     ext_prod (pl_v[2],u1,u2);
@@ -215,7 +215,7 @@ void set_sight(double offset)
     gluLookAt(ue[0], ue[1], ue[2],
 	      pl_p[2][0], pl_p[2][1], pl_p[2][2],
 	      0.0, 0.0, 1.0);
-  } else {			/* ¾åÊı¸ÇÄê */
+  } else {			/* ä¸Šæ–¹å›ºå®š */
     glLoadIdentity();
     gluLookAt(offset, -2.0, 50.0, 0.0, -2.0, 0.0, 0.0, 1.0, 0.0);
   }
@@ -241,22 +241,22 @@ void display_lane(void)
 void display_car_sub(cp,ce,cn,cv)
      double cp[3],ce[3],cn[3],cv[3];
 {
-  GLfloat mat_diffuse1[]   = {1.0, 0.7, 0.3, 1.0}; /* ¼ÖÂÎ¤Î¿§ */
+  GLfloat mat_diffuse1[]   = {1.0, 0.7, 0.3, 1.0}; /* è»Šä½“ã®è‰² */
   GLfloat mat_ambient1[]   = {0.8, 0.5, 0.2, 1.0};
   GLfloat mat_specular1[]  = {1.0, 0.7, 0.3, 1.0};
-  GLfloat mat_diffuse2[]   = {0.3, 0.3, 0.3, 1.0}; /* ¥¿¥¤¥ä¤Î¿§ */
+  GLfloat mat_diffuse2[]   = {0.3, 0.3, 0.3, 1.0}; /* ã‚¿ã‚¤ãƒ¤ã®è‰² */
   GLfloat mat_ambient2[]   = {0.2, 0.2, 0.2, 1.0};
   GLfloat mat_specular2[]  = {0.3, 0.3, 0.3, 1.0};
-  GLfloat mat_diffuse3[]   = {0.8, 0.8, 1.0, 1.0}; /* ¥¬¥é¥¹¤Î¿§ */
+  GLfloat mat_diffuse3[]   = {0.8, 0.8, 1.0, 1.0}; /* ã‚¬ãƒ©ã‚¹ã®è‰² */
   GLfloat mat_ambient3[]   = {0.6, 0.6, 0.9, 1.0};
   GLfloat mat_specular3[]  = {0.8, 0.8, 1.0, 1.0};
-  GLfloat mat_diffuse4[]   = {1.0, 1.0, 0.9, 1.0}; /* Á°¥é¥¤¥È¤Î¿§ */
+  GLfloat mat_diffuse4[]   = {1.0, 1.0, 0.9, 1.0}; /* å‰ãƒ©ã‚¤ãƒˆã®è‰² */
   GLfloat mat_ambient4[]   = {0.9, 0.9, 0.8, 1.0};
   GLfloat mat_specular4[]  = {1.0, 1.0, 0.9, 1.0};
-  GLfloat mat_diffuse5[]   = {1.0, 0.2, 0.2, 1.0}; /* ¸å¥é¥¤¥È¤Î¿§ */
+  GLfloat mat_diffuse5[]   = {1.0, 0.2, 0.2, 1.0}; /* å¾Œãƒ©ã‚¤ãƒˆã®è‰² */
   GLfloat mat_ambient5[]   = {0.7, 0.0, 0.0, 1.0};
   GLfloat mat_specular5[]  = {1.0, 0.2, 0.2, 1.0};
-  GLfloat mat_diffuse6[]   = {0.3, 0.3, 0.3, 1.0}; /* ¥·¡¼¥È¤Î¿§ */
+  GLfloat mat_diffuse6[]   = {0.3, 0.3, 0.3, 1.0}; /* ã‚·ãƒ¼ãƒˆã®è‰² */
   GLfloat mat_ambient6[]   = {0.1, 0.1, 0.1, 1.0};
   GLfloat mat_specular6[]  = {0.3, 0.3, 0.3, 1.0};
   GLfloat mat_shininess[] = {5.0};
@@ -532,52 +532,52 @@ void reshape(int w, int h)
 void keyboard(unsigned char key, int x, int y)
 {
   switch(key) {
-  case 27:			/* ¥×¥í¥°¥é¥à½ªÎ» */
+  case 27:			/* ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
   case 'q':
     quit();
     break;
-  case 's':			/* ¥¢¥Ë¥á¡¼¥·¥ç¥ó°ì»şÄä»ß */
+  case 's':			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€æ™‚åœæ­¢ */
     glutIdleFunc(NULL);
     break;
-  case ' ':			/* (Ää»ß»ş¤Ë)1¥³¥Ş¿Ê¤á¤ë */
+  case ' ':			/* (åœæ­¢æ™‚ã«)1ã‚³ãƒé€²ã‚ã‚‹ */
     idle();
     break;
-  case 'g':			/* ¥¢¥Ë¥á¡¼¥·¥ç¥óºÆ³« */
+  case 'g':			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†é–‹ */
     glutIdleFunc(idle);
     break;
-  case 'V':			/* »ëÅÀ¤ÎÊÑ¹¹¥¹¥¤¥Ã¥Á */
+  case 'V':			/* è¦–ç‚¹ã®å¤‰æ›´ã‚¹ã‚¤ãƒƒãƒ */
     sws--; if(sws == -1) sws=4;
     glutPostRedisplay();
     break;
-  case 'v':			/* »ëÅÀ¤ÎÊÑ¹¹¥¹¥¤¥Ã¥Á */
+  case 'v':			/* è¦–ç‚¹ã®å¤‰æ›´ã‚¹ã‚¤ãƒƒãƒ */
     sws++; if(sws == 5) sws=0;
     glutPostRedisplay();
     break;
-  case 'u':			/* »ëÅÀ¤Î³ÑÅÙ¤ò¾å¤²¤ë */
+  case 'u':			/* è¦–ç‚¹ã®è§’åº¦ã‚’ä¸Šã’ã‚‹ */
     if (sws > 0) vang += 0.2;
     if (vang > 1.0) vang = 1.0;
     glutPostRedisplay();
     break;
-  case 'd':			/* »ëÅÀ¤Î³ÑÅÙ¤ò²¼¤²¤ë */
+  case 'd':			/* è¦–ç‚¹ã®è§’åº¦ã‚’ä¸‹ã’ã‚‹ */
     if (sws > 0) vang -= 0.2;
     if (vang < -1.0) vang = -1.0;
     glutPostRedisplay();
     break;
-  case '+':			/* ¥º¡¼¥à¥¤¥ó */
+  case '+':			/* ã‚ºãƒ¼ãƒ ã‚¤ãƒ³ */
     if (sws > 0) zoom = zoom/2;
     if (zoom < 2) zoom = 2;
     glutPostRedisplay();
     break;
-  case '-':			/* ¥º¡¼¥à¥¢¥¦¥È */
+  case '-':			/* ã‚ºãƒ¼ãƒ ã‚¢ã‚¦ãƒˆ */
     if (sws > 0) zoom = zoom*2;
     if (zoom > 64) zoom = 64;
     glutPostRedisplay();
     break;
-  case 'l':			/* µ°Æ»¤ÎÉ½¼¨¥¹¥¤¥Ã¥Á */
+  case 'l':			/* è»Œé“ã®è¡¨ç¤ºã‚¹ã‚¤ãƒƒãƒ */
     lane = 1-lane;
     glutPostRedisplay();
     break;
-  case 'c':			/* °ÜÆ°ÊªÂÎ¤ÎÉ½¼¨¥¹¥¤¥Ã¥Á */
+  case 'c':			/* ç§»å‹•ç‰©ä½“ã®è¡¨ç¤ºã‚¹ã‚¤ãƒƒãƒ */
     car = 1-car;
     glutPostRedisplay();
     break;

@@ -1,5 +1,5 @@
 /*
- *   OpenGL, glut ¤ò»È¤Ã¤¿ ¥«¥ª¥¹¤Î¤ª¤â¤Á¤ã¤Î¥·¥ß¥å¥ì¡¼¥·¥ç¥ó
+ *   OpenGL, glut ã‚’ä½¿ã£ãŸ ã‚«ã‚ªã‚¹ã®ãŠã‚‚ã¡ã‚ƒã®ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
  *
  *                           toychaos.c   1998/12/16  ver.0.3
  */
@@ -9,14 +9,14 @@
 #include <math.h>
 #include <GL/glut.h>
 
-/* °Ê²¼¤Î¿ôÃÍ¤Ï¤ª¹¥¤ß¤ÇÀßÄê¤·¤Æ¤¯¤À¤µ¤¤¡£ */
+/* ä»¥ä¸‹ã®æ•°å€¤ã¯ãŠå¥½ã¿ã§è¨­å®šã—ã¦ãã ã•ã„ã€‚ */
 
-#define SPEED 0.5          /* ¥Ü¡¼¥ë¤ÎÆ°¤¯¥¹¥Ô¡¼¥É */
-#define MAGNET 0.7         /* ¼§ÀĞ¤Î¶¯¤µ */
+#define SPEED 0.5          /* ãƒœãƒ¼ãƒ«ã®å‹•ãã‚¹ãƒ”ãƒ¼ãƒ‰ */
+#define MAGNET 0.7         /* ç£çŸ³ã®å¼·ã• */
 
-/* ¤³¤³¤Ş¤Ç */
+/* ã“ã“ã¾ã§ */
 
-#define WHASPCT 1.8 /* É½¼¨¤Î½Ä²£Èæ(ËÜÅö¤Ï»ëÀş¤Î³ÑÅÙ¤Ë¤è¤Ã¤ÆÊÑ¤¨¤¿Êı¤¬ÎÉ¤¤) */
+#define WHASPCT 1.8 /* è¡¨ç¤ºã®ç¸¦æ¨ªæ¯”(æœ¬å½“ã¯è¦–ç·šã®è§’åº¦ã«ã‚ˆã£ã¦å¤‰ãˆãŸæ–¹ãŒè‰¯ã„) */
 #define STAND_ANGLE_P 24
 #define MAGNET_ANGLE_P 12
 #define BALL_PART 15
@@ -399,7 +399,7 @@ void display(void)
     glutSwapBuffers();
 }
 
-/* ms2mg() ¤Ç»È¤¦Äê¿ô¤Î·×»» */
+/* ms2mg() ã§ä½¿ã†å®šæ•°ã®è¨ˆç®— */
 void scalewin(void)
 {
     xcenter=wd/2.0;
@@ -542,7 +542,7 @@ int find_object(double xm, double ym, double xb, double yb)
     return imin;
 }
 
-/* ¥Ş¥¦¥¹¤Î°ÌÃÖ¤«¤é¼§ÀĞ¤ÎºÂÉ¸¤ò·×»» */
+/* ãƒã‚¦ã‚¹ã®ä½ç½®ã‹ã‚‰ç£çŸ³ã®åº§æ¨™ã‚’è¨ˆç®— */
 int ms2mg(int x, int y, double *xg, double *yg)
 {
       *xg = (x-xcenter) / xstandr * 5.0;
@@ -551,7 +551,7 @@ int ms2mg(int x, int y, double *xg, double *yg)
       if ((*xg)*(*xg)+(*yg)*(*yg)>20.0) return (-1); else return (0);
 }
 
-/* (²¾ÁÛ¤Î)¼§ÀĞ¤ÎºÂÉ¸¤«¤é¥Ü¡¼¥ë¤ÎºÂÉ¸¤ò·×»» */
+/* (ä»®æƒ³ã®)ç£çŸ³ã®åº§æ¨™ã‹ã‚‰ãƒœãƒ¼ãƒ«ã®åº§æ¨™ã‚’è¨ˆç®— */
 int mg2bl(double x, double y, double *xg, double *yg)
 {
       double aa,bb,cc,dd,ss;

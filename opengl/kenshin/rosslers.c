@@ -8,16 +8,16 @@
 #define DATA_SIZE 3000
 #define DISPLAY_DATA_SIZE 50
 
-static double de_sol[DATA_SIZE][3];    /* ²ò¶ÊÀş */
-static double de_n[DATA_SIZE][3];      /* ²ò¶ÊÀş¤Îattractive¤ÊÊı¸ş */
-static double de_a[DATA_SIZE][3];      /* ²ò¶ÊÀş¤Îexpanding¤ÊÊı¸ş */
+static double de_sol[DATA_SIZE][3];    /* è§£æ›²ç·š */
+static double de_n[DATA_SIZE][3];      /* è§£æ›²ç·šã®attractiveãªæ–¹å‘ */
+static double de_a[DATA_SIZE][3];      /* è§£æ›²ç·šã®expandingãªæ–¹å‘ */
 
-static int repeat=1;                   /* ¥Ç¥â¤ÎÈ¿Éü(¥¹¥¤¥Ã¥Á) */
-static int sws=0;                      /* »ëÅÀ¤Î°ÌÃÖ(¥¹¥¤¥Ã¥Á) */
-static int altrj=1;                    /* µ°Æ»¤ÎÁ´ÂÎ/ÉôÊ¬É½¼¨(¥¹¥¤¥Ã¥Á) */
-static int time=DISPLAY_DATA_SIZE;     /* ²ò¶ÊÀş¤Î»ÏÅÀ¤Î°ÌÃÖ */
-static double spos=2.5;                /* »ëÅÀ¤Î¹â¤µ */
-static int zoom=8;                     /* ³ÈÂçÎ¨ */
+static int repeat=1;                   /* ãƒ‡ãƒ¢ã®åå¾©(ã‚¹ã‚¤ãƒƒãƒ) */
+static int sws=0;                      /* è¦–ç‚¹ã®ä½ç½®(ã‚¹ã‚¤ãƒƒãƒ) */
+static int altrj=1;                    /* è»Œé“ã®å…¨ä½“/éƒ¨åˆ†è¡¨ç¤º(ã‚¹ã‚¤ãƒƒãƒ) */
+static int time=DISPLAY_DATA_SIZE;     /* è§£æ›²ç·šã®å§‹ç‚¹ã®ä½ç½® */
+static double spos=2.5;                /* è¦–ç‚¹ã®é«˜ã• */
+static int zoom=8;                     /* æ‹¡å¤§ç‡ */
 
 static int vp,vh,zm;             /* menu ID's */
 
@@ -38,17 +38,17 @@ void solv_de()
   double  dt;
   int  h,i;
 
-  dt = 0.01 ;			/* »ş´Ö´Ö³Ö */
+  dt = 0.01 ;			/* æ™‚é–“é–“éš” */
 
-  v1[0]= 5.0;			/* ½é´üÃÍ */
+  v1[0]= 5.0;			/* åˆæœŸå€¤ */
   v1[1]= 5.0;
   v1[2]= 0.0;
   u1[0]= 5.0;
   u1[1]= 5.1;
   u1[2]= 0.0;
 
-  /* º¹Ê¬ÊıÄø¼°¤Î·«¤êÊÖ¤··×»» */
-  /* ½é´ü¤Î¶õ²ó¤· */
+  /* å·®åˆ†æ–¹ç¨‹å¼ã®ç¹°ã‚Šè¿”ã—è¨ˆç®— */
+  /* åˆæœŸã®ç©ºå›ã— */
   for(i=0; i<100; i++) {
     v2[0] = v1[0] + dt * (2.2-v1[2]) * (-v1[1]-v1[2]*20.0);
     v2[1] = v1[1] + dt * (2.2-v1[2]) * (v1[0]+0.2*v1[1]);
@@ -71,7 +71,7 @@ void solv_de()
       v1[h] = v2[h];
     }
   }
-  /* ¥Ç¡¼¥¿¤ò·×»»¤·¤ÆÊİÂ¸ */
+  /* ãƒ‡ãƒ¼ã‚¿ã‚’è¨ˆç®—ã—ã¦ä¿å­˜ */
   for(i=0 ; i < DATA_SIZE ; i++) {
     v2[0] = v1[0] + dt * (2.2-v1[2]) * (-v1[1]-v1[2]*20.0);
     v2[1] = v1[1] + dt * (2.2-v1[2]) * (v1[0]+0.2*v1[1]);
@@ -143,7 +143,7 @@ void set_sight(double offset)
   glTranslated(offset, 0.0, 0.0);
   glRotated(atan2(offset, DISTANCE) * 180.0 / 3.1415926536, 0.0, 1.0, 0.0);
 #endif
-  if (sws == 1) {		/* Èô¹Ôµ¡¤Î¼Ğ¸åÊı */
+  if (sws == 1) {		/* é£›è¡Œæ©Ÿã®æ–œå¾Œæ–¹ */
     for(h=0; h<3; h++) {
       u1[h] = de_sol[time-1][h];
       ur[h] = de_sol[time][h] - u1[h] ;
@@ -158,18 +158,18 @@ void set_sight(double offset)
 	      de_n[time][0],
 	      de_n[time][1],
 	      de_n[time][2]);
-  } else if (sws == 2) {	/* Ãæ¿´¤Îµå */
+  } else if (sws == 2) {	/* ä¸­å¿ƒã®çƒ */
     gluLookAt(0.0, 0.0,  de_sol[time][2]+spos,
 	      de_sol[time+2][0], de_sol[time+2][1], de_sol[time+2][2],
 	      0.0, 0.0, 1.0);
-  } else if (sws == 3) {	/* Ãæ¿´¤Îµå¤ÈÈô¹Ôµ¡¤ò·ë¤ÖÀş¤Î±äÄ¹¾å */
+  } else if (sws == 3) {	/* ä¸­å¿ƒã®çƒã¨é£›è¡Œæ©Ÿã‚’çµã¶ç·šã®å»¶é•·ä¸Š */
     for(h=0; h<3; h++) u1[h] = de_sol[time+2][h];
     rr = sqrt(u1[0]*u1[0]+u1[1]*u1[1]);
     for(h=0; h<2; h++) ue[h] = u1[h]*16.0/rr;
     gluLookAt(ue[0],ue[1],u1[2]+spos,
 	      u1[0],u1[1],u1[2],
 	      0.0, 0.0, 1.0);
-  } else {			/* ¾åÊı¸ÇÄê */
+  } else {			/* ä¸Šæ–¹å›ºå®š */
     gluLookAt(0.0, 0.0, 50.0, 0.0, -2.0, 0.0, 0.0, 1.0, 0.0);
   }
 }
@@ -510,46 +510,46 @@ void menu(void)
 void keyboard(unsigned char key, int x, int y)
 {
   switch(key) {
-  case 27:			/* [ESC] ¥×¥í¥°¥é¥à½ªÎ» */
+  case 27:			/* [ESC] ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
     quit();
     break;
-  case 's':			/* ¥¢¥Ë¥á¡¼¥·¥ç¥ó°ì»şÄä»ß */
+  case 's':			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€æ™‚åœæ­¢ */
     glutIdleFunc(NULL);
     break;
-  case ' ':			/* (Ää»ß»ş¤Ë)1¥³¥Ş¿Ê¤á¤ë */
+  case ' ':			/* (åœæ­¢æ™‚ã«)1ã‚³ãƒé€²ã‚ã‚‹ */
     idle();
     break;
-  case 'g':			/* ¥¢¥Ë¥á¡¼¥·¥ç¥óºÆ³« */
+  case 'g':			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†é–‹ */
     glutIdleFunc(idle);
     break;
-  case 'V':			/* »ëÅÀ¤ÎÊÑ¹¹¥¹¥¤¥Ã¥Á */
+  case 'V':			/* è¦–ç‚¹ã®å¤‰æ›´ã‚¹ã‚¤ãƒƒãƒ */
     sws--; if(sws == -1) sws=3;
     glutPostRedisplay();
     break;
-  case 'v':			/* »ëÅÀ¤ÎÊÑ¹¹¥¹¥¤¥Ã¥Á */
+  case 'v':			/* è¦–ç‚¹ã®å¤‰æ›´ã‚¹ã‚¤ãƒƒãƒ */
     sws++; if(sws == 4) sws=0;
     glutPostRedisplay();
     break;
-  case 't':			/* ²ò¶ÊÀşÁ´ÂÎ/ÉôÊ¬ÉÁ²è¤ÎÊÑ¹¹¥¹¥¤¥Ã¥Á */
+  case 't':			/* è§£æ›²ç·šå…¨ä½“/éƒ¨åˆ†æç”»ã®å¤‰æ›´ã‚¹ã‚¤ãƒƒãƒ */
     altrj = 1-altrj;
     glutPostRedisplay();
     break;
-  case 'u':			/* »ëÅÀ¤Î¹â¤µ¤ò¾å¤²¤ë */
+  case 'u':			/* è¦–ç‚¹ã®é«˜ã•ã‚’ä¸Šã’ã‚‹ */
     if (sws > 0) spos += 1.0;
     if (spos > 5.5) spos = 5.5;
     glutPostRedisplay();
     break;
-  case 'd':			/* »ëÅÀ¤Î¹â¤µ¤ò²¼¤²¤ë */
+  case 'd':			/* è¦–ç‚¹ã®é«˜ã•ã‚’ä¸‹ã’ã‚‹ */
     if (sws > 0) spos -= 1.0;
     if (spos < -5.5) spos = -5.5;
     glutPostRedisplay();
     break;
-  case '+':			/* ¥º¡¼¥à¥¤¥ó */
+  case '+':			/* ã‚ºãƒ¼ãƒ ã‚¤ãƒ³ */
     if (sws == 1) zoom = zoom/2;
     if (zoom < 2) zoom = 2;
     glutPostRedisplay();
     break;
-  case '-':			/* ¥º¡¼¥à¥¢¥¦¥È */
+  case '-':			/* ã‚ºãƒ¼ãƒ ã‚¢ã‚¦ãƒˆ */
     if (sws == 1) zoom = zoom*2;
     if (zoom > 64) zoom = 64;
     glutPostRedisplay();

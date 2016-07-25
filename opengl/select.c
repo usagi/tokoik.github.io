@@ -2,19 +2,19 @@
 #include <math.h>
 #include <GL/glut.h>
 
-/* $B%;%l%/%7%g%s%P%C%U%!$N%5%$%:(B */
+/* セレクションバッファのサイズ */
 #define SELECTIONS 100
 
-/* $B%*%V%8%'%/%H$N?t(B */
+/* オブジェクトの数 */
 #define NOBJECTS 5
 
-/* $B%G%#%9%W%l%$%j%9%H$N<1JL;R(B */
+/* ディスプレイリストの識別子 */
 GLuint objects;
 
-/* $B3F%*%V%8%'%/%H$N?'(B */
+/* 各オブジェクトの色 */
 GLfloat *color[NOBJECTS];
 
-/* $B?'%G!<%?(B */
+/* 色データ */
 GLfloat gray[] = { 0.7, 0.7, 0.7 };
 GLfloat blue[] = { 0.1, 0.1, 0.9 };
 
@@ -26,7 +26,7 @@ void display(void)
   glLoadIdentity();
   gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  /* $B0lC6%7!<%s$rIA2h$9$k(B */
+  /* 一旦シーンを描画する */
   for (i = 0; i < NOBJECTS; i++) {
     glMaterialfv(GL_FRONT, GL_DIFFUSE, color[i]);
     glCallList(objects + i);
@@ -37,8 +37,8 @@ void display(void)
 
 void mouse(int button, int state, int x, int y)
 {
-  static GLuint selection[SELECTIONS];  /* $B%;%l%/%7%g%s%P%C%U%!!!!!!!!!!!(B */
-  static GLint hits = 0;                /* $B%;%l%/%H$5$l$?%*%V%8%'%/%H$N?t(B */
+  static GLuint selection[SELECTIONS];  /* セレクションバッファ　　　　　 */
+  static GLint hits = 0;                /* セレクトされたオブジェクトの数 */
 
   switch (button) {
   case GLUT_LEFT_BUTTON:
@@ -47,112 +47,112 @@ void mouse(int button, int state, int x, int y)
       GLint vp[4];
       int i;
 
-      /* $B%;%l%/%7%g%s$K;H$&%P%C%U%!$N@_Dj!%$3$l$O%;%l%/%7%g(B
-         $B%s%b!<%I0J30$N;~!J(BglRenderMode(GL_SELECT) $B$h$jA0!K(B
-         $B$K<B9T$9$kI,MW$,$"$k!%%;%l%/%7%g%s%P%C%U%!$K$O!$F~(B
-         $B$k$@$1$N%G!<%?$,5M$a9~$^$l$k(B */
+      /* セレクションに使うバッファの設定．これはセレクショ
+         ンモード以外の時（glRenderMode(GL_SELECT) より前）
+         に実行する必要がある．セレクションバッファには，入
+         るだけのデータが詰め込まれる */
       glSelectBuffer(SELECTIONS, selection);
 
-      /* $B%l%s%@%j%s%0%b!<%I$r%;%l%/%7%g%s%b!<%I$K@ZBX$($k(B */
+      /* レンダリングモードをセレクションモードに切替える */
       glRenderMode(GL_SELECT);
       
-      /* $B%;%l%/%7%g%s%P%C%U%!$N=i4|2=!$$3$l$O%;%l%/%7%g%s%b!<(B
-         $B%I$K$J$C$F$J$$$HL5;k$5$l$k(B */
+      /* セレクションバッファの初期化，これはセレクションモー
+         ドになってないと無視される */
       glInitNames();
 
-      /* $B%M!<%`%9%?%C%/$N@hF,$K2>$NL>A0$r5M$a$F$*$/!%%M!<%`(B
-         $B%9%?%C%/<+BN$OJ#?t$N%*%V%8%'%/%H$,A*Br$G$-$k$h$&$K(B
-         $B%9%?%C%/9=B$$K$J$C$F$$$k$,!$:#2s$O#18D$N%*%V%8%'%/(B
-         $B%H$7$+A*Br$7$J$$$N$G!$%M!<%`%9%?%C%/$N@hF,$NMWAG$@(B
-         $B$1$r<h$jBX$($J$,$iIA2h$9$l$P$h$$!%$=$3$G!$$"$i$+$8(B
-         $B$a%M!<%`%9%?%C%/$N@hF,$K2>$NL>A0(B (-1) $B$K5M$a$F$*$$(B
-         $B$F!$$=$3$r;H$$2s$9!%(B */
+      /* ネームスタックの先頭に仮の名前を詰めておく．ネーム
+         スタック自体は複数のオブジェクトが選択できるように
+         スタック構造になっているが，今回は１個のオブジェク
+         トしか選択しないので，ネームスタックの先頭の要素だ
+         けを取り替えながら描画すればよい．そこで，あらかじ
+         めネームスタックの先頭に仮の名前 (-1) に詰めておい
+         て，そこを使い回す． */
       glPushName(-1);
 
-      /* $B%;%l%/%7%g%s$N=hM}$O;kE@:BI87O$G9T$&(B */
+      /* セレクションの処理は視点座標系で行う */
       glMatrixMode(GL_PROJECTION);
 
-      /* $B8=:_$NF);kJQ49%^%H%j%/%9$rJ]B8$9$k(B */
+      /* 現在の透視変換マトリクスを保存する */
       glPushMatrix();
 
-      /* $BF);kJQ49%^%H%j%/%9$r=i4|2=$9$k(B */
+      /* 透視変換マトリクスを初期化する */
       glLoadIdentity();
 
-      /* $B8=:_$N%S%e!<%]!<%H@_Dj$rF@$k(B */
+      /* 現在のビューポート設定を得る */
       glGetIntegerv(GL_VIEWPORT, vp);
 
-      /* $BI=<(NN0h$,%^%&%9%]%$%s%?$N<~0O$@$1$K$J$k$h$&$KJQ49(B
-         $B9TNs$r@_Dj$9$k!%%^%&%9$N:BI87O$O!$%9%/%j!<%s$N:BI8(B
-         $B7O$KBP$7$F>e2<$,H?E>$7$F$$$k$N$G!$$=$l$rJd@5$9$k(B */
+      /* 表示領域がマウスポインタの周囲だけになるように変換
+         行列を設定する．マウスの座標系は，スクリーンの座標
+         系に対して上下が反転しているので，それを補正する */
       gluPickMatrix(x, vp[3] - y - 1, 1, 1, vp);
 
-      /* $BDL>o$NIA2h$HF1$8F);kJQ49%^%H%j%/%9$r@_Dj$9$k!%%&%#(B
-         $B%s%I%&A4BN$r%S%e!<%]!<%H$K$7$F$$$k$N$G!$%"%9%Z%/%H(B
-         $BHf$O(B vp[2] / vp[3] $B$GF@$i$l$k!%(B*/
+      /* 通常の描画と同じ透視変換マトリクスを設定する．ウィ
+         ンドウ全体をビューポートにしているので，アスペクト
+         比は vp[2] / vp[3] で得られる．*/
       gluPerspective(30.0, (double)vp[2] / (double)vp[3], 1.0, 100.0);
 
-      /* $B%b%G%k%S%e!<%^%H%j%/%9$K@ZBX$($k(B */
+      /* モデルビューマトリクスに切替える */
       glMatrixMode(GL_MODELVIEW);
 
-      /* $B$3$3$G0lC6%b%G%k%S%e!<%^%H%j%/%9$K@ZBX$($F!$%S%e!<(B
-         $B%$%s%0JQ49$d%b%G%j%s%0JQ49$N@_Dj$r$9$k$N$@$,!$D>A0(B
-         $B$KIA2h$5$l$??^7A$KBP$7$F%;%l%/%7%g%s$r9T$J$&$J$i!$(B
-         $B$=$N;~$K;H$C$?%b%G%k%S%e!<%^%H%j%/%9$,$=$N$^$^;H$((B
-         $B$k!J$O$:!K!%$@$+$i:#$O0J2<$N=hM}(B (#if 0 $B!A(B #endif) 
-         $B$r>JN,$7$F$bBg>fIW!J$@$H;W$&!K(B*/
+      /* ここで一旦モデルビューマトリクスに切替えて，ビュー
+         イング変換やモデリング変換の設定をするのだが，直前
+         に描画された図形に対してセレクションを行なうなら，
+         その時に使ったモデルビューマトリクスがそのまま使え
+         る（はず）．だから今は以下の処理 (#if 0 ～ #endif) 
+         を省略しても大丈夫（だと思う）*/
 
 #if 0
-      /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+      /* モデルビュー変換行列の初期化 */
       glLoadIdentity();
 
-      /* $B;kE@$N@_Dj(B */
+      /* 視点の設定 */
       gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 #endif
 
-      /* $B$b$&0lEY%7!<%s$rIA2h$9$k(B */
+      /* もう一度シーンを描画する */
       for (i = 0; i < NOBJECTS; i++) {
-	/* $B%M!<%`%9%?%C%/$N@hF,$K$3$l$+$iIA$/%*%V%8%'%/%H$N(B
-           $BHV9f$r@_Dj$9$k(B */
+	/* ネームスタックの先頭にこれから描くオブジェクトの
+           番号を設定する */
 	glLoadName(i);
-	/* $B%*%V%8%'%/%H$rIA2h$9$k!J2hLL$K$OI=<($5$l$J$$!K(B*/
+	/* オブジェクトを描画する（画面には表示されない）*/
 	glCallList(objects + i);
       }
 
-      /* $B:F$SF);kJQ49%^%H%j%/%9$K@ZBX$($k(B */
+      /* 再び透視変換マトリクスに切替える */
       glMatrixMode(GL_PROJECTION);
 
-      /* $BF);kJQ49%^%H%j%/%9$r85$KLa$9(B */
+      /* 透視変換マトリクスを元に戻す */
       glPopMatrix();
 
-      /* $B%b%G%k%S%e!<%^%H%j%/%9$KLa$9(B */
+      /* モデルビューマトリクスに戻す */
       glMatrixMode(GL_MODELVIEW);
 
-      /* $B%l%s%@%j%s%0%b!<%I$r85$KLa$9(B */
+      /* レンダリングモードを元に戻す */
       hits = glRenderMode(GL_RENDER);
 
-      /* $B%;%l%/%7%g%s%P%C%U%!$K$O$$$/$D$N%G!<%?$,F~$C$F$$$k(B
-         $B$N$+$o$+$i$J$$$N$G!$$H$j$"$($:@hF,$N%]%$%s%?$r<h$j(B
-         $B=P$7$F$*$/(B */
+      /* セレクションバッファにはいくつのデータが入っている
+         のかわからないので，とりあえず先頭のポインタを取り
+         出しておく */
       ptr = selection;
 
-      /* hits $B$K$O%;%l%/%7%g%s%P%C%U%!$K3JG<$5$l$?%G!<%?$N?t(B
-         $B$,F~$k!%%G!<%?$,%;%l%/%7%g%s%P%C%U%!$KF~$j@Z$i$J$1(B
-         $B$l$P(B hits < 0 $B$H$J$k(B */
+      /* hits にはセレクションバッファに格納されたデータの数
+         が入る．データがセレクションバッファに入り切らなけ
+         れば hits < 0 となる */
       for (i = 0; i < hits; i++) {
-	/* $B%;%l%/%7%g%s%P%C%U%!$N@hF,$NMWAG$O!"A*Br$5$l$?%*(B
-           $B%V%8%'%/%H$N?t(B */
+	/* セレクションバッファの先頭の要素は、選択されたオ
+           ブジェクトの数 */
 	unsigned int j, n = ptr[0];
 
-	/* $BB3$/#2$D$NMWAG$O!"A*Br$5$l$?0LCV$KCV$1$k1|9T$-CM(B
-           $B$N:G>.CM$H:GBgCM$rId9f$J$7@0?t$GI=$7$?$b$N(B */
+	/* 続く２つの要素は、選択された位置に置ける奥行き値
+           の最小値と最大値を符号なし整数で表したもの */
 	double near = (double)ptr[1] / (double)0x7fffffff;
 	double far  = (double)ptr[2] / (double)0x7fffffff;
 
-	/* $B%;%l%/%7%g%s%P%C%U%!$N#4$DL\$NMWAG!JE:;z!a#3!K$+(B
-           $B$iA*Br$5$l$?%*%V%8%'%/%H$NHV9f$,F~$C$F$$$k(B */
+	/* セレクションバッファの４つ目の要素（添字＝３）か
+           ら選択されたオブジェクトの番号が入っている */
 	ptr += 3;
 	for (j = 0; j < n; j++) {
-	  color[*(ptr++)] = blue; /* $B%*%V%8%'%/%H$N?'$r@D$K$9$k(B */
+	  color[*(ptr++)] = blue; /* オブジェクトの色を青にする */
 	}
       }
     }
@@ -160,8 +160,8 @@ void mouse(int button, int state, int x, int y)
       GLuint *ptr = selection;
       int i;
 
-      /* selection[] $B$NFbMF$O%^%&%9$N:8%\%?%s$r%/%j%C%/$7$?(B
-         $B;~$K$7$+JQ99$5$l$J$$$O$:$@$+$i!$$^$@;D$C$F$$$k$O$:(B */
+      /* selection[] の内容はマウスの左ボタンをクリックした
+         時にしか変更されないはずだから，まだ残っているはず */
       for (i = 0; i < hits; i++) {
 	unsigned int j, n = ptr[0];
 	
@@ -172,7 +172,7 @@ void mouse(int button, int state, int x, int y)
       }
     }
 
-    /* $B2hLL$r=q$-49$($F$_$k(B */
+    /* 画面を書き換えてみる */
     glutPostRedisplay();
     break;
   case GLUT_MIDDLE_BUTTON:
@@ -186,15 +186,15 @@ void mouse(int button, int state, int x, int y)
 
 void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$r@_Dj$9$k(B */
+  /* 透視変換行列を設定する */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$r;XDj$7$F$*$/(B */
+  /* モデルビュー変換行列を指定しておく */
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -204,7 +204,7 @@ void keyboard(unsigned char key, int x, int y)
   case 'q':
   case 'Q':
   case '\033':
-    exit(0);  /* '\033' $B$O(B ESC $B$N(B ASCII $B%3!<%I(B */
+    exit(0);  /* '\033' は ESC の ASCII コード */
   default:
     break;
   }
@@ -214,21 +214,21 @@ void init(void)
 {
   int i;
 
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
 
-  /* $B3F%*%V%8%'%/%H$N%G%#%9%W%l%$%j%9%H$r:n$k(B */
+  /* 各オブジェクトのディスプレイリストを作る */
   objects = glGenLists(NOBJECTS);
   if (objects <= 0) {
     fprintf(stderr, "Can't create so many objects: %d.\n", NOBJECTS);
     exit(1);
   }
 
-  /* $B3F%*%V%8%'%/%H$N?'$r=i4|2=(B */
+  /* 各オブジェクトの色を初期化 */
   for (i = 0; i < NOBJECTS; i++) {
     color[i] = gray;
   }
@@ -241,14 +241,14 @@ void scene(void)
   const GLdouble step = width / (NOBJECTS - 1);
   int i;
 
-  /* $B%;%l%/%7%g%s$NBP>]$K$J$k%*%V%8%'%/%H$r@8@.$7$F!$%G%#%9(B
-     $B%W%l%$%j%9%H$r:n$C$F$*$/(B*/
+  /* セレクションの対象になるオブジェクトを生成して，ディス
+     プレイリストを作っておく*/
   for (i = 0; i < NOBJECTS; i++) {
 
-    /* $B?^7A$r%G%#%9%W%l%$%j%9%H$KEPO?(B */
+    /* 図形をディスプレイリストに登録 */
     glNewList(objects + i, GL_COMPILE);
 
-    /* $B5e$rIA$/(B */
+    /* 球を描く */
     glPushMatrix();
     glTranslated((double)i * step - center, ((i & 1) * 2 - 1) * step, 0.0);
     glutSolidSphere(0.5, 10, 5);

@@ -2,16 +2,16 @@
 #include <math.h>
 #include <GL/glut.h>
 
-/* $B%;%l%/%7%g%s%P%C%U%!$N%5%$%:(B */
+/* セレクションバッファのサイズ */
 #define SELECTIONS 100
 
-/* $B%*%V%8%'%/%H$N?t(B */
+/* オブジェクトの数 */
 #define NOBJECTS 5
 
-/* $B%G%#%9%W%l%$%j%9%H$N<1JL;R(B */
+/* ディスプレイリストの識別子 */
 GLuint objects;
 
-/* $B%*%V%8%'%/%H$N?'(B */
+/* オブジェクトの色 */
 static GLfloat color[][3] = {
   { 0.1, 0.1, 0.9 },
   { 0.1, 0.9, 0.1 },
@@ -21,7 +21,7 @@ static GLfloat color[][3] = {
   { 0.9, 0.9, 0.1 },
 };
 
-/* $B%*%V%8%'%/%H$NG[CV(B */
+/* オブジェクトの配置 */
 #define ARRANGEWIDTH	4.0
 #define ARRANGECENTER	(ARRANGEWIDTH / 2.0)
 #define ARRANGESTEP	(ARRANGEWIDTH / (NOBJECTS - 1))
@@ -32,17 +32,17 @@ static GLfloat color[][3] = {
 #define REFRESHRATE	0.01 /* 100Hz */
 unsigned long touchtime[NOBJECTS];
 
-/* $B8w8;$N0LCV(B */
+/* 光源の位置 */
 GLfloat light0pos[] = { 4.0, 8.0, 6.0, 1.0 };
 
-/* $B%+%l%s%H%U%l!<%`HV9f(B */
+/* カレントフレーム番号 */
 unsigned long cframe = 0;
 
 void display(void)
 {
   int i;
 
-  /* $B;~4V$r7W$k$?$a$K%+%l%s%H%U%l!<%`HV9f$N%+%&%s%H$7$F$*$/(B */
+  /* 時間を計るためにカレントフレーム番号のカウントしておく */
   ++cframe;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -50,41 +50,41 @@ void display(void)
   gluLookAt(5.0, 4.0, 5.0, 0.4, 0.0, 0.0, 0.0, 1.0, 0.0);
   glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
 
-  /* $B%7!<%s$NIA2h(B */
+  /* シーンの描画 */
   for (i = 0; i < NOBJECTS; i++) {
 
-    /* $B3F%*%V%8%'%/%H$N?bD>0LCV$r=i4|0LCV$K@_Dj$9$k(B */
+    /* 各オブジェクトの垂直位置を初期位置に設定する */
     GLdouble h = INITIALHEIGHT;
 
-    /* $B%/%j%C%/$5$l$?;~4V$,@_Dj$5$l$F$$$?$iF0$-=P$9(B */
+    /* クリックされた時間が設定されていたら動き出す */
     if (touchtime[i] > 0) {
       double t;
 
-      /* $B7P2a%U%l!<%`?t$+$i;~4V$r7W;;!J$F$-$H!<!K(B*/
+      /* 経過フレーム数から時間を計算（てきとー）*/
       t = (cframe - touchtime[i]) * REFRESHRATE;
 
-      /* $B9b$5$N7W;;!JCf3X$+9b9;$NJ*M}$G=,$C$?$h$M!K(B*/
+      /* 高さの計算（中学か高校の物理で習ったよね）*/
       h += (GRAVITY * t * 0.5 + INITIALVELOCITY) * t;
 
-      /* $BCOLL$KMn2<$7$?$iF0$-$r;_$a$k$N$@(B */
+      /* 地面に落下したら動きを止めるのだ */
       if (h < 0.0) {
 	h = INITIALHEIGHT;
 	touchtime[i] = 0;
       }
     }
 
-    /* $B$H$j$"$($:?'$r@_Dj!%?'$O%;%l%/%7%g%s$K$O4X78$J$$$N$G!"(B
-       $B%G%#%9%W%l%$%j%9%H$K$OF~$l$J$$$3$H$K$9$k(B */
+    /* とりあえず色を設定．色はセレクションには関係ないので、
+       ディスプレイリストには入れないことにする */
     glMaterialfv(GL_FRONT, GL_DIFFUSE, color[i % 6]);
 
-    /* $B%;%l%/%7%g%s$N$?$a$KF1$8%7!<%s$r$b$&0lEYIA2h$9$kI,MW(B
-       $B$,$"$k$N$G!"%*%V%8%'%/%H$r%G%#%9%W%l%$%j%9%H$KF~$l$F(B
-       $B$7$^$&!#$?$@$7!"%G%#%9%W%l%$%j%9%H$r:o=|$;$:$K;H$$2s(B
-       $B$7$F$$$k$N$G!"%a%b%j%j!<%/$7$=$&$J5$$,$7$F$A$g$$$HIT(B
-       $B0B(B */
+    /* セレクションのために同じシーンをもう一度描画する必要
+       があるので、オブジェクトをディスプレイリストに入れて
+       しまう。ただし、ディスプレイリストを削除せずに使い回
+       しているので、メモリリークしそうな気がしてちょいと不
+       安 */
     glNewList(objects + i, GL_COMPILE_AND_EXECUTE);
 
-    /* $B?^7A$NIA2h(B */
+    /* 図形の描画 */
     glPushMatrix();
     glTranslated((double)i * ARRANGESTEP - ARRANGECENTER, h, ARRANGEDEPTH);
     glutSolidCube(0.8);
@@ -98,8 +98,8 @@ void display(void)
 
 void mouse(int button, int state, int x, int y)
 {
-  GLuint selection[SELECTIONS];  /* $B%;%l%/%7%g%s%P%C%U%!!!!!!!!!!!(B */
-  GLint hits = 0;                /* $B%;%l%/%H$5$l$?%*%V%8%'%/%H$N?t(B */
+  GLuint selection[SELECTIONS];  /* セレクションバッファ　　　　　 */
+  GLint hits = 0;                /* セレクトされたオブジェクトの数 */
 
   switch (button) {
   case GLUT_LEFT_BUTTON:
@@ -108,112 +108,112 @@ void mouse(int button, int state, int x, int y)
       GLint vp[4];
       int i;
 
-      /* $B%;%l%/%7%g%s$K;H$&%P%C%U%!$N@_Dj!%$3$l$O%;%l%/%7%g(B
-         $B%s%b!<%I0J30$N;~!J(BglRenderMode(GL_SELECT) $B$h$jA0!K(B
-         $B$K<B9T$9$kI,MW$,$"$k!%%;%l%/%7%g%s%P%C%U%!$K$O!$F~(B
-         $B$k$@$1$N%G!<%?$,5M$a9~$^$l$k(B */
+      /* セレクションに使うバッファの設定．これはセレクショ
+         ンモード以外の時（glRenderMode(GL_SELECT) より前）
+         に実行する必要がある．セレクションバッファには，入
+         るだけのデータが詰め込まれる */
       glSelectBuffer(SELECTIONS, selection);
 
-      /* $B%l%s%@%j%s%0%b!<%I$r%;%l%/%7%g%s%b!<%I$K@ZBX$($k(B */
+      /* レンダリングモードをセレクションモードに切替える */
       glRenderMode(GL_SELECT);
       
-      /* $B%;%l%/%7%g%s%P%C%U%!$r=i4|2=$9$k!%$3$l$O%;%l%/%7%g(B
-         $B%s%b!<%I$K$J$C$F$J$$$HL5;k$5$l$k(B */
+      /* セレクションバッファを初期化する．これはセレクショ
+         ンモードになってないと無視される */
       glInitNames();
 
-      /* $B%M!<%`%9%?%C%/$N@hF,$K2>$NL>A0$r5M$a$k!%%M!<%`%9%?%C(B
-       * $B%/<+BN$OJ#?t$N%*%V%8%'%/%H$,A*Br$G$-$k$h$&$K%9%?%C(B
-       * $B%/9=B$$K$J$C$F$$$k$,!$:#2s$O#18D$N%*%V%8%'%/%H$7$+(B
-       * $BA*Br$7$J$$$N$G!$%M!<%`%9%?%C%/$N@hF,$NMWAG$@$1$r<h(B
-       * $B$jBX$($J$,$iIA2h$9$l$P$h$$!%$=$3$G!$$"$i$+$8$a%M!<(B
-       * $B%`%9%?%C%/$N@hF,$K2>$NL>A0(B (-1) $B$K5M$a$F$*$$$F!$$=(B
-       * $B$3$r;H$$2s$9!%(B */
+      /* ネームスタックの先頭に仮の名前を詰める．ネームスタッ
+       * ク自体は複数のオブジェクトが選択できるようにスタッ
+       * ク構造になっているが，今回は１個のオブジェクトしか
+       * 選択しないので，ネームスタックの先頭の要素だけを取
+       * り替えながら描画すればよい．そこで，あらかじめネー
+       * ムスタックの先頭に仮の名前 (-1) に詰めておいて，そ
+       * こを使い回す． */
       glPushName(-1);
 
-      /* $B%;%l%/%7%g%s$N=hM}$O;kE@:BI87O$G9T$&(B */
+      /* セレクションの処理は視点座標系で行う */
       glMatrixMode(GL_PROJECTION);
 
-      /* $B8=:_$NF);kJQ49%^%H%j%/%9$rJ]B8$9$k(B */
+      /* 現在の透視変換マトリクスを保存する */
       glPushMatrix();
 
-      /* $BF);kJQ49%^%H%j%/%9$r=i4|2=$9$k(B */
+      /* 透視変換マトリクスを初期化する */
       glLoadIdentity();
 
-      /* $B8=:_$N%S%e!<%]!<%H@_Dj$rF@$k(B */
+      /* 現在のビューポート設定を得る */
       glGetIntegerv(GL_VIEWPORT, vp);
 
-      /* $BI=<(NN0h$,%^%&%9%]%$%s%?$N<~0O$@$1$K$J$k$h$&$KJQ49(B
-         $B9TNs$r@_Dj$9$k!%%^%&%9$N:BI87O$O!$%9%/%j!<%s$N:BI8(B
-         $B7O$KBP$7$F>e2<$,H?E>$7$F$$$k$N$G!$$=$l$rJd@5$9$k(B */
+      /* 表示領域がマウスポインタの周囲だけになるように変換
+         行列を設定する．マウスの座標系は，スクリーンの座標
+         系に対して上下が反転しているので，それを補正する */
       gluPickMatrix(x, vp[3] - y - 1, 1, 1, vp);
 
-      /* $BDL>o$NIA2h$HF1$8F);kJQ49%^%H%j%/%9$r@_Dj$9$k!%%&%#(B
-         $B%s%I%&A4BN$r%S%e!<%]!<%H$K$7$F$$$k$N$G!$%"%9%Z%/%H(B
-         $BHf$O(B vp[2] / vp[3] $B$GF@$i$l$k!%(B*/
+      /* 通常の描画と同じ透視変換マトリクスを設定する．ウィ
+         ンドウ全体をビューポートにしているので，アスペクト
+         比は vp[2] / vp[3] で得られる．*/
       gluPerspective(30.0, (double)vp[2] / (double)vp[3], 1.0, 100.0);
 
-      /* $B%b%G%k%S%e!<%^%H%j%/%9$K@ZBX$($k(B */
+      /* モデルビューマトリクスに切替える */
       glMatrixMode(GL_MODELVIEW);
 
-      /* $B$3$3$G0lC6%b%G%k%S%e!<%^%H%j%/%9$K@ZBX$($F!$%S%e!<(B
-       * $B%$%s%0JQ49$d%b%G%j%s%0JQ49$N@_Dj$r$9$k$N$@$,!$D>A0(B
-       * $B$KIA2h$5$l$??^7A$KBP$7$F%;%l%/%7%g%s$r9T$J$&$J$i!$(B
-       * $B$=$N;~$K;H$C$?%b%G%k%S%e!<%^%H%j%/%9$,$=$N$^$^;H$((B
-       * $B$k!J$O$:!K!%$@$+$i:#$O0J2<$N=hM}(B (#if 0 $B!A(B #endif) 
-       * $B$r>JN,$7$F$bBg>fIW!J$@$H;W$&!K(B*/
+      /* ここで一旦モデルビューマトリクスに切替えて，ビュー
+       * イング変換やモデリング変換の設定をするのだが，直前
+       * に描画された図形に対してセレクションを行なうなら，
+       * その時に使ったモデルビューマトリクスがそのまま使え
+       * る（はず）．だから今は以下の処理 (#if 0 ～ #endif) 
+       * を省略しても大丈夫（だと思う）*/
 
 #if 0
-      /* $B%b%G%k%S%e!<JQ499TNs$N=i4|2=(B */
+      /* モデルビュー変換行列の初期化 */
       glLoadIdentity();
 
-      /* $B;kE@$N@_Dj(B */
+      /* 視点の設定 */
       gluLookAt(5.0, 4.0, 5.0, 0.4, 0.0, 0.0, 0.0, 1.0, 0.0);
 #endif
 
-      /* $B$b$&0lEY%7!<%s$rIA2h(B */
+      /* もう一度シーンを描画 */
       for (i = 0; i < NOBJECTS; i++) {
-	/* $B%M!<%`%9%?%C%/$N@hF,$K$3$l$+$iIA$/%*%V%8%'%/%H$N(B
-           $BHV9f$r@_Dj$9$k(B */
+	/* ネームスタックの先頭にこれから描くオブジェクトの
+           番号を設定する */
 	glLoadName(i);
-	/* $B%*%V%8%'%/%H$rIA2h$9$k!J2hLL$K$OI=<($5$l$J$$!K(B*/
+	/* オブジェクトを描画する（画面には表示されない）*/
 	glCallList(objects + i);
       }
 
-      /* $B:F$SF);kJQ49%^%H%j%/%9$K@ZBX$($k(B */
+      /* 再び透視変換マトリクスに切替える */
       glMatrixMode(GL_PROJECTION);
 
-      /* $BF);kJQ49%^%H%j%/%9$r85$KLa$9(B */
+      /* 透視変換マトリクスを元に戻す */
       glPopMatrix();
 
-      /* $B%b%G%k%S%e!<%^%H%j%/%9$KLa$9(B */
+      /* モデルビューマトリクスに戻す */
       glMatrixMode(GL_MODELVIEW);
 
-      /* $B%l%s%@%j%s%0%b!<%I$r85$KLa$9(B */
+      /* レンダリングモードを元に戻す */
       hits = glRenderMode(GL_RENDER);
 
-      /* $B%;%l%/%7%g%s%P%C%U%!$K$O$$$/$D$N%G!<%?$,F~$C$F$$$k(B
-         $B$N$+$o$+$i$J$$$N$G!$$H$j$"$($:@hF,$N%]%$%s%?$r<h$j(B
-         $B=P$7$F$*$/(B */
+      /* セレクションバッファにはいくつのデータが入っている
+         のかわからないので，とりあえず先頭のポインタを取り
+         出しておく */
       ptr = selection;
 
-      /* hits $B$K$O%;%l%/%7%g%s%P%C%U%!$K3JG<$5$l$?%G!<%?$N?t(B
-         $B$,F~$k!%%G!<%?$,%;%l%/%7%g%s%P%C%U%!$KF~$j@Z$i$J$1(B
-         $B$l$P(B hits < 0 $B$H$J$k(B */
+      /* hits にはセレクションバッファに格納されたデータの数
+         が入る．データがセレクションバッファに入り切らなけ
+         れば hits < 0 となる */
       for (i = 0; i < hits; i++) {
-	/* $B%;%l%/%7%g%s%P%C%U%!$N@hF,$NMWAG$O!"A*Br$5$l$?%*(B
-           $B%V%8%'%/%H$N?t(B */
+	/* セレクションバッファの先頭の要素は、選択されたオ
+           ブジェクトの数 */
 	unsigned int j, n = ptr[0];
 
-	/* $BB3$/#2$D$NMWAG$O!"A*Br$5$l$?0LCV$KCV$1$k1|9T$-CM(B
-           $B$N:G>.CM$H:GBgCM$rId9f$J$7@0?t$GI=$7$?$b$N(B */
+	/* 続く２つの要素は、選択された位置に置ける奥行き値
+           の最小値と最大値を符号なし整数で表したもの */
 	double near = (double)ptr[1] / (double)0x7fffffff;
 	double far  = (double)ptr[2] / (double)0x7fffffff;
 
-	/* $B%;%l%/%7%g%s%P%C%U%!$N#4$DL\$NMWAG!JE:;z!a#3!K$+(B
-           $B$iA*Br$5$l$?%*%V%8%'%/%H$NHV9f$,F~$C$F$$$k(B */
+	/* セレクションバッファの４つ目の要素（添字＝３）か
+           ら選択されたオブジェクトの番号が入っている */
 	ptr += 3;
 	for (j = 0; j < n; j++) {
-	  /* $B%*%V%8%'%/%H$K%/%j%C%/$5$l$?;~4V$r@_Dj$9$k(B */
+	  /* オブジェクトにクリックされた時間を設定する */
 	  touchtime[*(ptr++)] = cframe;
 	}
       }
@@ -230,15 +230,15 @@ void mouse(int button, int state, int x, int y)
 
 void resize(int w, int h)
 {
-  /* $B%&%#%s%I%&A4BN$r%S%e!<%]!<%H$K$9$k(B */
+  /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
 
-  /* $BF);kJQ499TNs$r@_Dj$9$k(B */
+  /* 透視変換行列を設定する */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
 
-  /* $B%b%G%k%S%e!<JQ499TNs$r;XDj$7$F$*$/(B */
+  /* モデルビュー変換行列を指定しておく */
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -248,7 +248,7 @@ void keyboard(unsigned char key, int x, int y)
   case 'q':
   case 'Q':
   case '\033':
-    exit(0);  /* '\033' $B$O(B ESC $B$N(B ASCII $B%3!<%I(B */
+    exit(0);  /* '\033' は ESC の ASCII コード */
   default:
     break;
   }
@@ -258,21 +258,21 @@ void init(void)
 {
   int i;
 
-  /* $B=i4|@_Dj(B */
+  /* 初期設定 */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
 
-  /* $B3F%*%V%8%'%/%H$N%G%#%9%W%l%$%j%9%H$r:n$k(B */
+  /* 各オブジェクトのディスプレイリストを作る */
   objects = glGenLists(NOBJECTS);
   if (objects <= 0) {
     fprintf(stderr, "Can't create so many objects: %d.\n", NOBJECTS);
     exit(1);
   }
 
-  /* $B3F%*%V%8%'%/%H$r%/%j%C%/$7$?%U%l!<%`HV9f$r=i4|2=(B */
+  /* 各オブジェクトをクリックしたフレーム番号を初期化 */
   for (i = 0; i < NOBJECTS; i++) {
     touchtime[i] = 0;
   }
